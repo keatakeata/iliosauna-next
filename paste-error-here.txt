@@ -1,0 +1,14 @@
+PASTE YOUR ERROR MESSAGE HERE:
+
+1. Copy the error from Supabase
+2. Open this file in any text editor (Notepad, VS Code, etc.)
+3. Paste the error and save the file
+4. Tell me "I pasted the error" and I'll read it
+
+(Delete this instruction text and paste your error below)
+========================================
+ERROR: 23502: null value in column "product_id" of relation "order_items" violates not-null constraint
+DETAIL:  Failing row contains (9610f374-b663-42a1-82c7-15f0e0ea9849, b4d8f14c-ac7e-4ada-9608-7091000d20fa, null, Ilio Barrel Sauna - 6 Person, null, 1, 15999.00, 15999.00, null, 2025-08-28 14:34:50.677716+00).
+CONTEXT:  SQL statement "INSERT INTO order_items (order_id, product_name, quantity, unit_price, total_price)
+VALUES (test_order_id_1, 'Ilio Barrel Sauna - 6 Person', 1, 15999.00, 15999.00)"
+PL/pgSQL function inline_code_block line 53 at SQL statement

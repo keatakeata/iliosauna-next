@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { useCart } from '@/context/CartContext';
+import { FEATURE_FLAGS } from '@/lib/feature-flags';
 
 export default function Navbar({ animated = false, forceScrolled = false }: { animated?: boolean; forceScrolled?: boolean }) {
   const [isScrolled, setIsScrolled] = useState(forceScrolled);
@@ -180,22 +181,23 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
               margin: '0 0.75rem',
             }}></div>
             
-            {/* Cart Icon */}
-            <button 
-              className="nav-cart-button" 
-              onClick={openCart}
-              style={{
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '0.25rem',
-                padding: '0.5rem',
-                position: 'relative'
-              }}
-              aria-label="Shopping Cart"
-            >
+            {/* Cart Icon - CONTROLLED BY FEATURE FLAG */}
+            {FEATURE_FLAGS.SHOW_CART && (
+              <button 
+                className="nav-cart-button" 
+                onClick={openCart}
+                style={{
+                  background: 'none',
+                  border: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.25rem',
+                  padding: '0.5rem',
+                  position: 'relative'
+                }}
+                aria-label="Shopping Cart"
+              >
               <svg 
                 width="20" 
                 height="20" 
@@ -241,14 +243,16 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
                 </span>
               )}
             </button>
+            )}
             
-            {/* Auth Section */}
-            <div style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '0.75rem',
-              marginLeft: '0.5rem'
-            }}>
+            {/* Auth Section - CONTROLLED BY FEATURE FLAG */}
+            {FEATURE_FLAGS.SHOW_AUTH && (
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                marginLeft: '0.5rem'
+              }}>
               <SignedOut>
                 <SignInButton mode="modal">
                   <button style={{
@@ -295,11 +299,13 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
                 />
               </SignedIn>
             </div>
+            )}
           </div>
           
-          {/* Mobile Cart Icon (right on mobile) */}
-          <button 
-            className="mobile-only mobile-cart-button" 
+          {/* Mobile Cart Icon (right on mobile) - CONTROLLED BY FEATURE FLAG */}
+          {FEATURE_FLAGS.SHOW_CART && (
+            <button 
+              className="mobile-only mobile-cart-button" 
             onClick={openCart}
             style={{
               display: 'none',
@@ -356,6 +362,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
               </span>
             )}
           </button>
+          )}
         </div>
       </nav>
 

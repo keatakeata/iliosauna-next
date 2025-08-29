@@ -7,6 +7,7 @@ import ScrollAnimations from '@/components/ScrollAnimations';
 import Link from 'next/link';
 import { modalContent } from './modalContent';
 import { useCart } from '@/context/CartContext';
+import { FEATURE_FLAGS } from '@/lib/feature-flags';
 
 export default function SaunasPage() {
   const [pageLoaded, setPageLoaded] = useState(false);
@@ -365,13 +366,15 @@ export default function SaunasPage() {
               <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>6-8 weeks</div>
             </div>
             
-            {/* Add to Cart and Buy Now buttons */}
-            <div className="reveal-on-scroll reveal-delay-7" style={{ 
-              display: 'flex', 
-              gap: '1rem',
-              flexWrap: 'wrap'
-            }}>
-              <button
+            {/* Add to Cart and Buy Now buttons - CONTROLLED BY FEATURE FLAGS */}
+            {(FEATURE_FLAGS.SHOW_ADD_TO_CART || FEATURE_FLAGS.SHOW_BUY_NOW) && (
+              <div className="reveal-on-scroll reveal-delay-7" style={{ 
+                display: 'flex', 
+                gap: '1rem',
+                flexWrap: 'wrap'
+              }}>
+                {FEATURE_FLAGS.SHOW_ADD_TO_CART && (
+                  <button
                 onClick={() => {
                   addItem({
                     id: 'ilio-sauna-premium',
@@ -405,8 +408,10 @@ export default function SaunasPage() {
               >
                 ADD TO CART
               </button>
+              )}
               
-              <button
+              {FEATURE_FLAGS.SHOW_BUY_NOW && (
+                <button
                 onClick={() => {
                   addItem({
                     id: 'ilio-sauna-premium',
@@ -444,7 +449,9 @@ export default function SaunasPage() {
               >
                 BUY NOW
               </button>
+              )}
             </div>
+            )}
           </div>
         </div>
       </section>
