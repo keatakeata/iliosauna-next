@@ -8,7 +8,8 @@
     "dev:original": "next dev",
     "dev:clean": "rimraf .next .build && npm run dev",
     "dev:windows": "START_DEV_SERVER.bat",
-    "build": "cross-env NODE_ENV=production next build",
+    "build": "next build",
+    "vercel-build": "next build",
     "start": "next start",
     "clean": "rimraf .next .build node_modules/.cache"
   },

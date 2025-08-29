@@ -13,11 +13,8 @@ const nextConfig = {
     ],
   },
   
-  // Use custom build directory to avoid .next permission issues
-  distDir: '.build',
-  
-  // Disable SWC minification on Windows (can cause issues)
-  swcMinify: false,
+  // Use default build directory for Vercel
+  // distDir: '.build', // Commented out for Vercel compatibility
   
   // Disable type checking during dev (faster startup)
   typescript: {
@@ -59,8 +56,6 @@ const nextConfig = {
   
   // Experimental features to improve Windows compatibility
   experimental: {
-    // Disable instrumentation hook
-    instrumentationHook: false,
     // Use different worker strategy
     workerThreads: false,
     cpus: 1,
