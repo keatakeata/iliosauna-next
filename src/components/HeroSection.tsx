@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
 
 export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boolean }) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   const slides = [
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg',
@@ -16,10 +17,11 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
   ];
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
-    return () => clearInterval(timer);
+    }, 6000); // 6 seconds per slide
+    
+    return () => clearInterval(interval);
   }, [slides.length]);
 
   return (
@@ -33,19 +35,30 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
         paddingTop: 0
       }}
     >
-      {/* Slideshow Container */}
-      <div className="slideshow-container" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+      {/* Single Continuously Zooming Container */}
+      <div 
+        ref={containerRef}
+        className="hero-zoom-wrapper"
+        style={{
+          position: 'absolute',
+          inset: '-10%', // Extra space for zoom
+          width: '120%',
+          height: '120%',
+        }}
+      >
+        {/* All slides rendered, only opacity changes */}
         {slides.map((slide, index) => (
           <div
-            key={index}
-            className={`slide ${currentSlide === index ? 'active' : ''}`}
+            key={`slide-${index}`} // Static key - never changes
+            className="hero-slide-wrapper"
             style={{
               position: 'absolute',
               inset: 0,
               width: '100%',
               height: '100%',
               opacity: currentSlide === index ? 1 : 0,
-              transition: 'opacity 1.5s cubic-bezier(0.4, 0, 0.2, 1)',
+              transition: 'opacity 1.2s ease-in-out',
+              zIndex: currentSlide === index ? 2 : 1,
             }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -57,6 +70,7 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
                 height: '100%',
                 objectFit: 'cover',
               }}
+              loading="eager" // Pre-load all images
             />
             <div style={{
               position: 'absolute',

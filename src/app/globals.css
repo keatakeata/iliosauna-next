@@ -337,6 +337,66 @@ h1, h2, h3, h4, h5, h6, p {
   margin-top: -10px !important;
 }
 
+/* Hero Slideshow - Seamless Per-Slide Zoom */
+.hero-zoom-wrapper {
+  transform-origin: center center;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.hero-slide-wrapper {
+  animation: slideZoom 36s linear infinite; /* 6s × 6 slides = 36s total cycle */
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* Stagger animation start for each slide */
+.hero-slide-wrapper:nth-child(1) { animation-delay: 0s; }
+.hero-slide-wrapper:nth-child(2) { animation-delay: -6s; }
+.hero-slide-wrapper:nth-child(3) { animation-delay: -12s; }
+.hero-slide-wrapper:nth-child(4) { animation-delay: -18s; }
+.hero-slide-wrapper:nth-child(5) { animation-delay: -24s; }
+.hero-slide-wrapper:nth-child(6) { animation-delay: -30s; }
+
+@keyframes slideZoom {
+  0%, 83.33% {
+    transform: scale(1) translateZ(0);
+  }
+  16.66% {
+    transform: scale(1.2) translateZ(0); /* Increased to 1.2 scale */
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+  }
+}
+
+/* Saunas page - 5 slides version */
+.hero-slide-wrapper-saunas {
+  animation: slideZoomSaunas 30s linear infinite; /* 6s × 5 slides = 30s total cycle */
+  transform-origin: center center;
+  will-change: transform;
+}
+
+/* Stagger animation start for saunas page (5 slides) */
+.hero-slide-wrapper-saunas:nth-child(1) { animation-delay: 0s; }
+.hero-slide-wrapper-saunas:nth-child(2) { animation-delay: -6s; }
+.hero-slide-wrapper-saunas:nth-child(3) { animation-delay: -12s; }
+.hero-slide-wrapper-saunas:nth-child(4) { animation-delay: -18s; }
+.hero-slide-wrapper-saunas:nth-child(5) { animation-delay: -24s; }
+
+@keyframes slideZoomSaunas {
+  0%, 80% {
+    transform: scale(1) translateZ(0);
+  }
+  20% {
+    transform: scale(1.2) translateZ(0); /* 20% of 30s = 6s */
+  }
+  100% {
+    transform: scale(1) translateZ(0);
+  }
+}
+
 /* H2 Animation */
 @keyframes slideUp {
   from {

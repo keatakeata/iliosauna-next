@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollAnimations from '@/components/ScrollAnimations';
@@ -8,6 +8,70 @@ import Link from 'next/link';
 import { modalContent } from './modalContent';
 import { useCart } from '@/context/CartContext';
 import { FEATURE_FLAGS } from '@/lib/feature-flags';
+
+// Lazy Loading Image Component for Performance
+function LazyImage({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
+  const [imageSrc, setImageSrc] = useState<string>('');
+  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+
+  const onIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
+    const [entry] = entries;
+    if (entry.isIntersecting) {
+      setImageSrc(src);
+    }
+  }, [src]);
+
+  useEffect(() => {
+    if (!imageRef) return;
+    
+    const observer = new IntersectionObserver(onIntersection, {
+      threshold: 0,
+      rootMargin: '100px' // Start loading 100px before image enters viewport
+    });
+    
+    observer.observe(imageRef);
+    
+    return () => {
+      observer.disconnect();
+    };
+  }, [imageRef, onIntersection]);
+
+  return (
+    <>
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          background: '#f0f0f0',
+          filter: isLoaded ? 'blur(0px)' : 'blur(10px)',
+          transition: 'filter 0.3s ease-out',
+          ...style
+        }}
+      />
+      <img
+        ref={setImageRef}
+        src={imageSrc}
+        alt={alt}
+        onLoad={() => setIsLoaded(true)}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          opacity: isLoaded ? 1 : 0,
+          transition: 'opacity 0.3s ease-out',
+          ...style
+        }}
+      />
+    </>
+  );
+}
 
 export default function SaunasPage() {
   const [pageLoaded, setPageLoaded] = useState(false);
@@ -38,7 +102,7 @@ export default function SaunasPage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 5000);
+    }, 6000); // 6 seconds per slide
     return () => clearInterval(timer);
   }, [slides.length]);
 
@@ -155,18 +219,28 @@ export default function SaunasPage() {
         height: '100vh',
         overflow: 'hidden'
       }}>
-        {/* Slideshow */}
-        <div style={{ position: 'absolute', inset: 0, width: '100%', height: '100%' }}>
+        {/* Single Continuously Zooming Container */}
+        <div 
+          className="hero-zoom-wrapper"
+          style={{
+            position: 'absolute',
+            inset: '-10%',
+            width: '120%',
+            height: '120%',
+          }}
+        >
           {slides.map((slide, index) => (
             <div
-              key={index}
+              key={`slide-${index}`}
+              className="hero-slide-wrapper-saunas"
               style={{
                 position: 'absolute',
                 inset: 0,
                 width: '100%',
                 height: '100%',
                 opacity: currentSlide === index ? 1 : 0,
-                transition: 'opacity 1.5s ease-in-out',
+                transition: 'opacity 1.2s ease-in-out',
+                zIndex: currentSlide === index ? 2 : 1,
               }}
             >
               <img
@@ -177,7 +251,13 @@ export default function SaunasPage() {
                   height: '100%',
                   objectFit: 'cover',
                 }}
+                loading="eager"
               />
+              <div style={{
+                position: 'absolute',
+                inset: 0,
+                background: 'linear-gradient(180deg, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.5) 100%)',
+              }} />
             </div>
           ))}
         </div>
@@ -261,14 +341,14 @@ export default function SaunasPage() {
               </p>
             </div>
             
-            {/* Correct Video Player */}
+            {/* Video Section - 16:9 Aspect Ratio */}
             <div className="reveal-on-scroll reveal-delay-4" style={{ 
               maxWidth: '900px', 
               margin: '3rem auto 0',
               borderRadius: '8px',
               overflow: 'hidden',
               position: 'relative',
-              paddingBottom: '56.25%',
+              paddingBottom: '56.25%', /* 16:9 aspect ratio (9/16 = 0.5625) */
               height: 0
             }}>
               <video 
@@ -277,6 +357,8 @@ export default function SaunasPage() {
                 muted
                 loop
                 playsInline
+                preload="auto"
+                poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg"
                 style={{
                   position: 'absolute',
                   top: 0,
@@ -485,7 +567,9 @@ export default function SaunasPage() {
             gridTemplateColumns: 'repeat(3, 1fr)',
             gap: '1.5rem',
             maxWidth: '1200px',
-            margin: '0 auto'
+            margin: '0 auto',
+            willChange: 'transform',
+            transform: 'translateZ(0)' // Force GPU acceleration
           }}>
             {premiumFeatures.map((feature, index) => (
               <div 
@@ -517,17 +601,9 @@ export default function SaunasPage() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <img 
+                <LazyImage 
                   src={feature.image}
                   alt={feature.title}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
                 />
                 <div 
                   className="card-overlay"
@@ -581,17 +657,9 @@ export default function SaunasPage() {
                   cursor: 'pointer'
                 }}
               >
-                <img 
+                <LazyImage 
                   src={feature.image}
                   alt={feature.title}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover'
-                  }}
                 />
                 <div style={{
                   position: 'absolute',

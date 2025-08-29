@@ -35,23 +35,32 @@ export default function AboutSection() {
               Each sauna is precision-engineered from sustainably sourced Western Red Cedar and fitted 
               with advanced heating systems for an experience that lasts.
             </p>
-            {/* Video Section */}
+            {/* Video Section - 16:9 Aspect Ratio */}
             <div className="reveal-on-scroll reveal-delay-4" style={{ 
               maxWidth: '900px', 
               margin: '0 auto',
               borderRadius: '8px',
-              overflow: 'hidden'
+              overflow: 'hidden',
+              position: 'relative',
+              paddingBottom: '56.25%', /* 16:9 aspect ratio (9/16 = 0.5625) */
+              height: 0
             }}>
               <video 
                 controls
-                width="100%"
-                height="auto"
                 autoPlay
                 muted
                 loop
                 playsInline
                 preload="auto"
                 poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg"
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
               >
                 <source 
                   src="https://res.cloudinary.com/dnqa04ovh/video/upload/q_auto:low,w_1280/v1755735418/render_01_1_g8xfvf.mp4" 
