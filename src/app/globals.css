@@ -397,6 +397,14 @@ h1, h2, h3, h4, h5, h6, p {
   }
 }
 
+/* Mobile adjustments for hero slides */
+@media (max-width: 768px) {
+  /* Shift third slide image to show right side on mobile */
+  .hero-slide-wrapper:nth-child(3) img {
+    object-position: 70% center; /* Show more of the right side */
+  }
+}
+
 /* H2 Animation */
 @keyframes slideUp {
   from {

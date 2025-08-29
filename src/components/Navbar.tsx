@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import { useCart } from '@/context/CartContext';
@@ -10,6 +10,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
   const [isScrolled, setIsScrolled] = useState(forceScrolled);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [showNavbar, setShowNavbar] = useState(!animated);
+  const scrollPositionRef = useRef(0);
   const { totalItems, openCart } = useCart();
   
   const whiteLogo = 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f5bea48c9fcffec3e.svg';
@@ -32,13 +33,52 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
   // Lock body scroll when mobile menu is open
   useEffect(() => {
     if (isMobileMenuOpen) {
+      // Save current scroll position to ref
+      scrollPositionRef.current = window.scrollY;
+      
+      // Get scrollbar width to prevent layout shift
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      // Apply scroll lock with position fixed to prevent any scrolling
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${scrollPositionRef.current}px`;
+      document.body.style.left = '0';
+      document.body.style.right = '0';
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
       document.body.style.overflow = 'hidden';
-    } else {
+      
+      // Prevent iOS bounce
+      document.documentElement.style.overflow = 'hidden';
+    } else if (scrollPositionRef.current >= 0) {
+      // Get the saved position before removing styles
+      const savedPosition = scrollPositionRef.current;
+      
+      // Remove all scroll lock styles
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.paddingRight = '';
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      
+      // Restore scroll position instantly without animation
+      window.scrollTo({
+        top: savedPosition,
+        left: 0,
+        behavior: 'instant' as ScrollBehavior
+      });
     }
     
     return () => {
+      // Cleanup all styles on unmount
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.paddingRight = '';
       document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [isMobileMenuOpen]);
 
@@ -72,8 +112,9 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
               border: 'none',
               cursor: 'pointer',
               padding: '10px',
-              zIndex: isMobileMenuOpen ? 1001 : 'auto',
+              zIndex: 'auto',
               position: 'relative',
+              marginLeft: '-10px', // Align better to the left edge
             }}
           >
             <div id="hamburger-lines" style={{ width: '25px', height: '20px', position: 'relative' }}>
@@ -81,7 +122,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
                 position: 'absolute',
                 width: '100%',
                 height: '2px',
-                background: isMobileMenuOpen ? 'white' : (isScrolled ? '#374151' : 'white'),
+                background: isScrolled ? '#374151' : 'white',
                 top: isMobileMenuOpen ? '50%' : 0,
                 transform: isMobileMenuOpen ? 'translateY(-50%) rotate(45deg)' : 'none',
                 transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
@@ -91,7 +132,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
                 position: 'absolute',
                 width: '100%',
                 height: '2px',
-                background: isMobileMenuOpen ? 'transparent' : (isScrolled ? '#374151' : 'white'),
+                background: isScrolled ? '#374151' : 'white',
                 top: '50%',
                 transform: 'translateY(-50%)',
                 transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
@@ -101,7 +142,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
                 position: 'absolute',
                 width: '100%',
                 height: '2px',
-                background: isMobileMenuOpen ? 'white' : (isScrolled ? '#374151' : 'white'),
+                background: isScrolled ? '#374151' : 'white',
                 bottom: isMobileMenuOpen ? '50%' : 0,
                 transform: isMobileMenuOpen ? 'translateY(50%) rotate(-45deg)' : 'none',
                 transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
@@ -115,12 +156,12 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             display: 'flex', 
             alignItems: 'center', 
             textDecoration: 'none',
-            zIndex: isMobileMenuOpen ? 1001 : 'auto',
+            zIndex: 'auto',
             position: 'relative',
           }}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
-              src={isMobileMenuOpen ? whiteLogo : (isScrolled ? blackLogo : whiteLogo)} 
+              src={isScrolled ? blackLogo : whiteLogo} 
               alt="Ilio" 
               style={{ 
                 height: '38.5px',
@@ -302,8 +343,8 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             )}
           </div>
           
-          {/* Mobile Cart Icon (right on mobile) - CONTROLLED BY FEATURE FLAG */}
-          {FEATURE_FLAGS.SHOW_CART && (
+          {/* Mobile Spacer or Cart Icon (right on mobile) */}
+          {FEATURE_FLAGS.SHOW_CART ? (
             <button 
               className="mobile-only mobile-cart-button" 
             onClick={openCart}
@@ -362,6 +403,15 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
               </span>
             )}
           </button>
+          ) : (
+            <div 
+              className="mobile-only" 
+              style={{ 
+                display: 'none',
+                width: '40px', 
+                height: '40px' 
+              }} 
+            />
           )}
         </div>
       </nav>
@@ -383,7 +433,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             justifyContent: 'center',
             alignItems: 'center',
             gap: '2.5rem',
-            zIndex: 999,
+            zIndex: 9999,
             animation: 'slideIn 0.5s cubic-bezier(0.77, 0, 0.175, 1)',
           }}
           onClick={(e) => {
@@ -393,6 +443,44 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             }
           }}
         >
+          {/* Close Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(false)}
+            style={{
+              position: 'absolute',
+              top: '25px',
+              right: '25px',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '10px',
+              zIndex: 10000,
+            }}
+            aria-label="Close menu"
+          >
+            <svg
+              width="28"
+              height="28"
+              viewBox="0 0 24 24"
+              fill="none"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path
+                d="M18 6L6 18"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+              <path
+                d="M6 6L18 18"
+                stroke="white"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
+            </svg>
+          </button>
           <Link href="/our-story" onClick={() => setIsMobileMenuOpen(false)} style={{
             color: 'white',
             textDecoration: 'none',
@@ -446,7 +534,28 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             Contact
           </Link>
           
-          {/* Mobile Auth Section */}
+          {/* Divider and Slogan */}
+          <div style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+            paddingTop: '2rem',
+            marginTop: '1rem',
+            width: '200px',
+            textAlign: 'center'
+          }}>
+            <p style={{
+              color: 'rgba(255, 255, 255, 0.7)',
+              fontSize: '1.1rem',
+              fontWeight: 300,
+              letterSpacing: '0.15em',
+              textTransform: 'uppercase',
+              margin: 0
+            }}>
+              Live well
+            </p>
+          </div>
+          
+          {/* Mobile Auth Section - CONTROLLED BY FEATURE FLAG */}
+          {FEATURE_FLAGS.SHOW_AUTH && (
           <div style={{
             borderTop: '1px solid rgba(255, 255, 255, 0.2)',
             paddingTop: '2.5rem',
@@ -527,6 +636,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
               </div>
             </SignedIn>
           </div>
+          )}
         </div>
       )}
 

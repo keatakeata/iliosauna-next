@@ -392,12 +392,12 @@ export default function ContactPage() {
                     href="tel:604-555-0100"
                     style={{ 
                       display: 'inline-block',
-                      fontSize: '1.8rem', 
+                      fontSize: '1.2rem', 
                       fontWeight: 300, 
                       color: 'var(--color-primary)',
                       background: 'transparent',
-                      border: '2px solid var(--color-primary)',
-                      padding: '12px 24px',
+                      border: '1.5px solid var(--color-primary)',
+                      padding: '10px 20px',
                       borderRadius: '4px',
                       textDecoration: 'none',
                       transition: 'all 0.3s ease'
