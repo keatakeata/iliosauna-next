@@ -1,0 +1,527 @@
+/* Sauna Journey Dashboard - Clean Canvas CSS */
+/* This is a completely isolated stylesheet with unique prefixes */
+
+/* CSS Reset for Journey Dashboard */
+.sj-dashboard * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Use theme variables directly */
+.sj-dashboard {
+  /* Core colors from theme */
+  --sj-background: var(--background);
+  --sj-foreground: var(--foreground);
+  --sj-card: var(--card);
+  --sj-border: var(--border);
+  --sj-muted: var(--muted);
+  --sj-muted-foreground: var(--muted-foreground);
+  
+  /* Primary accent for key actions */
+  --sj-primary: var(--primary);
+  --sj-primary-foreground: var(--primary-foreground);
+  
+  /* Semantic colors */
+  --sj-success: oklch(0.7020 0.1454 142.03);
+  --sj-warning: oklch(0.7843 0.1207 84.91);
+  --sj-info: oklch(0.6471 0.1431 246.02);
+}
+
+/* Base Layout */
+.sj-dashboard {
+  min-height: 100vh;
+  background: var(--sj-background);
+  font-family: var(--font-sans);
+  color: var(--sj-foreground);
+  line-height: 1.6;
+}
+
+/* Container */
+.sj-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+/* Header */
+.sj-header {
+  background: var(--sj-card);
+  border-bottom: 1px solid var(--sj-border);
+  padding: 1.5rem 0;
+  margin-bottom: 3rem;
+  box-shadow: var(--shadow-xs);
+}
+
+.sj-header-content {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sj-welcome {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.sj-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--sj-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sj-muted-foreground);
+  font-weight: 600;
+  font-size: 1.125rem;
+}
+
+.sj-welcome-text h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--sj-foreground);
+  margin-bottom: 0.25rem;
+}
+
+.sj-welcome-text p {
+  font-size: 0.875rem;
+  color: var(--sj-muted-foreground);
+}
+
+.sj-header-actions {
+  display: flex;
+  gap: 1rem;
+}
+
+.sj-btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sj-btn-outline {
+  background: transparent;
+  color: var(--sj-muted-foreground);
+  border: 1px solid var(--sj-border);
+}
+
+.sj-btn-outline:hover {
+  background: var(--sj-muted);
+  border-color: var(--sj-muted-foreground);
+}
+
+.sj-btn-primary {
+  background: var(--sj-primary);
+  color: var(--sj-primary-foreground);
+  border: 1px solid var(--sj-primary);
+}
+
+.sj-btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Journey Timeline */
+.sj-journey-section {
+  margin-bottom: 3rem;
+}
+
+.sj-journey-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.sj-journey-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--sj-foreground);
+}
+
+.sj-delivery-date {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: var(--sj-muted);
+  color: var(--sj-primary);
+  border-radius: 2rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.sj-timeline {
+  background: var(--sj-card);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.sj-timeline-track {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  padding: 0 2rem;
+  margin-bottom: 3rem;
+}
+
+.sj-timeline-track::before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  left: 2rem;
+  right: 2rem;
+  height: 4px;
+  background: var(--sj-border);
+  z-index: 0;
+}
+
+.sj-timeline-progress {
+  position: absolute;
+  top: 20px;
+  left: 2rem;
+  height: 4px;
+  background: var(--sj-primary);
+  z-index: 1;
+  transition: width 0.5s ease;
+}
+
+.sj-timeline-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.sj-timeline-step:hover {
+  transform: translateY(-2px);
+}
+
+.sj-step-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--sj-card);
+  border: 4px solid var(--sj-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s;
+}
+
+.sj-step-complete .sj-step-circle {
+  background: var(--sj-primary);
+  border-color: var(--sj-primary);
+  color: var(--sj-primary-foreground);
+}
+
+.sj-step-active .sj-step-circle {
+  background: var(--sj-card);
+  border-color: var(--sj-primary);
+  color: var(--sj-primary);
+  box-shadow: 0 0 0 8px oklch(from var(--sj-primary) l c h / 0.1);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 8px oklch(from var(--sj-primary) l c h / 0.1);
+  }
+  50% {
+    box-shadow: 0 0 0 12px oklch(from var(--sj-primary) l c h / 0.05);
+  }
+}
+
+.sj-step-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--sj-muted-foreground);
+  text-align: center;
+  max-width: 100px;
+}
+
+.sj-step-complete .sj-step-label {
+  color: var(--sj-foreground);
+}
+
+.sj-step-active .sj-step-label {
+  color: var(--sj-primary);
+  font-weight: 600;
+}
+
+.sj-timeline-details {
+  background: var(--sj-muted);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+}
+
+.sj-detail-title {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--sj-foreground);
+  margin-bottom: 0.5rem;
+}
+
+.sj-detail-description {
+  color: var(--sj-muted-foreground);
+  margin-bottom: 1rem;
+}
+
+.sj-detail-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Content Grid */
+.sj-content-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.sj-card {
+  background: var(--sj-card);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.sj-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.sj-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.sj-card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--sj-foreground);
+}
+
+.sj-card-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.25rem;
+}
+
+.sj-icon-primary {
+  background: oklch(from var(--sj-primary) l c h / 0.1);
+  color: var(--sj-primary);
+}
+
+.sj-icon-cedar {
+  background: var(--sj-muted);
+  color: var(--sj-muted-foreground);
+}
+
+.sj-icon-accent {
+  background: var(--sj-muted);
+  color: var(--sj-muted-foreground);
+}
+
+.sj-card-content {
+  color: var(--sj-muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.sj-card-list {
+  list-style: none;
+  margin-top: 1rem;
+}
+
+.sj-card-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid var(--sj-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sj-card-list li:last-child {
+  border-bottom: none;
+}
+
+.sj-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.sj-badge-success {
+  background: oklch(0.7020 0.1454 142.03 / 0.1);
+  color: oklch(0.5020 0.1454 142.03);
+}
+
+.sj-badge-info {
+  background: oklch(0.6471 0.1431 246.02 / 0.1);
+  color: oklch(0.4471 0.1431 246.02);
+}
+
+/* Resources Section */
+.sj-resources {
+  background: var(--sj-card);
+  border-radius: var(--radius-lg);
+  padding: 2rem;
+  box-shadow: var(--shadow-sm);
+}
+
+.sj-resources-header {
+  margin-bottom: 1.5rem;
+}
+
+.sj-resources-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--sj-foreground);
+  margin-bottom: 0.5rem;
+}
+
+.sj-resources-subtitle {
+  color: var(--sj-muted-foreground);
+  font-size: 0.875rem;
+}
+
+.sj-resource-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.sj-resource-item {
+  padding: 1rem;
+  border: 1px solid var(--sj-border);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.sj-resource-item:hover {
+  background: var(--sj-muted);
+  border-color: var(--sj-primary);
+  transform: translateX(4px);
+}
+
+.sj-resource-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--sj-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--sj-primary-foreground);
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.sj-resource-info {
+  flex: 1;
+}
+
+.sj-resource-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--sj-foreground);
+  margin-bottom: 0.25rem;
+}
+
+.sj-resource-type {
+  font-size: 0.75rem;
+  color: var(--sj-muted-foreground);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .sj-container {
+    padding: 1rem;
+  }
+  
+  .sj-header-content {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .sj-welcome {
+    flex-direction: column;
+  }
+  
+  .sj-timeline-track {
+    flex-direction: column;
+    padding: 0;
+    gap: 2rem;
+  }
+  
+  .sj-timeline-track::before {
+    top: 0;
+    bottom: 0;
+    left: 20px;
+    right: auto;
+    width: 4px;
+    height: auto;
+  }
+  
+  .sj-timeline-progress {
+    top: 0;
+    left: 20px;
+    width: 4px;
+    height: 40%;
+  }
+  
+  .sj-timeline-step {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .sj-step-circle {
+    margin-bottom: 0;
+  }
+  
+  .sj-step-label {
+    text-align: left;
+    max-width: none;
+  }
+  
+  .sj-content-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .sj-resource-grid {
+    grid-template-columns: 1fr;
+  }
+}

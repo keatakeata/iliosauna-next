@@ -1,0 +1,30 @@
+# Dependencies
+node_modules/
+
+# Next.js build output
+.next/
+.build/
+
+# Environment variables
+.env.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.log
+*.tmp
+nul
+NDH6SA~M
+
+# Clerk secrets
+/.clerk/
+
+# Vercel
+.vercel/

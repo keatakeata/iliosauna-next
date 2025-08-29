@@ -1,0 +1,558 @@
+'use client';
+
+import { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { useCart } from '@/context/CartContext';
+
+export default function Navbar({ animated = false, forceScrolled = false }: { animated?: boolean; forceScrolled?: boolean }) {
+  const [isScrolled, setIsScrolled] = useState(forceScrolled);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showNavbar, setShowNavbar] = useState(!animated);
+  const { totalItems, openCart } = useCart();
+  
+  const whiteLogo = 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f5bea48c9fcffec3e.svg';
+  const blackLogo = 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f9042cd3de1f9c712.svg';
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(forceScrolled || window.scrollY > 10);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [forceScrolled]);
+
+  useEffect(() => {
+    if (animated) {
+      setTimeout(() => setShowNavbar(true), 100);
+    }
+  }, [animated]);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (isMobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [isMobileMenuOpen]);
+
+  return (
+    <>
+      <nav 
+        id="main-navigation" 
+        className={`navbar ${isScrolled ? 'scrolled' : ''}`}
+        style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 1000,
+          transform: showNavbar ? 'translateY(0)' : 'translateY(-100%)',
+          transition: 'all 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+          background: isScrolled ? 'rgba(255,255,255,0.95)' : 'transparent',
+          backdropFilter: isScrolled ? 'blur(20px)' : 'none',
+          boxShadow: isScrolled ? '0 1px 20px rgba(0,0,0,0.1)' : 'none',
+        }}
+      >
+        <div className="ilio-container" style={{ height: '70px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          
+          {/* Mobile Hamburger (left on mobile) */}
+          <button 
+            className="mobile-only hamburger-button"
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            style={{
+              display: 'none',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '10px',
+              zIndex: isMobileMenuOpen ? 1001 : 'auto',
+              position: 'relative',
+            }}
+          >
+            <div id="hamburger-lines" style={{ width: '25px', height: '20px', position: 'relative' }}>
+              <span style={{
+                position: 'absolute',
+                width: '100%',
+                height: '2px',
+                background: isMobileMenuOpen ? 'white' : (isScrolled ? '#374151' : 'white'),
+                top: isMobileMenuOpen ? '50%' : 0,
+                transform: isMobileMenuOpen ? 'translateY(-50%) rotate(45deg)' : 'none',
+                transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+                transformOrigin: 'center'
+              }}></span>
+              <span style={{
+                position: 'absolute',
+                width: '100%',
+                height: '2px',
+                background: isMobileMenuOpen ? 'transparent' : (isScrolled ? '#374151' : 'white'),
+                top: '50%',
+                transform: 'translateY(-50%)',
+                transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+                opacity: isMobileMenuOpen ? 0 : 1
+              }}></span>
+              <span style={{
+                position: 'absolute',
+                width: '100%',
+                height: '2px',
+                background: isMobileMenuOpen ? 'white' : (isScrolled ? '#374151' : 'white'),
+                bottom: isMobileMenuOpen ? '50%' : 0,
+                transform: isMobileMenuOpen ? 'translateY(50%) rotate(-45deg)' : 'none',
+                transition: 'all 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55)',
+                transformOrigin: 'center'
+              }}></span>
+            </div>
+          </button>
+          
+          {/* Logo (centered on mobile) */}
+          <Link href="/" className="navbar-logo" style={{ 
+            display: 'flex', 
+            alignItems: 'center', 
+            textDecoration: 'none',
+            zIndex: isMobileMenuOpen ? 1001 : 'auto',
+            position: 'relative',
+          }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img 
+              src={isMobileMenuOpen ? whiteLogo : (isScrolled ? blackLogo : whiteLogo)} 
+              alt="Ilio" 
+              style={{ 
+                height: '38.5px',
+                width: 'auto',
+                transition: 'all 0.3s ease'
+              }}
+            />
+          </Link>
+
+          {/* Desktop Navigation */}
+          <div className="desktop-nav" style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
+            <Link href="/our-story" className="nav-link" style={{
+              color: isScrolled ? '#374151' : 'white',
+              textDecoration: 'none',
+              fontWeight: 300,
+              letterSpacing: '0.05em',
+              transition: 'all 0.3s ease',
+              fontSize: '0.9625rem',
+            }}>
+              Our story
+            </Link>
+            <Link href="/saunas" className="nav-link" style={{
+              color: isScrolled ? '#374151' : 'white',
+              textDecoration: 'none',
+              fontWeight: 300,
+              letterSpacing: '0.05em',
+              transition: 'all 0.3s ease',
+              fontSize: '0.9625rem',
+            }}>
+              Saunas
+            </Link>
+            <Link href="/journal" className="nav-link" style={{
+              color: isScrolled ? '#374151' : 'white',
+              textDecoration: 'none',
+              fontWeight: 300,
+              letterSpacing: '0.05em',
+              transition: 'all 0.3s ease',
+              fontSize: '0.9625rem',
+            }}>
+              Journal
+            </Link>
+            <Link href="/contact" className="nav-link" style={{
+              color: isScrolled ? '#374151' : 'white',
+              textDecoration: 'none',
+              fontWeight: 300,
+              letterSpacing: '0.05em',
+              transition: 'all 0.3s ease',
+              fontSize: '0.9625rem',
+            }}>
+              Contact
+            </Link>
+            
+            {/* Divider */}
+            <div style={{
+              width: '1px',
+              height: '24px',
+              background: isScrolled ? '#e5e7eb' : 'rgba(255,255,255,0.3)',
+              margin: '0 0.75rem',
+            }}></div>
+            
+            {/* Cart Icon */}
+            <button 
+              className="nav-cart-button" 
+              onClick={openCart}
+              style={{
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.25rem',
+                padding: '0.5rem',
+                position: 'relative'
+              }}
+              aria-label="Shopping Cart"
+            >
+              <svg 
+                width="20" 
+                height="20" 
+                fill="none" 
+                viewBox="0 0 20 20" 
+                xmlns="http://www.w3.org/2000/svg"
+                style={{
+                  transition: 'stroke 0.3s ease'
+                }}
+              >
+                <g clipPath="url(#clip0_1655_15551)">
+                  <path 
+                    d="M1.66699 1.66675H2.75546C2.96048 1.66675 3.06299 1.66675 3.14548 1.70445C3.21817 1.73767 3.27978 1.7911 3.32295 1.85837C3.37194 1.9347 3.38644 2.03618 3.41543 2.23913L3.80985 5.00008M3.80985 5.00008L4.68643 11.4429C4.79766 12.2605 4.85328 12.6693 5.04874 12.977C5.22097 13.2482 5.46789 13.4638 5.75979 13.5979C6.09104 13.7501 6.50361 13.7501 7.32875 13.7501H14.4603C15.2458 13.7501 15.6385 13.7501 15.9595 13.6088C16.2424 13.4842 16.4852 13.2833 16.6606 13.0286C16.8594 12.7398 16.9329 12.354 17.0799 11.5824L18.1829 5.79149C18.2346 5.51992 18.2605 5.38414 18.223 5.278C18.1901 5.18489 18.1253 5.10649 18.0399 5.05676C17.9427 5.00008 17.8045 5.00008 17.528 5.00008H3.80985ZM8.33366 17.5001C8.33366 17.9603 7.96056 18.3334 7.50033 18.3334C7.04009 18.3334 6.66699 17.9603 6.66699 17.5001C6.66699 17.0398 7.04009 16.6667 7.50033 16.6667C7.96056 16.6667 8.33366 17.0398 8.33366 17.5001ZM15.0003 17.5001C15.0003 17.9603 14.6272 18.3334 14.167 18.3334C13.7068 18.3334 13.3337 17.9603 13.3337 17.5001C13.3337 17.0398 13.7068 16.6667 14.167 16.6667C14.6272 16.6667 15.0003 17.0398 15.0003 17.5001Z" 
+                    strokeWidth="1.66667" 
+                    stroke={isScrolled ? '#374151' : 'white'}
+                    strokeLinecap="round" 
+                    strokeLinejoin="round"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_1655_15551">
+                    <rect width="20" height="20" fill="white"/>
+                  </clipPath>
+                </defs>
+              </svg>
+              {totalItems > 0 && (
+                <span style={{
+                  position: 'absolute',
+                  top: '2px',
+                  right: '2px',
+                  background: '#BF5813',
+                  color: 'white',
+                  borderRadius: '50%',
+                  width: '20px',
+                  height: '20px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                }}>
+                  {totalItems}
+                </span>
+              )}
+            </button>
+            
+            {/* Auth Section */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              marginLeft: '0.5rem'
+            }}>
+              <SignedOut>
+                <SignInButton mode="modal">
+                  <button style={{
+                    background: 'transparent',
+                    border: `1px solid ${isScrolled ? '#374151' : 'white'}`,
+                    color: isScrolled ? '#374151' : 'white',
+                    padding: '0.4rem 1rem',
+                    borderRadius: '4px',
+                    fontSize: '0.875rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    fontWeight: 400
+                  }}>
+                    Sign In
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button style={{
+                    background: '#BF5813',
+                    border: 'none',
+                    color: 'white',
+                    padding: '0.5rem 1.25rem',
+                    borderRadius: '4px',
+                    fontSize: '0.875rem',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    fontWeight: 500
+                  }}>
+                    Sign Up
+                  </button>
+                </SignUpButton>
+              </SignedOut>
+              <SignedIn>
+                <UserButton 
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      avatarBox: {
+                        width: '32px',
+                        height: '32px'
+                      }
+                    }
+                  }}
+                />
+              </SignedIn>
+            </div>
+          </div>
+          
+          {/* Mobile Cart Icon (right on mobile) */}
+          <button 
+            className="mobile-only mobile-cart-button" 
+            onClick={openCart}
+            style={{
+              display: 'none',
+              background: 'none',
+              border: 'none',
+              cursor: 'pointer',
+              padding: '0.5rem',
+              position: 'relative'
+            }}
+            aria-label="Shopping Cart"
+          >
+            <svg 
+              width="20" 
+              height="20" 
+              fill="none" 
+              viewBox="0 0 20 20" 
+              xmlns="http://www.w3.org/2000/svg"
+              style={{
+                transition: 'stroke 0.3s ease'
+              }}
+            >
+              <g clipPath="url(#clip0_mobile_cart)">
+                <path 
+                  d="M1.66699 1.66675H2.75546C2.96048 1.66675 3.06299 1.66675 3.14548 1.70445C3.21817 1.73767 3.27978 1.7911 3.32295 1.85837C3.37194 1.9347 3.38644 2.03618 3.41543 2.23913L3.80985 5.00008M3.80985 5.00008L4.68643 11.4429C4.79766 12.2605 4.85328 12.6693 5.04874 12.977C5.22097 13.2482 5.46789 13.4638 5.75979 13.5979C6.09104 13.7501 6.50361 13.7501 7.32875 13.7501H14.4603C15.2458 13.7501 15.6385 13.7501 15.9595 13.6088C16.2424 13.4842 16.4852 13.2833 16.6606 13.0286C16.8594 12.7398 16.9329 12.354 17.0799 11.5824L18.1829 5.79149C18.2346 5.51992 18.2605 5.38414 18.223 5.278C18.1901 5.18489 18.1253 5.10649 18.0399 5.05676C17.9427 5.00008 17.8045 5.00008 17.528 5.00008H3.80985ZM8.33366 17.5001C8.33366 17.9603 7.96056 18.3334 7.50033 18.3334C7.04009 18.3334 6.66699 17.9603 6.66699 17.5001C6.66699 17.0398 7.04009 16.6667 7.50033 16.6667C7.96056 16.6667 8.33366 17.0398 8.33366 17.5001ZM15.0003 17.5001C15.0003 17.9603 14.6272 18.3334 14.167 18.3334C13.7068 18.3334 13.3337 17.9603 13.3337 17.5001C13.3337 17.0398 13.7068 16.6667 14.167 16.6667C14.6272 16.6667 15.0003 17.0398 15.0003 17.5001Z" 
+                  strokeWidth="1.66667" 
+                  stroke={isScrolled ? '#374151' : 'white'}
+                  strokeLinecap="round" 
+                  strokeLinejoin="round"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_mobile_cart">
+                  <rect width="20" height="20" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            {totalItems > 0 && (
+              <span style={{
+                position: 'absolute',
+                top: '2px',
+                right: '2px',
+                background: '#BF5813',
+                color: 'white',
+                borderRadius: '50%',
+                width: '20px',
+                height: '20px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '11px',
+                fontWeight: 600,
+              }}>
+                {totalItems}
+              </span>
+            )}
+          </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu Overlay */}
+      {isMobileMenuOpen && (
+        <div 
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'black',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '2.5rem',
+            zIndex: 999,
+            animation: 'slideIn 0.5s cubic-bezier(0.77, 0, 0.175, 1)',
+          }}
+          onClick={(e) => {
+            // Close menu when clicking on the black background
+            if (e.target === e.currentTarget) {
+              setIsMobileMenuOpen(false);
+            }
+          }}
+        >
+          <Link href="/our-story" onClick={() => setIsMobileMenuOpen(false)} style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontSize: '1.8rem',
+            fontWeight: 300,
+            letterSpacing: '0.1em',
+            transition: 'opacity 0.3s ease',
+            opacity: 0.9,
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}>
+            Our story
+          </Link>
+          <Link href="/saunas" onClick={() => setIsMobileMenuOpen(false)} style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontSize: '1.8rem',
+            fontWeight: 300,
+            letterSpacing: '0.1em',
+            transition: 'opacity 0.3s ease',
+            opacity: 0.9,
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}>
+            Saunas
+          </Link>
+          <Link href="/journal" onClick={() => setIsMobileMenuOpen(false)} style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontSize: '1.8rem',
+            fontWeight: 300,
+            letterSpacing: '0.1em',
+            transition: 'opacity 0.3s ease',
+            opacity: 0.9,
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}>
+            Journal
+          </Link>
+          <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)} style={{
+            color: 'white',
+            textDecoration: 'none',
+            fontSize: '1.8rem',
+            fontWeight: 300,
+            letterSpacing: '0.1em',
+            transition: 'opacity 0.3s ease',
+            opacity: 0.9,
+          }}
+          onMouseEnter={(e) => e.currentTarget.style.opacity = '1'}
+          onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}>
+            Contact
+          </Link>
+          
+          {/* Mobile Auth Section */}
+          <div style={{
+            borderTop: '1px solid rgba(255, 255, 255, 0.2)',
+            paddingTop: '2.5rem',
+            marginTop: '2rem',
+            display: 'flex',
+            gap: '1.25rem',
+            flexDirection: 'column',
+            width: '280px'
+          }}>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <button style={{
+                  background: 'transparent',
+                  border: '1px solid rgba(255, 255, 255, 0.5)',
+                  color: 'white',
+                  padding: '0.875rem 1.5rem',
+                  borderRadius: '4px',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  fontWeight: 300,
+                  width: '100%',
+                  letterSpacing: '0.05em'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+                  e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.5)';
+                  e.currentTarget.style.background = 'transparent';
+                }}>
+                  Sign In
+                </button>
+              </SignInButton>
+              <SignUpButton mode="modal">
+                <button style={{
+                  background: '#BF5813',
+                  border: 'none',
+                  color: 'white',
+                  padding: '0.875rem 1.5rem',
+                  borderRadius: '4px',
+                  fontSize: '1rem',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease',
+                  fontWeight: 400,
+                  width: '100%',
+                  letterSpacing: '0.05em'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = '#A04810';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = '#BF5813';
+                }}>
+                  Sign Up
+                </button>
+              </SignUpButton>
+            </SignedOut>
+            <SignedIn>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}>
+                <span style={{ color: 'white', fontSize: '0.9rem', opacity: 0.8 }}>Account</span>
+                <UserButton 
+                  afterSignOutUrl="/"
+                  appearance={{
+                    elements: {
+                      avatarBox: {
+                        width: '40px',
+                        height: '40px'
+                      }
+                    }
+                  }}
+                />
+              </div>
+            </SignedIn>
+          </div>
+        </div>
+      )}
+
+      <style jsx>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-100%);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        
+        @media (max-width: 924px) {
+          .desktop-nav {
+            display: none !important;
+          }
+          .mobile-only {
+            display: flex !important;
+            align-items: center;
+          }
+          .navbar-logo {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+          }
+          .ilio-container {
+            position: relative;
+          }
+        }
+      `}</style>
+    </>
+  );
+}

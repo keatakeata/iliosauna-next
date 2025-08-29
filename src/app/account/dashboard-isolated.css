@@ -1,0 +1,666 @@
+/* ISOLATED DASHBOARD - NO CONFLICTS */
+
+.ilio-dashboard {
+  min-height: 100vh;
+  background: oklch(1.0000 0 0);
+  color: oklch(0.1999 0.0223 65.9737);
+  font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  isolation: isolate;
+}
+
+/* Reset all children */
+.ilio-dashboard * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* Loading */
+.ilio-loading {
+  width: 40px;
+  height: 40px;
+  border: 3px solid oklch(0.9699 0.0013 106.4238);
+  border-top-color: oklch(0.5799 0.1510 47.6963);
+  border-radius: 50%;
+  animation: ilio-spin 1s linear infinite;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes ilio-spin {
+  to { transform: translate(-50%, -50%) rotate(360deg); }
+}
+
+/* Header */
+.ilio-header {
+  background: oklch(1.0000 0 0);
+  border-bottom: 1px solid oklch(0.9232 0.0026 48.7171);
+  height: 60px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.ilio-header-content {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1.5rem;
+}
+
+.ilio-menu-btn {
+  background: none;
+  border: none;
+  color: oklch(0.1999 0.0223 65.9737);
+  cursor: pointer;
+  padding: 0.5rem;
+  margin-left: -0.5rem;
+  border-radius: 0.5rem;
+  transition: background 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.ilio-menu-btn:hover {
+  background: oklch(0.9699 0.0013 106.4238);
+}
+
+.ilio-logo {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: oklch(0.1999 0.0223 65.9737);
+  text-decoration: none;
+  letter-spacing: -0.025em;
+}
+
+.ilio-user-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 50%;
+  overflow: hidden;
+  width: 36px;
+  height: 36px;
+  transition: box-shadow 0.2s;
+}
+
+.ilio-user-btn:hover {
+  box-shadow: 0 0 0 2px oklch(0.5799 0.1510 47.6963);
+}
+
+.ilio-user-btn img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ilio-avatar {
+  width: 100%;
+  height: 100%;
+  background: oklch(0.5799 0.1510 47.6963);
+  color: oklch(1.0000 0 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+/* Sidebar */
+.ilio-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 110;
+  animation: ilio-fade 0.2s;
+}
+
+@keyframes ilio-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.ilio-sidebar {
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 280px;
+  background: oklch(0.1999 0.0223 65.9737);
+  color: oklch(1.0000 0 0);
+  transform: translateX(-100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+}
+
+.ilio-sidebar.open {
+  transform: translateX(0);
+}
+
+.ilio-sidebar-header {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ilio-sidebar-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: oklch(1.0000 0 0);
+}
+
+.ilio-close-btn {
+  background: none;
+  border: none;
+  color: oklch(1.0000 0 0);
+  cursor: pointer;
+  padding: 0.25rem;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+  display: flex;
+  align-items: center;
+}
+
+.ilio-close-btn:hover {
+  opacity: 1;
+}
+
+.ilio-nav {
+  flex: 1;
+  padding: 1rem 0;
+  overflow-y: auto;
+}
+
+.ilio-nav-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  color: oklch(1.0000 0 0);
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.2s;
+  font-size: 0.9375rem;
+  opacity: 0.8;
+  position: relative;
+}
+
+.ilio-nav-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  opacity: 1;
+}
+
+.ilio-nav-item.active {
+  background: oklch(0.5799 0.1510 47.6963);
+  opacity: 1;
+}
+
+.ilio-nav-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: oklch(1.0000 0 0);
+}
+
+.ilio-sidebar-footer {
+  padding: 1rem 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ilio-logout {
+  color: oklch(0.8 0.15 25);
+}
+
+/* Main */
+.ilio-main {
+  margin-left: 0;
+  min-height: calc(100vh - 60px);
+  transition: margin-left 0.3s;
+}
+
+.ilio-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+/* Desktop Layout */
+@media (min-width: 1024px) {
+  .ilio-menu-btn {
+    display: none;
+  }
+  
+  .ilio-sidebar {
+    position: sticky;
+    top: 60px;
+    height: calc(100vh - 60px);
+    transform: translateX(0);
+    width: 240px;
+  }
+  
+  .ilio-sidebar-header {
+    display: none;
+  }
+  
+  .ilio-overlay {
+    display: none !important;
+  }
+  
+  .ilio-main {
+    margin-left: 240px;
+  }
+  
+  .ilio-content {
+    padding: 3rem 2rem;
+  }
+}
+
+/* Welcome */
+.ilio-welcome {
+  background: linear-gradient(135deg, oklch(0.5799 0.1510 47.6963), oklch(0.5799 0.1510 47.6963));
+  color: oklch(1.0000 0 0);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  margin-bottom: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.ilio-welcome h1 {
+  font-size: 1.75rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.ilio-welcome p {
+  opacity: 0.9;
+  font-size: 1rem;
+}
+
+/* Buttons */
+.ilio-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  text-decoration: none;
+  cursor: pointer;
+  border: none;
+  transition: all 0.2s;
+}
+
+.ilio-btn-primary {
+  background: oklch(1.0000 0 0);
+  color: oklch(0.5799 0.1510 47.6963);
+}
+
+.ilio-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.ilio-btn-secondary {
+  background: oklch(0.9699 0.0013 106.4238);
+  color: oklch(0.1999 0.0223 65.9737);
+}
+
+.ilio-btn-secondary:hover {
+  background: oklch(0.9699 0.0013 106.4238);
+  opacity: 0.8;
+}
+
+.ilio-btn-text {
+  background: none;
+  border: none;
+  color: oklch(0.5799 0.1510 47.6963);
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0;
+}
+
+/* Stats */
+.ilio-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.ilio-stat {
+  background: oklch(1.0000 0 0);
+  border: 1px solid oklch(0.9232 0.0026 48.7171);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.ilio-stat-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.5rem;
+  background: oklch(0.9699 0.0013 106.4238);
+  color: oklch(0.1999 0.0223 65.9737);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ilio-stat-icon.warning {
+  background: oklch(0.9 0.05 85);
+  color: oklch(0.5 0.15 85);
+}
+
+.ilio-stat-icon.success {
+  background: oklch(0.9 0.05 142);
+  color: oklch(0.6368 0.1510 142.3313);
+}
+
+.ilio-stat-label {
+  font-size: 0.875rem;
+  color: oklch(0.5534 0.0116 58.0708);
+  margin-bottom: 0.25rem;
+}
+
+.ilio-stat-value {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: oklch(0.1999 0.0223 65.9737);
+}
+
+/* Cards */
+.ilio-card {
+  background: oklch(1.0000 0 0);
+  border: 1px solid oklch(0.9232 0.0026 48.7171);
+  border-radius: 0.5rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.ilio-card-header {
+  padding: 1.5rem;
+  border-bottom: 1px solid oklch(0.9232 0.0026 48.7171);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.ilio-card-header h2 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: oklch(0.1999 0.0223 65.9737);
+}
+
+.ilio-card-header h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem 1.5rem 0;
+}
+
+/* Orders */
+.ilio-orders {
+  padding: 0.5rem 0;
+}
+
+.ilio-order {
+  padding: 1rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid oklch(0.9232 0.0026 48.7171);
+  transition: background 0.2s;
+}
+
+.ilio-order:hover {
+  background: oklch(0.9699 0.0013 106.4238);
+}
+
+.ilio-order:last-child {
+  border-bottom: none;
+}
+
+.ilio-order h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: oklch(0.1999 0.0223 65.9737);
+}
+
+.ilio-order p {
+  font-size: 0.875rem;
+  color: oklch(0.5534 0.0116 58.0708);
+}
+
+.ilio-order-meta {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.ilio-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.ilio-badge-success {
+  background: oklch(0.9 0.05 142);
+  color: oklch(0.6368 0.1510 142.3313);
+}
+
+.ilio-badge-warning {
+  background: oklch(0.9 0.05 85);
+  color: oklch(0.5 0.15 85);
+}
+
+.ilio-badge-info {
+  background: oklch(0.9 0.05 200);
+  color: oklch(0.5 0.15 200);
+}
+
+.ilio-badge-muted {
+  background: oklch(0.9699 0.0013 106.4238);
+  color: oklch(0.5534 0.0116 58.0708);
+}
+
+.ilio-amount {
+  font-weight: 600;
+  color: oklch(0.1999 0.0223 65.9737);
+}
+
+/* Sections */
+.ilio-section-header {
+  margin-bottom: 2rem;
+}
+
+.ilio-section-header h1 {
+  font-size: 1.875rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: oklch(0.1999 0.0223 65.9737);
+}
+
+.ilio-section-header p {
+  color: oklch(0.5534 0.0116 58.0708);
+}
+
+/* Grids */
+.ilio-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.ilio-profile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Info Lists */
+.ilio-info-list {
+  padding: 0 1.5rem 1.5rem;
+}
+
+.ilio-info-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.75rem 0;
+  border-bottom: 1px solid oklch(0.9232 0.0026 48.7171);
+}
+
+.ilio-info-row:last-child {
+  border-bottom: none;
+}
+
+.ilio-info-label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: oklch(0.5534 0.0116 58.0708);
+  font-size: 0.875rem;
+}
+
+.ilio-info-value {
+  color: oklch(0.1999 0.0223 65.9737);
+  font-weight: 500;
+  text-align: right;
+}
+
+/* Settings */
+.ilio-setting {
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border-bottom: 1px solid oklch(0.9232 0.0026 48.7171);
+}
+
+.ilio-setting:last-child {
+  border-bottom: none;
+}
+
+.ilio-setting-info {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  flex: 1;
+}
+
+.ilio-setting-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 0.5rem;
+  background: oklch(0.9699 0.0013 106.4238);
+  color: oklch(0.1999 0.0223 65.9737);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.ilio-setting h4 {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: oklch(0.1999 0.0223 65.9737);
+}
+
+.ilio-setting p {
+  font-size: 0.875rem;
+  color: oklch(0.5534 0.0116 58.0708);
+}
+
+/* Empty State */
+.ilio-empty {
+  padding: 3rem 1.5rem;
+  text-align: center;
+  color: oklch(0.5534 0.0116 58.0708);
+}
+
+.ilio-empty svg {
+  margin: 0 auto 1rem;
+  opacity: 0.5;
+}
+
+.ilio-empty h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: oklch(0.1999 0.0223 65.9737);
+  margin-bottom: 0.5rem;
+}
+
+.ilio-empty p {
+  margin-bottom: 1.5rem;
+}
+
+/* Utilities */
+.ilio-text-muted {
+  color: oklch(0.5534 0.0116 58.0708);
+  font-size: 0.875rem;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.ilio-full-width {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Mobile */
+@media (max-width: 640px) {
+  .ilio-welcome {
+    padding: 1.5rem;
+  }
+  
+  .ilio-welcome h1 {
+    font-size: 1.5rem;
+  }
+  
+  .ilio-stats {
+    grid-template-columns: 1fr;
+  }
+  
+  .ilio-profile-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .ilio-order-meta {
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.5rem;
+  }
+}
