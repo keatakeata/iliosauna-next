@@ -184,17 +184,32 @@ export default function CartDrawer() {
                     height: '100px',
                     flexShrink: 0,
                     overflow: 'hidden',
-                    borderRadius: '8px'
+                    borderRadius: '8px',
+                    background: item.image ? 'transparent' : '#f0f0f0'
                   }}>
-                    <img 
-                      src={item.image} 
-                      alt={item.name}
-                      style={{
+                    {item.image ? (
+                      <img 
+                        src={item.image} 
+                        alt={item.name}
+                        style={{
+                          width: '100%',
+                          height: '100%',
+                          objectFit: 'cover'
+                        }}
+                      />
+                    ) : (
+                      <div style={{
                         width: '100%',
                         height: '100%',
-                        objectFit: 'cover'
-                      }}
-                    />
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: '#999',
+                        fontSize: '12px'
+                      }}>
+                        No Image
+                      </div>
+                    )}
                   </div>
 
                   {/* Product Details */}

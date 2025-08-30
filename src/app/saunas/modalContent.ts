@@ -516,5 +516,116 @@ export const modalContent: ModalContentMap = {
         author: 'Sarah Chen, Airbnb Photography Specialist'
       }
     ]
+  },
+  serviceAreas: {
+    title: 'Professional Installation Across BC',
+    subtitle: 'White-glove delivery and setup included in every order',
+    mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689eb8385bdfcf7391ce0084.jpeg',
+    sections: [
+      {
+        type: 'coverage-map',
+        title: 'Greater Vancouver Service Area',
+        description: 'Free delivery and installation within 50km of Vancouver',
+        areas: [
+          {
+            region: 'Vancouver & North Shore',
+            cities: [
+              'Vancouver',
+              'North Vancouver',
+              'West Vancouver',
+              'UBC',
+              'Point Grey',
+              'Kitsilano',
+              'Downtown'
+            ]
+          },
+          {
+            region: 'Tri-Cities & Eastern Communities',
+            cities: [
+              'Burnaby',
+              'Coquitlam',
+              'Port Coquitlam',
+              'Port Moody',
+              'New Westminster',
+              'Anmore',
+              'Belcarra'
+            ]
+          },
+          {
+            region: 'Richmond & South',
+            cities: [
+              'Richmond',
+              'Delta',
+              'Tsawwassen',
+              'Ladner',
+              'Steveston',
+              'White Rock',
+              'South Surrey'
+            ]
+          },
+          {
+            region: 'Fraser Valley',
+            cities: [
+              'Surrey',
+              'Langley',
+              'Maple Ridge',
+              'Pitt Meadows',
+              'Mission',
+              'Abbotsford',
+              'Chilliwack'
+            ]
+          },
+          {
+            region: 'Sea to Sky Corridor',
+            cities: [
+              'Squamish',
+              'Whistler',
+              'Pemberton',
+              'Lions Bay',
+              'Bowen Island',
+              'Britannia Beach'
+            ]
+          }
+        ]
+      },
+      {
+        type: 'installation-process',
+        title: 'What to Expect',
+        items: [
+          {
+            step: '1',
+            title: 'Site Assessment',
+            text: 'Our team visits to confirm placement, electrical requirements, and access'
+          },
+          {
+            step: '2',
+            title: 'Scheduled Delivery',
+            text: 'White-glove delivery on your schedule, typically within 2-3 weeks'
+          },
+          {
+            step: '3',
+            title: 'Professional Assembly',
+            text: '4-6 hour installation by certified technicians, including electrical hookup'
+          },
+          {
+            step: '4',
+            title: 'Walkthrough & Training',
+            text: 'Complete orientation on operation, maintenance, and app setup'
+          }
+        ]
+      },
+      {
+        type: 'additional-services',
+        title: 'Extended Service Areas',
+        text: 'We also service Vancouver Island, the Okanagan, and other BC regions. Additional delivery fees may apply.',
+        extendedAreas: [
+          'Victoria & Southern Vancouver Island',
+          'Nanaimo & Central Vancouver Island',
+          'Kelowna & Central Okanagan',
+          'Kamloops & Thompson Valley',
+          'Prince George & Northern BC'
+        ]
+      }
+    ]
   }
 };

@@ -63,10 +63,10 @@ export default function AboutSection() {
                 }}
               >
                 <source 
-                  src="https://res.cloudinary.com/dnqa04ovh/video/upload/q_auto:low,w_1280/v1755735418/render_01_1_g8xfvf.mp4" 
+                  src="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4" 
                   type="video/mp4" 
                 />
-                <p>Your browser does not support HTML5 video. Here is a <a href="https://res.cloudinary.com/dnqa04ovh/video/upload/q_auto:low,w_1280/v1755735418/render_01_1_g8xfvf.mp4">link to the video</a> instead.</p>
+                <p>Your browser does not support HTML5 video. Here is a <a href="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4">link to the video</a> instead.</p>
               </video>
             </div>
           </div>

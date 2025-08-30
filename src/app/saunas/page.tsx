@@ -11,35 +11,36 @@ import { FEATURE_FLAGS } from '@/lib/feature-flags';
 
 // Lazy Loading Image Component for Performance
 function LazyImage({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
-  const [imageSrc, setImageSrc] = useState<string>('');
-  const [imageRef, setImageRef] = useState<HTMLImageElement | null>(null);
+  const [imageSrc, setImageSrc] = useState<string | null>(null);
+  const [containerRef, setContainerRef] = useState<HTMLDivElement | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
   const onIntersection = useCallback((entries: IntersectionObserverEntry[]) => {
     const [entry] = entries;
-    if (entry.isIntersecting) {
+    if (entry.isIntersecting && src) {
       setImageSrc(src);
     }
   }, [src]);
 
   useEffect(() => {
-    if (!imageRef) return;
+    if (!containerRef) return;
     
     const observer = new IntersectionObserver(onIntersection, {
       threshold: 0,
       rootMargin: '100px' // Start loading 100px before image enters viewport
     });
     
-    observer.observe(imageRef);
+    observer.observe(containerRef);
     
     return () => {
       observer.disconnect();
     };
-  }, [imageRef, onIntersection]);
+  }, [containerRef, onIntersection]);
 
   return (
     <>
       <div
+        ref={setContainerRef}
         style={{
           position: 'absolute',
           top: 0,
@@ -52,23 +53,24 @@ function LazyImage({ src, alt, style }: { src: string; alt: string; style?: Reac
           ...style
         }}
       />
-      <img
-        ref={setImageRef}
-        src={imageSrc}
-        alt={alt}
-        onLoad={() => setIsLoaded(true)}
-        style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          opacity: isLoaded ? 1 : 0,
-          transition: 'opacity 0.3s ease-out',
-          ...style
-        }}
-      />
+      {imageSrc && (
+        <img
+          src={imageSrc}
+          alt={alt}
+          onLoad={() => setIsLoaded(true)}
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: isLoaded ? 1 : 0,
+            transition: 'opacity 0.3s ease-out',
+            ...style
+          }}
+        />
+      )}
     </>
   );
 }
@@ -369,7 +371,7 @@ export default function SaunasPage() {
                 }}
               >
                 <source 
-                  src="https://res.cloudinary.com/dnqa04ovh/video/upload/v1755736013/render_01_2_j9bh27.mp4" 
+                  src="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0ebafd8a0cd83ab30.mp4" 
                   type="video/mp4" 
                 />
               </video>
@@ -601,10 +603,12 @@ export default function SaunasPage() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                <LazyImage 
-                  src={feature.image}
-                  alt={feature.title}
-                />
+                {feature.image && (
+                  <LazyImage 
+                    src={feature.image}
+                    alt={feature.title}
+                  />
+                )}
                 <div 
                   className="card-overlay"
                   style={{
@@ -657,10 +661,12 @@ export default function SaunasPage() {
                   cursor: 'pointer'
                 }}
               >
-                <LazyImage 
-                  src={feature.image}
-                  alt={feature.title}
-                />
+                {feature.image && (
+                  <LazyImage 
+                    src={feature.image}
+                    alt={feature.title}
+                  />
+                )}
                 <div style={{
                   position: 'absolute',
                   inset: 0,
@@ -928,7 +934,7 @@ export default function SaunasPage() {
                       gap: '1rem',
                       marginBottom: '2rem'
                     }}>
-                      {content.gallery.map((img, idx) => (
+                      {content.gallery.map((img, idx) => img ? (
                         <img 
                           key={idx}
                           src={img}
@@ -942,7 +948,7 @@ export default function SaunasPage() {
                             cursor: 'zoom-in'
                           }}
                         />
-                      ))}
+                      ) : null)}
                     </div>
                   )}
                   

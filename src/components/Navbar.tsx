@@ -193,7 +193,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             }}>
               Saunas
             </Link>
-            <Link href="/journal" className="nav-link" style={{
+            <Link href="/blog" className="nav-link" style={{
               color: isScrolled ? '#374151' : 'white',
               textDecoration: 'none',
               fontWeight: 300,
@@ -507,7 +507,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
           onMouseLeave={(e) => e.currentTarget.style.opacity = '0.9'}>
             Saunas
           </Link>
-          <Link href="/journal" onClick={() => setIsMobileMenuOpen(false)} style={{
+          <Link href="/blog" onClick={() => setIsMobileMenuOpen(false)} style={{
             color: 'white',
             textDecoration: 'none',
             fontSize: '1.8rem',
