@@ -75,10 +75,13 @@ export const PUBLIC_ROUTES = [
   ROUTES.SAUNAS,
   ROUTES.OUR_STORY,
   ROUTES.JOURNAL,
+  '/journal/(.*)', // Include all journal/blog post pages
   ROUTES.CONTACT,
   ROUTES.PRODUCTS,
   ROUTES.SIGN_IN,
   ROUTES.SIGN_UP,
   '/studio',
   '/studio/(.*)', // Include all studio sub-routes
+  '/blog', // Blog redirect page
+  '/blog/(.*)', // All blog sub-routes
 ];
