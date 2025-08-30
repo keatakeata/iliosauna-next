@@ -64,18 +64,40 @@ export default {
       ]
     },
     {
-      type: 'code',
+      name: 'codeBlock',
+      type: 'object',
       title: 'Code Block',
-      options: {
-        language: 'javascript',
-        languageAlternatives: [
-          { title: 'JavaScript', value: 'javascript' },
-          { title: 'HTML', value: 'html' },
-          { title: 'CSS', value: 'css' },
-          { title: 'JSON', value: 'json' },
-          { title: 'Markdown', value: 'markdown' }
-        ]
-      }
+      fields: [
+        {
+          name: 'code',
+          type: 'text',
+          title: 'Code',
+          description: 'The code snippet'
+        },
+        {
+          name: 'language',
+          type: 'string',
+          title: 'Language',
+          options: {
+            list: [
+              { title: 'JavaScript', value: 'javascript' },
+              { title: 'TypeScript', value: 'typescript' },
+              { title: 'HTML', value: 'html' },
+              { title: 'CSS', value: 'css' },
+              { title: 'JSON', value: 'json' },
+              { title: 'Markdown', value: 'markdown' },
+              { title: 'Python', value: 'python' },
+              { title: 'Bash', value: 'bash' }
+            ]
+          }
+        },
+        {
+          name: 'filename',
+          type: 'string',
+          title: 'Filename (optional)',
+          description: 'Optional filename to display above the code block'
+        }
+      ]
     },
     {
       name: 'youtube',

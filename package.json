@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev -p 4448",
     "dev:webpack": "cross-env NODE_OPTIONS=--max-old-space-size=4096 NEXT_CONFIG_FILE=next.config.windows.js next dev",
     "dev:original": "next dev",
     "dev:clean": "rimraf .next .build && npm run dev",
@@ -37,6 +37,7 @@
     "react": "19.1.0",
     "react-dom": "19.1.0",
     "sanity": "^4.6.0",
+    "styled-components": "^6.1.19",
     "tailwind-merge": "^3.3.1"
   },
   "devDependencies": {

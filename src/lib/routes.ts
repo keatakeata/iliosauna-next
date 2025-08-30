@@ -79,4 +79,6 @@ export const PUBLIC_ROUTES = [
   ROUTES.PRODUCTS,
   ROUTES.SIGN_IN,
   ROUTES.SIGN_UP,
+  '/studio',
+  '/studio/(.*)', // Include all studio sub-routes
 ];
