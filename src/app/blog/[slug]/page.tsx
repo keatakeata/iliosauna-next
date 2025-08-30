@@ -460,7 +460,12 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
                     boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
                     transition: 'transform 0.3s ease'
                   }}
-                  className="related-card"
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
                   >
                     {relatedPost.mainImage && (
                       <div style={{
@@ -498,12 +503,6 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
           </div>
         </section>
       )}
-
-      <style jsx>{`
-        .related-card:hover {
-          transform: translateY(-4px);
-        }
-      `}</style>
 
       <Footer />
     </>
