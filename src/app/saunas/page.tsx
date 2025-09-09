@@ -354,9 +354,7 @@ export default function SaunasPage() {
               margin: '3rem auto 0',
               borderRadius: '8px',
               overflow: 'hidden',
-              position: 'relative',
-              paddingBottom: '56.25%',
-              height: 0
+              boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
             }}>
               <video 
                 controls
@@ -367,12 +365,9 @@ export default function SaunasPage() {
                 preload="auto"
                 poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg"
                 style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
                   width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
+                  height: 'auto',
+                  display: 'block'
                 }}
               >
                 <source 

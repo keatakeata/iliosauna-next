@@ -37,6 +37,28 @@ export default function AboutSection({ homepageData }: AboutSectionProps) {
             }}>
               {aboutData?.paragraph1 || 'At Ilio, we believe wellness should be accessible, beautiful, and transformative. Ilio delivers an affordable, high-quality sauna experience unlike any other. Our saunas unite Scandinavian craftsmanship with modern design, blending contemporary aesthetics with premium British Columbia–sourced materials. Precision-engineered and fitted with advanced heating systems, each sauna provides enduring quality and an experience that lasts.'}
             </p>
+            
+            {/* Video Section */}
+            <div className="video-container reveal-on-scroll reveal-delay-3" style={{
+              maxWidth: '800px',
+              margin: '3rem auto 0',
+              borderRadius: '8px',
+              overflow: 'hidden',
+              boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
+            }}>
+              <video 
+                controls 
+                style={{
+                  width: '100%',
+                  height: 'auto',
+                  display: 'block'
+                }}
+                poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48eefde667db736f79.jpeg"
+              >
+                <source src={aboutData?.videoUrl || 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4'} type="video/mp4" />
+                Your browser does not support the video tag.
+              </video>
+            </div>
           </div>
         </div>
       </div>
