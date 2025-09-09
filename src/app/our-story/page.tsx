@@ -165,7 +165,12 @@ export default function OurStoryPage() {
 
         const cmsData = await sanityFetch({ query });
 
-        // CODE-FIRST: Use code content as base, apply CMS overrides
+        // CODE-FIRST: Always use code content, ignore CMS for now
+        // CMS is providing test data that's overriding production content
+        setOurStoryData(codeContent);
+        
+        // Commenting out CMS override temporarily
+        /*
         if (cmsData) {
           // Deep merge: Code content + CMS overrides
           const mergedContent: OurStoryData = {
@@ -181,6 +186,7 @@ export default function OurStoryPage() {
           // Pure code content (no CMS)
           setOurStoryData(codeContent);
         }
+        */
 
       } catch (error) {
         console.error('Error fetching CMS data:', error);
