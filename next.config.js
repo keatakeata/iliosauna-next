@@ -23,7 +23,28 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   experimental: {
-    cpus: 1,
+    // Increase worker limits for better build performance
+    cpus: Math.max(1, require('os').cpus().length - 1),
+    workerThreads: true,
+    esmExternals: true,
+  },
+  // Increase memory limits for build processes
+  webpack: (config, { dev }) => {
+    if (!dev) {
+      config.optimization.splitChunks = {
+        chunks: 'all',
+        cacheGroups: {
+          default: false,
+          vendors: false,
+          vendor: {
+            name: 'vendor',
+            chunks: 'all',
+            test: /node_modules/,
+          },
+        },
+      };
+    }
+    return config;
   },
   // Temporarily exclude account pages from build if Clerk is not configured
   async redirects() {

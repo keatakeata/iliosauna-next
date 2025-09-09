@@ -7,6 +7,9 @@ import { blogPostQuery, blogPostsQuery } from '../../../../sanity/lib/queries';
 import { PortableText } from '@portabletext/react';
 import { notFound } from 'next/navigation';
 
+// Enable ISR with 1 hour revalidation
+export const revalidate = 3600;
+
 interface BlogPost {
   _id: string;
   title: string;
@@ -41,39 +44,60 @@ interface BlogPost {
 }
 
 export async function generateStaticParams() {
-  const posts = await sanityFetch<BlogPost[]>({ 
-    query: blogPostsQuery,
-    tags: ['blog']
-  });
+  try {
+    const posts = await sanityFetch<BlogPost[]>({ 
+      query: blogPostsQuery,
+      tags: ['blog']
+    });
 
-  return posts.map((post) => ({
-    slug: post.slug.current,
-  }));
+    if (!posts || !Array.isArray(posts)) {
+      console.warn('No blog posts found during static generation');
+      return [];
+    }
+
+    return posts
+      .filter(post => post?.slug?.current) // Filter out invalid posts
+      .map((post) => ({
+        slug: post.slug.current,
+      }));
+  } catch (error) {
+    console.error('Error generating static params for blog posts:', error);
+    return []; // Return empty array to prevent build failure
+  }
 }
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
-  const post = await sanityFetch<BlogPost>({ 
-    query: blogPostQuery,
-    params: { slug: params.slug },
-    tags: ['blog', params.slug]
-  });
+  try {
+    const post = await sanityFetch<BlogPost>({ 
+      query: blogPostQuery,
+      params: { slug: params.slug },
+      tags: ['blog', params.slug]
+    });
 
-  if (!post) {
+    if (!post) {
+      return {
+        title: 'Post Not Found - Ilio Sauna',
+        description: 'The requested blog post could not be found.',
+      };
+    }
+
     return {
-      title: 'Post Not Found',
+      title: post.seo?.metaTitle || post.title || 'Ilio Sauna Blog',
+      description: post.seo?.metaDescription || post.excerpt || 'Ilio Sauna - Luxury wellness and sauna insights',
+      keywords: post.seo?.keywords?.join(', ') || post.tags?.join(', ') || 'sauna, wellness, luxury',
+      openGraph: {
+        title: post.seo?.metaTitle || post.title || 'Ilio Sauna Blog',
+        description: post.seo?.metaDescription || post.excerpt || 'Ilio Sauna wellness insights',
+        images: post.mainImage ? [urlFor(post.mainImage).width(1200).height(630).url()] : [],
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata for blog post:', error);
+    return {
+      title: 'Ilio Sauna Blog',
+      description: 'Luxury sauna and wellness insights',
     };
   }
-
-  return {
-    title: post.seo?.metaTitle || post.title,
-    description: post.seo?.metaDescription || post.excerpt,
-    keywords: post.seo?.keywords?.join(', ') || post.tags?.join(', '),
-    openGraph: {
-      title: post.seo?.metaTitle || post.title,
-      description: post.seo?.metaDescription || post.excerpt,
-      images: post.mainImage ? [urlFor(post.mainImage).width(1200).height(630).url()] : [],
-    },
-  };
 }
 
 function formatDate(date: string) {
@@ -86,31 +110,42 @@ function formatDate(date: string) {
 
 const components = {
   types: {
-    image: ({ value }: any) => (
-      <div style={{ margin: '2rem 0' }}>
-        <Image
-          src={urlFor(value).width(800).url()}
-          alt={value.alt || ''}
-          width={800}
-          height={450}
-          style={{
-            width: '100%',
-            height: 'auto',
-            borderRadius: '8px'
-          }}
-        />
-        {value.caption && (
-          <p style={{
-            textAlign: 'center',
-            fontSize: '0.875rem',
-            color: '#666',
-            marginTop: '0.5rem'
-          }}>
-            {value.caption}
-          </p>
-        )}
-      </div>
-    ),
+    image: ({ value }: any) => {
+      if (!value || !value.asset) {
+        return null; // Skip invalid images
+      }
+      
+      return (
+        <div style={{ margin: '2rem 0' }}>
+          <Image
+            src={urlFor(value).width(800).url()}
+            alt={value.alt || 'Blog image'}
+            width={800}
+            height={450}
+            style={{
+              width: '100%',
+              height: 'auto',
+              borderRadius: '8px'
+            }}
+            loading="lazy"
+            onError={(e) => {
+              console.warn('Failed to load blog image:', value);
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+          {value.caption && (
+            <p style={{
+              textAlign: 'center',
+              fontSize: '0.875rem',
+              color: '#666',
+              marginTop: '0.5rem'
+            }}>
+              {value.caption}
+            </p>
+          )}
+        </div>
+      );
+    },
     callout: ({ value }: any) => (
       <div style={{
         padding: '1.5rem',
@@ -240,11 +275,18 @@ const components = {
 };
 
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
-  const post = await sanityFetch<BlogPost>({ 
-    query: blogPostQuery,
-    params: { slug: params.slug },
-    tags: ['blog', params.slug]
-  });
+  let post: BlogPost | null = null;
+  
+  try {
+    post = await sanityFetch<BlogPost>({ 
+      query: blogPostQuery,
+      params: { slug: params.slug },
+      tags: ['blog', params.slug]
+    });
+  } catch (error) {
+    console.error('Error fetching blog post:', error);
+    notFound();
+  }
 
   if (!post) {
     notFound();
@@ -258,9 +300,9 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
       <section style={{
         position: 'relative',
         minHeight: '70vh',
-        backgroundImage: post.mainImage ? 
+        backgroundImage: (post.mainImage && post.mainImage.asset) ? 
           `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('${urlFor(post.mainImage).width(1920).url()}')` :
-          `linear-gradient(135deg, #667eea 0%, #764ba2 100%)`,
+          `linear-gradient(135deg, #8B7355 0%, #6B5B47 100%)`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         display: 'flex',
