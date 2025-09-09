@@ -2,32 +2,80 @@ import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
 import customFieldIds from '@/lib/custom-field-ids.json';
 
-// Simple PIT token configuration - no OAuth needed
+// GHL OAuth configuration
 const GHL_ACCESS_TOKEN = process.env.GHL_ACCESS_TOKEN;
+const GHL_REFRESH_TOKEN = process.env.GHL_REFRESH_TOKEN;
 const GHL_LOCATION_ID = process.env.GHL_LOCATION_ID;
 const GHL_API_BASE = process.env.GHL_API_BASE || 'https://services.leadconnectorhq.com';
+const GHL_CLIENT_ID = process.env.GHL_CLIENT_ID;
+const GHL_CLIENT_SECRET = process.env.GHL_CLIENT_SECRET;
+
+// Token management
+let accessToken = GHL_ACCESS_TOKEN;
+let tokenExpiresAt = parseInt(process.env.GHL_TOKEN_EXPIRES_AT || '0');
+
+async function refreshAccessToken() {
+  if (!GHL_REFRESH_TOKEN) {
+    throw new Error('No refresh token available');
+  }
+
+  try {
+    const response = await axios({
+      method: 'post',
+      url: `${GHL_API_BASE}/oauth/token`,
+      data: `client_id=${GHL_CLIENT_ID}&client_secret=${GHL_CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${encodeURIComponent(GHL_REFRESH_TOKEN)}`,
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+        'Accept': 'application/json'
+      }
+    });
+
+    accessToken = response.data.access_token;
+    tokenExpiresAt = Date.now() + (response.data.expires_in * 1000);
+    
+    console.log('Token refreshed successfully');
+    return response.data.access_token;
+  } catch (error) {
+    console.error('Error refreshing token:', error);
+    throw error;
+  }
+}
+
+async function getValidAccessToken() {
+  // Check if token needs refresh (5 minutes before expiry)
+  if (Date.now() >= tokenExpiresAt - (5 * 60 * 1000)) {
+    console.log('Token expired or expiring soon, refreshing...');
+    try {
+      return await refreshAccessToken();
+    } catch (error) {
+      console.error('Failed to refresh token, using existing token');
+      return accessToken;
+    }
+  }
+  return accessToken;
+}
 
 export async function POST(request: NextRequest) {
   try {
     const contactData = await request.json();
-    console.log('Creating contact with data:', JSON.stringify(contactData, null, 2));
+    console.log('Creating contact:', JSON.stringify(contactData, null, 2));
 
     // Check if GHL credentials are configured
-    if (!GHL_ACCESS_TOKEN || !GHL_LOCATION_ID) {
-      console.error('GHL credentials not configured:', {
-        hasToken: !!GHL_ACCESS_TOKEN,
-        hasLocationId: !!GHL_LOCATION_ID
-      });
+    if (!GHL_ACCESS_TOKEN || GHL_ACCESS_TOKEN === 'your-ghl-access-token-here') {
+      console.log('GHL credentials not configured - running in test mode');
       
       // Return success in test mode
       return NextResponse.json({
         success: true,
         contactId: 'test-' + Date.now(),
-        message: 'Form submitted successfully (test mode - GHL not configured)',
+        message: 'Form submitted successfully (test mode - GHL credentials not configured)',
         testMode: true
       });
     }
 
+    // Get valid access token
+    const token = await getValidAccessToken();
+    
     // Prepare the contact payload
     const payload: any = {
       locationId: GHL_LOCATION_ID,
@@ -75,20 +123,18 @@ export async function POST(request: NextRequest) {
 
     console.log('Sending to GHL:', JSON.stringify(payload, null, 2));
 
-    // Make API call to create contact - using PIT token directly
+    // Make API call to create contact
     const response = await axios.post(
       `${GHL_API_BASE}/contacts/`,
       payload,
       {
         headers: {
-          'Authorization': `Bearer ${GHL_ACCESS_TOKEN}`,
+          'Authorization': `Bearer ${token}`,
           'Content-Type': 'application/json',
           'Version': '2021-07-28'
         }
       }
     );
-
-    console.log('GHL Response:', response.data);
 
     return NextResponse.json({
       success: true,
@@ -97,11 +143,7 @@ export async function POST(request: NextRequest) {
     });
 
   } catch (error: any) {
-    console.error('Error creating contact:', {
-      message: error.message,
-      response: error.response?.data,
-      status: error.response?.status
-    });
+    console.error('Error creating contact:', error.response?.data || error.message);
     
     // Handle duplicate contact error gracefully
     if (error.response?.status === 400 && 
@@ -116,12 +158,12 @@ export async function POST(request: NextRequest) {
 
     // Handle authorization errors
     if (error.response?.status === 401) {
-      console.error('Authorization failed - PIT token may be invalid');
+      console.error('Authorization failed - token may be expired or invalid');
       return NextResponse.json(
         {
           success: false,
           message: 'Service temporarily unavailable. Please try again later or contact us directly.',
-          error: 'Authorization error - check PIT token in Vercel'
+          error: 'Authorization error'
         },
         { status: 500 }
       );
