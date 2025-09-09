@@ -2,7 +2,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 
-export default function TestimonialsSection() {
+interface TestimonialsSectionProps {
+  homepageData?: {
+    testimonialSection?: {
+      title?: string;
+      subtitle?: string;
+    };
+  };
+}
+
+export default function TestimonialsSection({ homepageData }: TestimonialsSectionProps) {
+  const testimonialData = homepageData?.testimonialSection;
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -99,7 +109,7 @@ export default function TestimonialsSection() {
       <div className="ilio-container">
         <div className="text-center mb-5">
           <h2 className="section-header h2-animate reveal-on-scroll" style={{ marginBottom: '2rem' }}>
-            Client Experiences
+            {testimonialData?.title || 'Client Experiences'}
           </h2>
           <div className="section-divider reveal-on-scroll reveal-delay-1" style={{
             width: '75%',
@@ -114,7 +124,7 @@ export default function TestimonialsSection() {
             lineHeight: '1.8',
             color: '#5a5a5a'
           }}>
-            Discover what our early adopters are saying about their Ilio Sauna journey
+            {testimonialData?.subtitle || 'Discover what our early adopters are saying about their Ilio Sauna journey'}
           </p>
         </div>
 

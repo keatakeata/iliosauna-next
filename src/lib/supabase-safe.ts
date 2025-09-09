@@ -10,7 +10,9 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 // Create a safe client that won't crash if credentials are missing
 let supabaseClient: ReturnType<typeof createClient> | null = null
 
-if (supabaseUrl && supabaseAnonKey) {
+// Disable Supabase in development to avoid connection timeouts
+const isDevelopment = process.env.NODE_ENV === 'development';
+if (supabaseUrl && supabaseAnonKey && !isDevelopment) {
   try {
     supabaseClient = createClient(supabaseUrl, supabaseAnonKey, {
       auth: {

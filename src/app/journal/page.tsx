@@ -3,23 +3,25 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import { createClient } from '@sanity/client';
-import imageUrlBuilder from '@sanity/image-url';
+import ExpandableSearch from '@/components/ExpandableSearch';
+import { analytics } from '@/lib/analytics';
 
-// Sanity client setup
-const sanityClient = createClient({
-  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
-  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
-  useCdn: true,
-  apiVersion: '2024-01-01'
-});
-
-const builder = imageUrlBuilder(sanityClient);
-
-function urlFor(source: any) {
-  return builder.image(source);
+// Helper function to build Sanity image URLs
+function getImageUrl(image: any, width: number, height: number): string {
+  if (!image?.asset?._ref) {
+    return `https://images.unsplash.com/photo-1540555700478-4be289fbecef?w=${width}&h=${height}&fit=crop`;
+  }
+  
+  const projectId = 'bxybmggj';
+  const dataset = 'production';
+  const ref = image.asset._ref;
+  const [_file, id, dimensions, format] = ref.split('-');
+  const [w, h] = dimensions.split('x');
+  
+  return `https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${dimensions}.${format}?w=${width}&h=${height}&fit=crop`;
 }
 
 interface BlogPost {
@@ -63,109 +65,60 @@ export default function JournalPage() {
   const [loading, setLoading] = useState(true);
   const [pageLoaded, setPageLoaded] = useState(false);
 
-  // Fetch blog posts from Sanity
+  // Track page view
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        // Fetch posts
-        const postsQuery = `*[_type == "blogPost"] | order(publishedAt desc) {
-          _id,
-          title,
-          slug,
-          excerpt,
-          publishedAt,
-          mainImage,
-          tags,
-          featured,
-          readingTime,
-          categories[]->{
-            _id,
-            title,
-            slug,
-            color
-          },
-          author->{
-            name,
-            slug,
-            image
-          }
-        }`;
-        
-        // Fetch categories
-        const categoriesQuery = `*[_type == "category"] | order(order asc) {
-          _id,
-          title,
-          slug,
-          color,
-          "postCount": count(*[_type == "blogPost" && references(^._id)])
-        }`;
-        
-        const [postsData, categoriesData] = await Promise.all([
-          sanityClient.fetch(postsQuery),
-          sanityClient.fetch(categoriesQuery)
-        ]);
-        
-        setPosts(postsData);
-        setFilteredPosts(postsData);
-        setCategories(categoriesData);
-        setLoading(false);
-      } catch (error) {
-        console.error('Error fetching blog data:', error);
-        setLoading(false);
-        // Use fallback static data if Sanity fails
-        const fallbackPosts = [
-          {
-            _id: '1',
-            title: "The Science Behind Infrared Saunas",
-            slug: { current: "science-behind-infrared-saunas" },
-            excerpt: "Discover the proven health benefits of regular sauna use, from improved cardiovascular health to enhanced recovery.",
-            publishedAt: "2024-12-15",
-            categories: [{ _id: '1', title: 'Health', slug: { current: 'health' }, color: '#4CAF50' }],
-            tags: ['wellness', 'health', 'science'],
-            author: { name: 'Dr. Sarah Mitchell', slug: { current: 'sarah-mitchell' } },
-            readingTime: 5,
-            mainImage: null
-          },
-          {
-            _id: '2',
-            title: "Designing Your Backyard Wellness Retreat",
-            slug: { current: "designing-backyard-wellness-retreat" },
-            excerpt: "Transform your outdoor space into a personal sanctuary with thoughtful design and strategic placement.",
-            publishedAt: "2024-12-10",
-            categories: [{ _id: '2', title: 'Design', slug: { current: 'design' }, color: '#9B8B7E' }],
-            tags: ['design', 'backyard', 'installation'],
-            author: { name: 'Alex Chen', slug: { current: 'alex-chen' } },
-            readingTime: 7,
-            mainImage: null
-          },
-          {
-            _id: '3',
-            title: "Sauna Maintenance: A Complete Guide",
-            slug: { current: "sauna-maintenance-complete-guide" },
-            excerpt: "Keep your Ilio sauna in pristine condition with our comprehensive maintenance tips and seasonal care guide.",
-            publishedAt: "2024-12-05",
-            categories: [{ _id: '3', title: 'Technical', slug: { current: 'technical' }, color: '#FF9800' }],
-            tags: ['maintenance', 'care', 'technical'],
-            author: { name: 'Mike Johnson', slug: { current: 'mike-johnson' } },
-            readingTime: 10,
-            mainImage: null
-          }
-        ];
-        setPosts(fallbackPosts as any);
-        setFilteredPosts(fallbackPosts as any);
-        setCategories([
-          { _id: '1', title: 'Health', slug: { current: 'health' }, color: '#4CAF50', postCount: 1 },
-          { _id: '2', title: 'Design', slug: { current: 'design' }, color: '#9B8B7E', postCount: 1 },
-          { _id: '3', title: 'Technical', slug: { current: 'technical' }, color: '#FF9800', postCount: 1 }
-        ]);
-      }
-    };
-    
-    fetchData();
+    analytics.pageView('/journal', 'Wellness Journal');
     
     // Trigger animations
     const timer = setTimeout(() => setPageLoaded(true), 50);
     return () => clearTimeout(timer);
+  }, []);
+
+  // Fetch blog posts from API
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      
+      try {
+        // Fetch from our API route which handles server-side Sanity fetching
+        const response = await fetch('/api/blog/posts');
+        const data = await response.json();
+        
+        const postsData = data.posts;
+        const categoriesData = data.categories;
+
+        // If we have real posts from Sanity, use them
+        if (postsData && postsData.length > 0) {
+          console.log('✅ Loaded', postsData.length, 'real blog posts from Sanity');
+          setPosts(postsData);
+          setFilteredPosts(postsData);
+        } else {
+          console.log('📝 No blog posts found in Sanity yet');
+          setPosts([]);
+          setFilteredPosts([]);
+        }
+
+        // Set categories if available
+        if (categoriesData && categoriesData.length > 0) {
+          setCategories(categoriesData);
+        } else {
+          // Default categories if none exist
+          setCategories([
+            { _id: 'wellness', title: 'Wellness', slug: { current: 'wellness' }, color: '#9B8B7E', postCount: 0 },
+            { _id: 'design', title: 'Design', slug: { current: 'design' }, color: '#8B5A3C', postCount: 0 },
+            { _id: 'maintenance', title: 'Maintenance', slug: { current: 'maintenance' }, color: '#B08D57', postCount: 0 }
+          ]);
+        }
+      } catch (error) {
+        console.error('Error fetching blog posts:', error);
+        setPosts([]);
+        setFilteredPosts([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
   }, []);
 
   // Filter posts based on search, category, and tags
@@ -174,18 +127,37 @@ export default function JournalPage() {
     
     // Filter by search term
     if (searchTerm) {
+      const searchLower = searchTerm.toLowerCase();
       filtered = filtered.filter(post =>
-        post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        post.tags?.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()))
+        post.title.toLowerCase().includes(searchLower) ||
+        (post.excerpt && post.excerpt.toLowerCase().includes(searchLower)) ||
+        post.tags?.some(tag => tag.toLowerCase().includes(searchLower)) ||
+        (post.author?.name && post.author.name.toLowerCase().includes(searchLower))
       );
+      
+      // Track search
+      analytics.track('Blog Search', { 
+        search_term: searchTerm,
+        results_count: filtered.length 
+      });
     }
     
     // Filter by category
     if (selectedCategory !== 'all') {
       filtered = filtered.filter(post =>
-        post.categories?.some(cat => cat.slug.current === selectedCategory)
+        post.categories?.some(cat => {
+          // Handle malformed slugs by cleaning them first
+          const slugValue = cat.slug.current;
+          const cleanSlug = slugValue.split(/[A-Z]/)[0] || slugValue;
+          return cleanSlug === selectedCategory || slugValue.startsWith(selectedCategory);
+        })
       );
+      
+      // Track category filter
+      analytics.track('Blog Category Filtered', { 
+        category: selectedCategory,
+        results_count: filtered.length 
+      });
     }
     
     // Filter by tag
@@ -193,6 +165,12 @@ export default function JournalPage() {
       filtered = filtered.filter(post =>
         post.tags?.includes(selectedTag)
       );
+      
+      // Track tag filter
+      analytics.track('Blog Tag Filtered', { 
+        tag: selectedTag,
+        results_count: filtered.length 
+      });
     }
     
     setFilteredPosts(filtered);
@@ -200,6 +178,16 @@ export default function JournalPage() {
 
   // Get all unique tags
   const allTags = Array.from(new Set(posts.flatMap(post => post.tags || [])));
+
+  const handlePostClick = (post: BlogPost) => {
+    analytics.track('Blog Post Clicked', {
+      post_id: post._id,
+      post_title: post.title,
+      post_slug: post.slug.current,
+      categories: post.categories?.map(c => c.title) || [],
+      tags: post.tags || []
+    });
+  };
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -267,153 +255,466 @@ export default function JournalPage() {
       </section>
       
       {/* Search and Filter Section */}
-      <section style={{ background: '#f8f8f8', padding: '40px 0' }}>
+      <section style={{ background: '#f8f8f8', padding: '20px 0' }}>
         <div className="ilio-container">
-          {/* Search Bar */}
-          <div style={{ maxWidth: '600px', margin: '0 auto 2rem' }}>
-            <input
-              type="text"
-              placeholder="Search articles, topics, or tags..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                width: '100%',
-                padding: '1rem 1.5rem',
-                fontSize: '1rem',
-                border: '1px solid #ddd',
-                borderRadius: '50px',
-                outline: 'none',
-                transition: 'border-color 0.3s ease',
-                backgroundColor: 'white'
-              }}
-              onFocus={(e) => e.currentTarget.style.borderColor = '#9B8B7E'}
-              onBlur={(e) => e.currentTarget.style.borderColor = '#ddd'}
-            />
-          </div>
-          
-          {/* Category Filters */}
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '1rem', flexWrap: 'wrap' }}>
-            <button
-              onClick={() => setSelectedCategory('all')}
-              style={{
-                padding: '0.5rem 1.5rem',
-                border: 'none',
-                borderRadius: '25px',
-                backgroundColor: selectedCategory === 'all' ? '#9B8B7E' : 'white',
-                color: selectedCategory === 'all' ? 'white' : '#666',
-                cursor: 'pointer',
-                transition: 'all 0.3s ease',
-                fontSize: '0.95rem'
-              }}
-            >
-              All Posts ({posts.length})
-            </button>
-            {categories.map(category => (
-              <button
-                key={category._id}
-                onClick={() => setSelectedCategory(category.slug.current)}
-                style={{
-                  padding: '0.5rem 1.5rem',
-                  border: 'none',
-                  borderRadius: '25px',
-                  backgroundColor: selectedCategory === category.slug.current 
-                    ? (category.color || '#9B8B7E') 
-                    : 'white',
-                  color: selectedCategory === category.slug.current ? 'white' : '#666',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease',
-                  fontSize: '0.95rem'
-                }}
-              >
-                {category.title} ({category.postCount || 0})
-              </button>
-            ))}
-          </div>
-          
-          {/* Tags Cloud */}
-          {allTags.length > 0 && (
-            <div style={{ marginTop: '2rem', textAlign: 'center' }}>
-              <p style={{ marginBottom: '1rem', color: '#666' }}>Popular Tags:</p>
-              <div style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', flexWrap: 'wrap' }}>
-                {allTags.map(tag => (
-                  <span
-                    key={tag}
-                    onClick={() => setSelectedTag(selectedTag === tag ? '' : tag)}
-                    style={{
-                      padding: '0.25rem 0.75rem',
-                      backgroundColor: selectedTag === tag ? '#9B8B7E' : '#f0f0f0',
-                      color: selectedTag === tag ? 'white' : '#666',
-                      borderRadius: '15px',
-                      fontSize: '0.85rem',
-                      cursor: 'pointer',
-                      transition: 'all 0.3s ease'
-                    }}
-                  >
-                    #{tag}
-                  </span>
-                ))}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: pageLoaded ? 1 : 0, y: pageLoaded ? 0 : 20 }}
+            transition={{ duration: 0.6, delay: 0.3 }}
+          >
+            {/* Search Bar and Filters Row */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.75rem',
+              flexWrap: 'wrap',
+              justifyContent: 'center'
+            }}>
+              {/* Search Component */}
+              <ExpandableSearch
+                searchTerm={searchTerm}
+                onSearchChange={setSearchTerm}
+                placeholder="Search articles"
+              />
+              
+              {/* Category Filter Badges */}
+              <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
+                <motion.button
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  transition={{ delay: 0.1, type: 'spring', bounce: 0.3 }}
+                  onClick={() => setSelectedCategory('all')}
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    backgroundColor: selectedCategory === 'all' ? '#9B8B7E' : 'rgba(155, 139, 126, 0.1)',
+                    color: selectedCategory === 'all' ? 'white' : '#9B8B7E',
+                    borderRadius: '4px',
+                    fontSize: '0.9rem',
+                    border: selectedCategory === 'all' ? 'none' : '1px solid rgba(155, 139, 126, 0.3)',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    fontWeight: selectedCategory === 'all' ? '500' : '400'
+                  }}
+                >
+                  All Posts {loading ? '' : `(${posts.length})`}
+                </motion.button>
+                
+                {categories.map((category, index) => {
+                  const cleanSlug = (category.slug.current.split(/[A-Z]/)[0] || category.slug.current);
+                  const isSelected = selectedCategory === cleanSlug;
+                  
+                  return (
+                    <motion.button
+                      key={category._id}
+                      initial={{ opacity: 0, scale: 0.9 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ delay: 0.1 + (index * 0.05), type: 'spring', bounce: 0.3 }}
+                      onClick={() => setSelectedCategory(cleanSlug)}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
+                      style={{
+                        padding: '0.5rem 1rem',
+                        backgroundColor: isSelected ? (category.color || '#9B8B7E') : `${category.color || '#9B8B7E'}15`,
+                        color: isSelected ? 'white' : (category.color || '#9B8B7E'),
+                        borderRadius: '4px',
+                        fontSize: '0.9rem',
+                        border: isSelected ? 'none' : `1px solid ${category.color || '#9B8B7E'}40`,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s ease',
+                        fontWeight: isSelected ? '500' : '400'
+                      }}
+                    >
+                      {category.title} {loading ? '' : `(${category.postCount || 0})`}
+                    </motion.button>
+                  );
+                })}
               </div>
             </div>
-          )}
+            
+            {/* Tags Section */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.4 }}
+              style={{ marginTop: '1rem' }}
+            >
+              {allTags.length > 0 && (
+                <div style={{ textAlign: 'center' }}>
+                  <p style={{ 
+                    marginBottom: '0.5rem', 
+                    color: '#666',
+                    fontSize: '0.85rem',
+                    fontWeight: '500'
+                  }}>
+                    Popular Tags:
+                  </p>
+                  <div style={{ 
+                    display: 'flex', 
+                    justifyContent: 'center', 
+                    gap: '0.5rem', 
+                    flexWrap: 'wrap' 
+                  }}>
+                    {allTags.map((tag, index) => (
+                      <motion.button
+                        key={tag}
+                        initial={{ opacity: 0, y: 5 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.5 + (index * 0.03) }}
+                        onClick={() => setSelectedTag(selectedTag === tag ? '' : tag)}
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                        style={{
+                          padding: '0.25rem 0.75rem',
+                          backgroundColor: selectedTag === tag ? '#9B8B7E' : '#f0f0f0',
+                          color: selectedTag === tag ? 'white' : '#666',
+                          borderRadius: '4px',
+                          fontSize: '0.8rem',
+                          border: 'none',
+                          cursor: 'pointer',
+                          transition: 'all 0.2s ease'
+                        }}
+                      >
+                        #{tag}
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+            
+            {/* Results count */}
+            <AnimatePresence>
+              {(searchTerm || selectedCategory !== 'all' || selectedTag) && posts.length > 0 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.9 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.9 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ textAlign: 'center', marginTop: '0.75rem' }}
+                >
+                  <p style={{ color: '#666', fontSize: '0.85rem' }}>
+                    Showing {filteredPosts.length} of {posts.length} articles
+                  </p>
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </motion.div>
         </div>
       </section>
       
       {/* Blog Posts Grid */}
       <section style={{ background: 'white', padding: '60px 0', flex: 1 }}>
         <div className="ilio-container">
-          {loading ? (
-            <div style={{ textAlign: 'center', padding: '3rem' }}>
-              <p>Loading articles...</p>
-            </div>
-          ) : filteredPosts.length === 0 ? (
-            <div style={{ textAlign: 'center', padding: '3rem' }}>
-              <p>No articles found matching your criteria.</p>
-            </div>
-          ) : (
-            <>
-              {/* Featured Posts */}
-              {filteredPosts.filter(post => post.featured).length > 0 && (
-                <div style={{ marginBottom: '3rem' }}>
-                  <h2 style={{ fontSize: '1.8rem', fontWeight: 300, marginBottom: '2rem', color: '#333' }}>
-                    Featured Articles
-                  </h2>
+          <AnimatePresence mode="wait">
+            {loading ? (
+              <motion.div
+                key="loading"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-center py-12"
+              >
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                  className="w-8 h-8 border-2 border-[#9B8B7E] border-t-transparent rounded-full mx-auto mb-4"
+                />
+                <p className="text-xl text-gray-600">Loading articles from Sanity...</p>
+              </motion.div>
+            ) : posts.length === 0 ? (
+              <motion.div
+                key="no-posts"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="text-center py-12"
+              >
+                <motion.h2
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.2, type: 'spring', bounce: 0.3 }}
+                  className="text-3xl font-light text-gray-800 mb-4"
+                >
+                  Coming Soon
+                </motion.h2>
+                <motion.p
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.4 }}
+                  className="text-lg text-gray-600 max-w-2xl mx-auto mb-6"
+                >
+                  We're currently preparing exciting content about sauna wellness, design tips, and maintenance guides. 
+                  Check back soon for our first articles!
+                </motion.p>
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.6 }}
+                  className="mt-6"
+                >
+                  <p className="text-gray-500 text-sm">
+                    In the meantime, explore our <Link href="/saunas" className="text-[#9B8B7E] hover:underline">sauna collection</Link> or <Link href="/contact" className="text-[#9B8B7E] hover:underline">contact us</Link> with any questions.
+                  </p>
+                </motion.div>
+              </motion.div>
+            ) : filteredPosts.length === 0 ? (
+              <motion.div
+                key="no-results"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.4 }}
+                className="text-center py-12"
+              >
+                <motion.p
+                  initial={{ scale: 0.9 }}
+                  animate={{ scale: 1 }}
+                  transition={{ delay: 0.1, type: 'spring', bounce: 0.3 }}
+                  className="text-xl text-gray-600 mb-6"
+                >
+                  No articles found matching your criteria.
+                </motion.p>
+                <motion.button
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.3 }}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={() => {
+                    setSearchTerm('');
+                    setSelectedCategory('all');
+                    setSelectedTag('');
+                  }}
+                  className="px-6 py-2 border border-[#9B8B7E] rounded-lg bg-transparent text-[#9B8B7E] hover:bg-[#9B8B7E] hover:text-white transition-all duration-200"
+                >
+                  Clear Filters
+                </motion.button>
+              </motion.div>
+            ) : (
+              <motion.div
+                key="posts"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.4 }}
+              >
+                {/* Featured Posts */}
+                {filteredPosts.filter(post => post.featured).length > 0 && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5, delay: 0.2 }}
+                    className="mb-12"
+                  >
+                    <div style={{ marginBottom: '3rem' }}>
+                      <motion.h2
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.3 }}
+                        style={{
+                          fontSize: '2rem',
+                          fontWeight: 100,
+                          color: '#333',
+                          letterSpacing: '0.05em',
+                          marginBottom: '0.75rem'
+                        }}
+                      >
+                        Featured Articles
+                      </motion.h2>
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.6, delay: 0.4 }}
+                        style={{
+                          height: '1px',
+                          background: 'linear-gradient(90deg, #9B8B7E 0%, #9B8B7E 30%, transparent 100%)',
+                          transformOrigin: 'left',
+                          maxWidth: '200px'
+                        }}
+                      />
+                    </div>
+                    <div style={{ 
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+                      gap: '2rem'
+                    }}>
+                      {filteredPosts.filter(post => post.featured).map(post => (
+                        <Link 
+                          key={post._id} 
+                          href={`/journal/${post.slug.current}`}
+                          onClick={() => handlePostClick(post)}
+                          style={{ textDecoration: 'none', color: 'inherit' }}
+                        >
+                          <article style={{
+                            background: 'white',
+                            borderRadius: '12px',
+                            overflow: 'hidden',
+                            boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
+                            cursor: 'pointer',
+                            border: '2px solid #9B8B7E'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'translateY(-8px)';
+                            e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.15)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'translateY(0)';
+                            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+                          }}
+                          >
+                            {post.mainImage && (
+                              <div style={{ 
+                                position: 'relative',
+                                paddingBottom: '50%',
+                                overflow: 'hidden',
+                                background: '#f0f0f0'
+                              }}>
+                              <img
+                                src={getImageUrl(post.mainImage, 800, 400)}
+                                alt={post.mainImage.alt || post.title}
+                                style={{
+                                  position: 'absolute',
+                                  top: 0,
+                                  left: 0,
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'cover'
+                                }}
+                              />
+                              </div>
+                            )}
+                            <div style={{ padding: '2rem' }}>
+                              {post.categories && post.categories.length > 0 && (
+                                <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
+                                  {post.categories.map(category => (
+                                    <span key={category._id} style={{
+                                      padding: '0.25rem 0.75rem',
+                                      backgroundColor: category.color || '#9B8B7E',
+                                      color: 'white',
+                                      borderRadius: '4px',
+                                      fontSize: '0.85rem'
+                                    }}>
+                                      {category.title}
+                                    </span>
+                                  ))}
+                                </div>
+                              )}
+                              <h3 style={{ 
+                                fontSize: '1.5rem',
+                                fontWeight: 300,
+                                marginBottom: '0.75rem',
+                                color: '#333'
+                              }}>
+                                {post.title}
+                              </h3>
+                              <p style={{
+                                color: '#666',
+                                lineHeight: '1.6',
+                                marginBottom: '1rem'
+                              }}>
+                                {post.excerpt || 'Click to read more...'}
+                              </p>
+                              <div style={{ 
+                                display: 'flex', 
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                fontSize: '0.875rem',
+                                color: '#999'
+                              }}>
+                                <span>{post.author?.name || 'Ilio Team'}</span>
+                                <div style={{ display: 'flex', gap: '1rem' }}>
+                                  {post.readingTime && (
+                                    <span>{post.readingTime} min read</span>
+                                  )}
+                                  <time>{new Date(post.publishedAt).toLocaleDateString()}</time>
+                                </div>
+                              </div>
+                            </div>
+                          </article>
+                        </Link>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+                
+                {/* Regular Posts */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.5, delay: filteredPosts.filter(post => post.featured).length > 0 ? 0.4 : 0.2 }}
+                >
+                  {filteredPosts.filter(post => !post.featured).length > 0 && (
+                    <div style={{ marginBottom: '3rem' }}>
+                      <motion.h2
+                        initial={{ opacity: 0, x: -20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.5, delay: 0.5 }}
+                        style={{
+                          fontSize: '2rem',
+                          fontWeight: 100,
+                          color: '#333',
+                          letterSpacing: '0.05em',
+                          marginBottom: '0.75rem'
+                        }}
+                      >
+                        {filteredPosts.filter(post => post.featured).length > 0 ? 'Recent Articles' : 'All Articles'}
+                      </motion.h2>
+                      <motion.div
+                        initial={{ scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: 0.6, delay: 0.6 }}
+                        style={{
+                          height: '1px',
+                          background: 'linear-gradient(90deg, #9B8B7E 0%, #9B8B7E 30%, transparent 100%)',
+                          transformOrigin: 'left',
+                          maxWidth: '200px'
+                        }}
+                      />
+                    </div>
+                  )}
                   <div style={{ 
                     display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fill, minmax(400px, 1fr))',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
                     gap: '2rem'
                   }}>
-                    {filteredPosts.filter(post => post.featured).map(post => (
+                    {filteredPosts.filter(post => !post.featured).map(post => (
                       <Link 
                         key={post._id} 
                         href={`/journal/${post.slug.current}`}
+                        onClick={() => handlePostClick(post)}
                         style={{ textDecoration: 'none', color: 'inherit' }}
                       >
                         <article style={{
                           background: 'white',
-                          borderRadius: '12px',
+                          borderRadius: '8px',
                           overflow: 'hidden',
-                          boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
+                          boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
                           transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                          cursor: 'pointer',
-                          border: '2px solid #9B8B7E'
+                          cursor: 'pointer'
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-8px)';
-                          e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.15)';
+                          e.currentTarget.style.transform = 'translateY(-4px)';
+                          e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.12)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+                          e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
                         }}
                         >
                           {post.mainImage && (
                             <div style={{ 
                               position: 'relative',
-                              paddingBottom: '50%',
-                              overflow: 'hidden'
+                              paddingBottom: '60%',
+                              overflow: 'hidden',
+                              background: '#f0f0f0'
                             }}>
-                              <img 
-                                src={urlFor(post.mainImage).width(800).height(400).url()}
+                              <img
+                                src={getImageUrl(post.mainImage, 700, 420)}
                                 alt={post.mainImage.alt || post.title}
                                 style={{
                                   position: 'absolute',
@@ -426,180 +727,57 @@ export default function JournalPage() {
                               />
                             </div>
                           )}
-                          <div style={{ padding: '2rem' }}>
-                            <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '1rem' }}>
-                              {post.categories?.map(category => (
-                                <span key={category._id} style={{
-                                  padding: '0.25rem 0.75rem',
-                                  backgroundColor: category.color || '#f8f8f8',
-                                  color: category.color ? 'white' : '#666',
-                                  borderRadius: '4px',
-                                  fontSize: '0.85rem'
-                                }}>
-                                  {category.title}
-                                </span>
-                              ))}
-                            </div>
+                          <div style={{ padding: '1.5rem' }}>
+                            {post.categories && post.categories.length > 0 && (
+                              <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
+                                {post.categories.map(category => (
+                                  <span key={category._id} style={{
+                                    padding: '0.2rem 0.6rem',
+                                    backgroundColor: category.color ? `${category.color}20` : '#f8f8f820',
+                                    color: category.color || '#9B8B7E',
+                                    borderRadius: '4px',
+                                    fontSize: '0.8rem'
+                                  }}>
+                                    {category.title}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
                             <h3 style={{ 
-                              fontSize: '1.5rem',
+                              fontSize: '1.25rem',
                               fontWeight: 300,
-                              marginBottom: '0.75rem',
+                              marginBottom: '0.5rem',
                               color: '#333'
                             }}>
                               {post.title}
                             </h3>
                             <p style={{
                               color: '#666',
-                              lineHeight: '1.6',
-                              marginBottom: '1rem'
+                              lineHeight: '1.5',
+                              marginBottom: '1rem',
+                              fontSize: '0.95rem'
                             }}>
-                              {post.excerpt}
+                              {post.excerpt || 'Click to read more...'}
                             </p>
                             <div style={{ 
                               display: 'flex', 
                               justifyContent: 'space-between',
                               alignItems: 'center',
-                              fontSize: '0.875rem',
+                              fontSize: '0.8rem',
                               color: '#999'
                             }}>
-                              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                                {post.author?.image && (
-                                  <img 
-                                    src={urlFor(post.author.image).width(30).height(30).url()}
-                                    alt={post.author.name}
-                                    style={{ 
-                                      width: '30px', 
-                                      height: '30px', 
-                                      borderRadius: '50%',
-                                      objectFit: 'cover'
-                                    }}
-                                  />
-                                )}
-                                <span>{post.author?.name}</span>
-                              </div>
-                              <div style={{ display: 'flex', gap: '1rem' }}>
-                                {post.readingTime && (
-                                  <span>{post.readingTime} min read</span>
-                                )}
-                                <time>{new Date(post.publishedAt).toLocaleDateString()}</time>
-                              </div>
+                              <span>{post.author?.name || 'Ilio Team'}</span>
+                              <time>{new Date(post.publishedAt).toLocaleDateString()}</time>
                             </div>
                           </div>
                         </article>
                       </Link>
                     ))}
                   </div>
-                </div>
-              )}
-              
-              {/* Regular Posts */}
-              <div>
-                {filteredPosts.filter(post => !post.featured).length > 0 && (
-                  <h2 style={{ 
-                    fontSize: '1.8rem', 
-                    fontWeight: 300, 
-                    marginBottom: '2rem', 
-                    color: '#333' 
-                  }}>
-                    {filteredPosts.filter(post => post.featured).length > 0 ? 'Recent Articles' : 'All Articles'}
-                  </h2>
-                )}
-                <div style={{ 
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(350px, 1fr))',
-                  gap: '2rem'
-                }}>
-                  {filteredPosts.filter(post => !post.featured).map(post => (
-                    <Link 
-                      key={post._id} 
-                      href={`/journal/${post.slug.current}`}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
-                      <article style={{
-                        background: 'white',
-                        borderRadius: '8px',
-                        overflow: 'hidden',
-                        boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-                        transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-                        cursor: 'pointer'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = 'translateY(-4px)';
-                        e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.12)';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
-                      }}
-                      >
-                        {post.mainImage && (
-                          <div style={{ 
-                            position: 'relative',
-                            paddingBottom: '60%',
-                            overflow: 'hidden'
-                          }}>
-                            <img 
-                              src={urlFor(post.mainImage).width(600).height(360).url()}
-                              alt={post.mainImage.alt || post.title}
-                              style={{
-                                position: 'absolute',
-                                top: 0,
-                                left: 0,
-                                width: '100%',
-                                height: '100%',
-                                objectFit: 'cover'
-                              }}
-                            />
-                          </div>
-                        )}
-                        <div style={{ padding: '1.5rem' }}>
-                          <div style={{ display: 'flex', gap: '0.5rem', marginBottom: '0.75rem' }}>
-                            {post.categories?.map(category => (
-                              <span key={category._id} style={{
-                                padding: '0.2rem 0.6rem',
-                                backgroundColor: category.color ? `${category.color}20` : '#f8f8f8',
-                                color: category.color || '#9B8B7E',
-                                borderRadius: '4px',
-                                fontSize: '0.8rem'
-                              }}>
-                                {category.title}
-                              </span>
-                            ))}
-                          </div>
-                          <h3 style={{ 
-                            fontSize: '1.25rem',
-                            fontWeight: 300,
-                            marginBottom: '0.5rem',
-                            color: '#333'
-                          }}>
-                            {post.title}
-                          </h3>
-                          <p style={{
-                            color: '#666',
-                            lineHeight: '1.5',
-                            marginBottom: '1rem',
-                            fontSize: '0.95rem'
-                          }}>
-                            {post.excerpt}
-                          </p>
-                          <div style={{ 
-                            display: 'flex', 
-                            justifyContent: 'space-between',
-                            alignItems: 'center',
-                            fontSize: '0.8rem',
-                            color: '#999'
-                          }}>
-                            <span>{post.author?.name}</span>
-                            <time>{new Date(post.publishedAt).toLocaleDateString()}</time>
-                          </div>
-                        </div>
-                      </article>
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </>
-          )}
+                </motion.div>
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
       </section>
       

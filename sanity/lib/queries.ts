@@ -8,7 +8,7 @@ export const homepageQuery = groq`
       subtitle,
       buttonText,
       "images": images[]{
-        "url": asset->url,
+        "url": coalesce(imageUrl, imageFile.asset->url),
         alt
       }
     },
@@ -19,9 +19,11 @@ export const homepageQuery = groq`
       videoUrl,
       "videoPoster": videoPoster.asset->url
     },
-    premiumDetailsSection {
+    saunaShowcaseSection {
       title,
-      features[] {
+      subtitle,
+      buttonText,
+      cards[] {
         title,
         description,
         "image": image.asset->url
@@ -29,9 +31,15 @@ export const homepageQuery = groq`
     },
     testimonialSection {
       title,
-      showTestimonials
+      subtitle
     },
-    ctaSection {
+    newsletterSection {
+      title,
+      subtitle,
+      buttonText,
+      "backgroundImage": backgroundImage.asset->url
+    },
+    contactSection {
       title,
       subtitle,
       buttonText,
@@ -86,52 +94,76 @@ export const ourStoryQuery = groq`
 // Saunas page query
 export const saunasPageQuery = groq`
   *[_type == "saunaspage"][0] {
-    heroSection {
+    section1 {
       title,
       subtitle,
-      buttonText,
-      "images": images[]{
-        "url": asset->url,
+      slides[] {
+        "url": coalesce(imageUrl, image.asset->url),
         alt
       }
     },
-    introSection {
+    section2 {
       title,
-      description
+      paragraph1,
+      paragraph2,
+      videoUrl,
+      videoPoster
     },
-    productsSection {
+    section3 {
       title,
-      displayMode,
-      selectedProducts[]-> {
-        _id,
-        name,
-        slug,
-        price,
-        "heroImage": heroImage.asset->url,
-        description
-      }
+      backgroundImage,
+      basePrice,
+      size,
+      heater,
+      warranty,
+      leadTime
     },
-    benefitsSection {
-      title,
-      benefits[] {
-        title,
-        description,
-        "icon": icon.asset->url
-      }
-    },
-    processSection {
-      title,
-      steps[] {
-        stepNumber,
-        title,
-        description
-      }
-    },
-    ctaSection {
+    section4 {
       title,
       subtitle,
-      buttonText,
-      buttonLink
+      features[] {
+        id,
+        title,
+        description,
+        "imageUrl": coalesce(imageUrl, image.asset->url),
+        modalContent {
+          modalTitle,
+          modalSubtitle,
+          award,
+          awardText,
+          mainImage,
+          gallery,
+          sections[] {
+            sectionType,
+            title,
+            text,
+            image,
+            items[] {
+              title,
+              text,
+              image,
+              list
+            },
+            engineeringDetails[] {
+              subtitle,
+              image,
+              text
+            }
+          }
+        }
+      }
+    },
+    section5 {
+      guaranteeTitle,
+      guaranteeDescription,
+      guaranteeFeatures,
+      guaranteeNote,
+      faqTitle,
+      faqItems[] {
+        question,
+        answer
+      },
+      contactLinkText
     }
   }
 `

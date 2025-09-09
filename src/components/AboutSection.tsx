@@ -1,12 +1,25 @@
 'use client';
 
-export default function AboutSection() {
+interface AboutSectionProps {
+  homepageData?: {
+    aboutSection?: {
+      title?: string;
+      paragraph1?: string;
+      paragraph2?: string;
+      videoUrl?: string;
+    };
+  };
+}
+
+export default function AboutSection({ homepageData }: AboutSectionProps) {
+  const aboutData = homepageData?.aboutSection;
+  
   return (
-    <section id="story" className="ilio-section" style={{ padding: '100px 0' }}>
+    <section id="story" className="ilio-section" style={{ padding: '80px 0' }}>
       <div className="ilio-container">
         <div className="text-center mb-5">
           <h2 className="section-header h2-animate reveal-on-scroll" style={{ marginBottom: '2rem' }}>
-            Make it stand out
+            {aboutData?.title || 'Bring beauty and wellness home with Ilio'}
           </h2>
           <div className="section-divider reveal-on-scroll reveal-delay-1" style={{
             width: '75%',
@@ -22,53 +35,8 @@ export default function AboutSection() {
               lineHeight: '1.8',
               color: '#5a5a5a'
             }}>
-              At Ilio, we believe wellness should be accessible, beautiful, and transformative.
-              Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.
+              {aboutData?.paragraph1 || 'At Ilio, we believe wellness should be accessible, beautiful, and transformative. Ilio delivers an affordable, high-quality sauna experience unlike any other. Our saunas unite Scandinavian craftsmanship with modern design, blending contemporary aesthetics with premium British Columbia–sourced materials. Precision-engineered and fitted with advanced heating systems, each sauna provides enduring quality and an experience that lasts.'}
             </p>
-            <p className="reveal-on-scroll reveal-delay-3" style={{ 
-              maxWidth: '800px', 
-              margin: '1.5rem auto 3rem',
-              fontSize: '1.1rem',
-              lineHeight: '1.8',
-              color: '#5a5a5a'
-            }}>
-              Each sauna is precision-engineered from sustainably sourced Western Red Cedar and fitted 
-              with advanced heating systems for an experience that lasts.
-            </p>
-            {/* Video Section - 16:9 Aspect Ratio */}
-            <div className="reveal-on-scroll reveal-delay-4" style={{ 
-              maxWidth: '900px', 
-              margin: '0 auto',
-              borderRadius: '8px',
-              overflow: 'hidden',
-              position: 'relative',
-              paddingBottom: '56.25%', /* 16:9 aspect ratio (9/16 = 0.5625) */
-              height: 0
-            }}>
-              <video 
-                controls
-                autoPlay
-                muted
-                loop
-                playsInline
-                preload="auto"
-                poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg"
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover'
-                }}
-              >
-                <source 
-                  src="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4" 
-                  type="video/mp4" 
-                />
-                <p>Your browser does not support HTML5 video. Here is a <a href="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4">link to the video</a> instead.</p>
-              </video>
-            </div>
           </div>
         </div>
       </div>

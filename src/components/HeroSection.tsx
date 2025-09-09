@@ -2,12 +2,27 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
+import { sanityImageUrl } from '@/lib/sanity.config';
 
-export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boolean }) {
+interface HeroSectionProps {
+  homepageData?: {
+    heroSection: {
+      title: string;
+      subtitle: string;
+      buttonText: string;
+      images: { imageFile?: any; imageUrl?: string; alt: string }[];
+    };
+  };
+}
+
+export default function HeroSection({ homepageData }: HeroSectionProps) {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [pageLoaded, setPageLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
   
-  const slides = [
+  // Updated images - exact sequence from live site
+  const fallbackSlides = [
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg',
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6deefde6fa237370e2.jpeg',
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/688e6fd14f59c85a9f60aa2d.jpeg',
@@ -15,6 +30,41 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6898b31fefa0f04e3e74fc35.jpeg',
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c126b12dc665.jpeg'
   ];
+
+  let slides = fallbackSlides;
+  if (homepageData?.heroSection?.images?.length) {
+    const sanitySlides = homepageData.heroSection.images
+      .map(img => img.imageUrl)
+      .filter((url): url is string => Boolean(url));
+    if (sanitySlides.length > 0) {
+      slides = sanitySlides;
+    }
+  }
+
+
+
+  // Get text content from Sanity or use defaults
+  const heroTitle = homepageData?.heroSection?.title || 'Contemporary Luxury Saunas';
+  const heroSubtitle = homepageData?.heroSection?.subtitle || 'Scandinavian craftsmanship';
+  const heroButtonText = homepageData?.heroSection?.buttonText || 'View Models';
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPageLoaded(true);
+    }, 50);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Mobile detection for responsive positioning
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -69,8 +119,22 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
                 width: '100%',
                 height: '100%',
                 objectFit: 'cover',
+                objectPosition:
+                  // Mobile specific positioning for Image 3 (index 2)
+                  (isMobile && index === 2) ? '80% center' : // Image 3 - more to the right on mobile
+                  // Desktop positioning
+                  index === 1 ? '70% center' : // Image 2 - slightly left of right
+                  index === 5 ? '40% center' : // Image 6 - slightly right of left
+                  'center center'
               }}
-              loading="eager" // Pre-load all images
+              loading="eager"
+              onError={(e) => {
+                console.error('Hero image failed to load:', slide);
+                e.currentTarget.style.backgroundColor = '#ff0000';
+              }}
+              onLoad={() => {
+                console.log('Hero image loaded successfully:', slide);
+              }}
             />
             <div style={{
               position: 'absolute',
@@ -109,7 +173,7 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
                 marginBottom: '0.6rem',
               }}
             >
-              Contemporary Luxury Saunas
+              {heroTitle}
             </h1>
             <p style={{ 
               opacity: pageLoaded ? 1 : 0,
@@ -121,7 +185,7 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
               fontWeight: 200, 
               letterSpacing: '0.06em' 
             }}>
-              Scandinavian craftsmanship
+              {heroSubtitle}
             </p>
             <Link 
               href="/saunas" 
@@ -154,7 +218,7 @@ export default function HeroSection({ pageLoaded = false }: { pageLoaded?: boole
                 e.currentTarget.style.background = 'transparent';
               }}
             >
-              View Models <span style={{ marginLeft: '0.6rem', transition: 'transform 0.3s ease' }}>→</span>
+              {heroButtonText} <span style={{ marginLeft: '0.6rem', transition: 'transform 0.3s ease' }}>→</span>
             </Link>
           </div>
         </div>

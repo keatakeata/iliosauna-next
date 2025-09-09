@@ -1,4 +1,33 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ilio Sauna Website - V1
+
+This is a luxury sauna website built with Next.js, featuring advanced subscription management, content management via Sanity CMS, and modern user experience design.
+
+## Version History
+
+### V1.0.0 (Current - September 2025)
+- ✅ Enhanced newsletter subscription with improved accessibility
+- ✅ CRO-optimized messaging: "Join the Exclusive Wellness Circle"
+- ✅ Brand integration with consistent color scheme (#BF5813)
+- ✅ Professional loading states and error handling
+- ✅ Responsive design across all devices
+- ✅ Accessibility compliant (WCAG AA standards)
+
+### Future Versions
+- **V1.1**: Minor feature enhancements
+- **V1.2**: Additional functionality updates
+- **V2.0**: Major version with significant new features
+
+## Git Workflow
+
+### Version Tags
+- All major versions are tagged (V1, V1.1, V2, etc.)
+- Tags are pushed to GitHub for easy reference
+- Use `git checkout V1` to return to this version
+
+### Development Workflow
+1. Create feature branches for development
+2. Merge to main when ready
+3. Tag major releases with version numbers
 
 ## Getting Started
 

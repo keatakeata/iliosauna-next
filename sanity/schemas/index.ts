@@ -5,7 +5,7 @@ import category from './category'
 import saunaProduct from './saunaProduct'
 import testimonial from './testimonial'
 import homepage from './homepage'
-import ourstory from './ourstory'
+import ourstoryFinal from './ourstory-final'
 import saunaspage from './saunaspage'
 import contactpage from './contactpage'
 import journalpage from './journalpage'
@@ -18,17 +18,17 @@ export const schemaTypes = [
   testimonial,
   author,
   category,
-  
+
   // Page schemas
   homepage,
-  ourstory,
+  ourstoryFinal,  // ONLY our final schema - all others removed
   saunaspage,
   contactpage,
   journalpage,
-  
+
   // Settings
   siteSettings,
-  
+
   // Block content
   blockContent
 ]

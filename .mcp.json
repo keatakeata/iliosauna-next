@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "shadcn": {
+      "command": "npx",
+      "args": [
+        "shadcn@latest",
+        "mcp"
+      ]
+    },
+    "ghl-mcp": {
+      "url": "https://services.leadconnectorhq.com/mcp/",
+      "headers": {
+        "Authorization": "Bearer pit-38be6539-4649-4fa4-b724-27b6c5876150",
+        "locationId": "GCSgKFx6fTLWG5qmWqeN"
+      }
+    }
+  }
+}

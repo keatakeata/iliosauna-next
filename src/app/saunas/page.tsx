@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollAnimations from '@/components/ScrollAnimations';
@@ -27,7 +28,7 @@ function LazyImage({ src, alt, style }: { src: string; alt: string; style?: Reac
     
     const observer = new IntersectionObserver(onIntersection, {
       threshold: 0,
-      rootMargin: '100px' // Start loading 100px before image enters viewport
+      rootMargin: '100px'
     });
     
     observer.observe(containerRef);
@@ -80,19 +81,12 @@ export default function SaunasPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
+  const [isMobile, setIsMobile] = useState(false);
   const scrollPositionRef = useRef(0);
   const { addItem } = useCart();
 
-  // Trigger page load animations
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      setPageLoaded(true);
-    }, 50);
-    return () => clearTimeout(timer);
-  }, []);
-
-  // Slideshow images
-  const slides = [
+  // Hero slideshow images - exact from live website
+  const heroSlides = [
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689e7797e0fe546e46493d4b.jpeg',
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48e916f40ac13c4545.jpeg',
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb480049a5af45ea7a26.jpeg',
@@ -100,24 +94,99 @@ export default function SaunasPage() {
     'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb487377cf367b8827bf.jpeg'
   ];
 
+  // Premium features data with exact images from live website
+  const premiumFeatures = [
+    {
+      id: 'structural',
+      title: 'Building',
+      description: '2×4 frame, Rockwool R-14, dual barriers',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689e787c914f6a78afadce42.jpeg'
+    },
+    {
+      id: 'doors',
+      title: 'Doors and Windows',
+      description: 'Tempered glass, cedar frame, premium hardware',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6dd9c1c1203c2dc791.jpeg'
+    },
+    {
+      id: 'flooring',
+      title: 'Flooring',
+      description: 'Waterproof, coved, zero-maintenance',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689ecad6c6ba4e59e89d6e5b.jpeg'
+    },
+    {
+      id: 'lighting',
+      title: 'Lighting',
+      description: '3000K under-bench ambient glow',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6da6e2ac105564b218.jpeg'
+    },
+    {
+      id: 'heater',
+      title: 'Heater',
+      description: '9 kW HUUM DROP, Red Dot Award winner',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb480049a5af45ea7a26.jpeg'
+    },
+    {
+      id: 'control',
+      title: 'Smart Control / App',
+      description: 'Start from anywhere, ready when you are',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68aafb46622ad160dd29c5ca.png'
+    },
+    {
+      id: 'gauge',
+      title: 'Instruments',
+      description: 'Fischer 194.01 precision gauge',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48e9d6715de23bf29a.jpeg'
+    },
+    {
+      id: 'timer',
+      title: 'Sand Timer',
+      description: '15-minute traditional hourglass',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb480049a59ba2ea7a25.jpeg'
+    },
+    {
+      id: 'hooks',
+      title: 'Steel Hardware',
+      description: 'Matte black corrosion-resistant',
+      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48a6e2ac5b4164b058.jpeg'
+    }
+  ];
+
+  // Trigger page load animations and detect mobile
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setPageLoaded(true);
+    }, 50);
+    
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, []);
+
   // Auto-advance slideshow
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000); // 6 seconds per slide
+      setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
+    }, 6000);
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [heroSlides.length]);
 
   // Handle scroll locking when modal is open
   useEffect(() => {
     const isModalOpen = activeModal || fullscreenImage;
     
     if (isModalOpen) {
-      // Only save scroll position if body is not already fixed (first modal/fullscreen opening)
       if (document.body.style.position !== 'fixed') {
         scrollPositionRef.current = window.scrollY;
         
-        // Apply scroll lock styles
         const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
         document.body.style.position = 'fixed';
         document.body.style.top = `-${scrollPositionRef.current}px`;
@@ -127,11 +196,9 @@ export default function SaunasPage() {
         document.body.style.overflow = 'hidden';
       }
     } else {
-      // Only restore if body is currently fixed
       if (document.body.style.position === 'fixed') {
         const savedScrollPosition = scrollPositionRef.current;
         
-        // Remove all scroll lock styles
         document.body.style.position = '';
         document.body.style.top = '';
         document.body.style.left = '';
@@ -139,7 +206,6 @@ export default function SaunasPage() {
         document.body.style.paddingRight = '';
         document.body.style.overflow = '';
         
-        // Restore scroll position without animation
         if (savedScrollPosition >= 0) {
           window.scrollTo({
             top: savedScrollPosition,
@@ -150,65 +216,6 @@ export default function SaunasPage() {
       }
     }
   }, [activeModal, fullscreenImage]);
-
-  const premiumFeatures = [
-    { 
-      id: 'structural',
-      title: 'Building',
-      description: '2×4 frame, Rockwool R-14, dual barriers',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689e787c914f6a78afadce42.jpeg'
-    },
-    { 
-      id: 'doors',
-      title: 'Doors and Windows',
-      description: 'Tempered glass, cedar frame, premium hardware',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6dd9c1c1203c2dc791.jpeg'
-    },
-    { 
-      id: 'flooring',
-      title: 'Flooring',
-      description: 'Waterproof, coved, zero-maintenance',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6de916f4ccf63c46c1.jpeg'
-    },
-    { 
-      id: 'lighting',
-      title: 'Lighting',
-      description: '3000K under-bench ambient glow',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6da6e2ac105564b218.jpeg'
-    },
-    { 
-      id: 'heater',
-      title: 'Heater',
-      description: '9 kW HUUM DROP, Red Dot Award winner',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb480049a5af45ea7a26.jpeg'
-    },
-    { 
-      id: 'control',
-      title: 'Smart Control / App',
-      description: 'Start from anywhere, ready when you are',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68aafb46622ad160dd29c5ca.png'
-    },
-    { 
-      id: 'gauge',
-      title: 'Instruments',
-      description: 'Fischer 194.01 precision gauge',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48e9d6715de23bf29a.jpeg'
-    },
-    { 
-      id: 'timer',
-      title: 'Sand Timer',
-      description: '15-minute traditional hourglass',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb480049a59ba2ea7a25.jpeg'
-    },
-    { 
-      id: 'hooks',
-      title: 'Steel Hardware',
-      description: 'Matte black corrosion-resistant',
-      image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48a6e2ac5b4164b058.jpeg'
-    }
-  ];
-
-  // Modal content imported from modalContent.ts
 
   return (
     <>
@@ -221,7 +228,6 @@ export default function SaunasPage() {
         height: '100vh',
         overflow: 'hidden'
       }}>
-        {/* Single Continuously Zooming Container */}
         <div 
           className="hero-zoom-wrapper"
           style={{
@@ -231,7 +237,7 @@ export default function SaunasPage() {
             height: '120%',
           }}
         >
-          {slides.map((slide, index) => (
+          {heroSlides.map((slide, index) => (
             <div
               key={`slide-${index}`}
               className="hero-slide-wrapper-saunas"
@@ -247,11 +253,12 @@ export default function SaunasPage() {
             >
               <img
                 src={slide}
-                alt={`Ilio Sauna ${index + 1}`}
+                alt={`Sauna ${index + 1}`}
                 style={{
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
+                  objectPosition: index === 0 && isMobile ? '65% center' : 'center',
                 }}
                 loading="eager"
               />
@@ -302,7 +309,7 @@ export default function SaunasPage() {
         </div>
       </section>
 
-      {/* Story Section with correct video */}
+      {/* Make It Stand Out Section */}
       <section className="ilio-section" style={{ background: 'white', padding: '100px 0' }}>
         <div className="ilio-container">
           <div className="text-center mb-5">
@@ -312,7 +319,7 @@ export default function SaunasPage() {
               fontWeight: 100,
               letterSpacing: '0.05em'
             }}>
-              Make it stand out
+              Live well with ilio
             </h2>
             <div className="section-divider reveal-on-scroll reveal-delay-1" style={{
               width: '75%',
@@ -328,8 +335,7 @@ export default function SaunasPage() {
                 lineHeight: '1.8',
                 color: '#5a5a5a'
               }}>
-                At Ilio, we believe wellness should be accessible, beautiful, and transformative.
-                Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.
+                Ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows, complete with a covered porch with a cold rinse shower.
               </p>
               <p className="reveal-on-scroll reveal-delay-3" style={{ 
                 maxWidth: '800px', 
@@ -338,19 +344,18 @@ export default function SaunasPage() {
                 lineHeight: '1.8',
                 color: '#5a5a5a'
               }}>
-                Each sauna is precision-engineered from sustainably sourced Western Red Cedar and fitted 
-                with advanced heating systems for an experience that lasts.
+                Ilio interiors are created using the finest clear western red cedar interior panelling, known for its anti-inflammatory, astringent and antimicrobial properties, durability, and pleasant aroma. The meticulously designed sauna is built for comfort and relaxation, with two deep-seat stadium benches spanning over six feet, a modern Wi-Fi-enabled heater for remote start, and a full-length glass door that provides a view corridor and a feeling of spaciousness. Bring beauty and wellness to your backyard with Ilio.
               </p>
             </div>
             
-            {/* Video Section - 16:9 Aspect Ratio */}
+            {/* Video Section */}
             <div className="reveal-on-scroll reveal-delay-4" style={{ 
               maxWidth: '900px', 
               margin: '3rem auto 0',
               borderRadius: '8px',
               overflow: 'hidden',
               position: 'relative',
-              paddingBottom: '56.25%', /* 16:9 aspect ratio (9/16 = 0.5625) */
+              paddingBottom: '56.25%',
               height: 0
             }}>
               <video 
@@ -380,11 +385,11 @@ export default function SaunasPage() {
         </div>
       </section>
 
-      {/* Sauna Specs Section - Updated */}
+      {/* Sauna Specs Section */}
       <section style={{
         position: 'relative',
         minHeight: '100vh',
-        backgroundImage: `url('https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6da6e2ac4d0764b219.jpeg')`,
+        backgroundImage: 'url("https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6da6e2ac4d0764b219.jpeg")',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
@@ -447,10 +452,10 @@ export default function SaunasPage() {
             
             <div className="reveal-on-scroll reveal-delay-6" style={{ marginBottom: '3rem' }}>
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>LEAD TIME</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>6-8 weeks</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>4-6 weeks</div>
             </div>
             
-            {/* Add to Cart and Buy Now buttons - CONTROLLED BY FEATURE FLAGS */}
+            {/* Add to Cart and Buy Now buttons */}
             {(FEATURE_FLAGS.SHOW_ADD_TO_CART || FEATURE_FLAGS.SHOW_BUY_NOW) && (
               <div className="reveal-on-scroll reveal-delay-7" style={{ 
                 display: 'flex', 
@@ -459,88 +464,87 @@ export default function SaunasPage() {
               }}>
                 {FEATURE_FLAGS.SHOW_ADD_TO_CART && (
                   <button
-                onClick={() => {
-                  addItem({
-                    id: 'ilio-sauna-premium',
-                    name: 'Ilio Premium Cedar Sauna',
-                    price: 20000,
-                    image: slides[0],
-                    description: '4-6 person capacity, HUUM DROP heater'
-                  });
-                }}
-                style={{
-                  flex: '1 1 200px',
-                  padding: '16px 32px',
-                  backgroundColor: '#BF5813',
-                  color: '#ffffff',
-                  border: 'none',
-                  borderRadius: '4px',
-                  fontSize: '16px',
-                  fontWeight: 400,
-                  letterSpacing: '0.05em',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#a64a11';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = '#BF5813';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                ADD TO CART
-              </button>
-              )}
-              
-              {FEATURE_FLAGS.SHOW_BUY_NOW && (
-                <button
-                onClick={() => {
-                  addItem({
-                    id: 'ilio-sauna-premium',
-                    name: 'Ilio Premium Cedar Sauna',
-                    price: 20000,
-                    image: slides[0],
-                    description: '4-6 person capacity, HUUM DROP heater'
-                  });
-                  // Navigate to checkout
-                  window.location.href = '/checkout';
-                }}
-                style={{
-                  flex: '1 1 200px',
-                  padding: '16px 32px',
-                  backgroundColor: 'transparent',
-                  color: '#ffffff',
-                  border: '2px solid #BF5813',
-                  borderRadius: '4px',
-                  fontSize: '16px',
-                  fontWeight: 400,
-                  letterSpacing: '0.05em',
-                  cursor: 'pointer',
-                  transition: 'all 0.3s ease'
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#BF5813';
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'transparent';
-                  e.currentTarget.style.color = '#ffffff';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                BUY NOW
-              </button>
-              )}
-            </div>
+                    onClick={() => {
+                      addItem({
+                        id: 'ilio-sauna-premium',
+                        name: 'Ilio Premium Cedar Sauna',
+                        price: 20000,
+                        image: heroSlides[0],
+                        description: '4-6 person capacity, HUUM DROP heater'
+                      });
+                    }}
+                    style={{
+                      flex: '1 1 200px',
+                      padding: '16px 32px',
+                      backgroundColor: '#BF5813',
+                      color: '#ffffff',
+                      border: 'none',
+                      borderRadius: '4px',
+                      fontSize: '16px',
+                      fontWeight: 400,
+                      letterSpacing: '0.05em',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#a64a11';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = '#BF5813';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    ADD TO CART
+                  </button>
+                )}
+                
+                {FEATURE_FLAGS.SHOW_BUY_NOW && (
+                  <button
+                    onClick={() => {
+                      addItem({
+                        id: 'ilio-sauna-premium',
+                        name: 'Ilio Premium Cedar Sauna',
+                        price: 20000,
+                        image: heroSlides[0],
+                        description: '4-6 person capacity, HUUM DROP heater'
+                      });
+                      window.location.href = '/checkout';
+                    }}
+                    style={{
+                      flex: '1 1 200px',
+                      padding: '16px 32px',
+                      backgroundColor: 'transparent',
+                      color: '#ffffff',
+                      border: '2px solid #BF5813',
+                      borderRadius: '4px',
+                      fontSize: '16px',
+                      fontWeight: 400,
+                      letterSpacing: '0.05em',
+                      cursor: 'pointer',
+                      transition: 'all 0.3s ease'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = '#BF5813';
+                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.transform = 'translateY(-2px)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                      e.currentTarget.style.color = '#ffffff';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }}
+                  >
+                    BUY NOW
+                  </button>
+                )}
+              </div>
             )}
           </div>
         </div>
       </section>
 
-      {/* Premium Details Section - Complete Redesign */}
+      {/* Premium Features Section */}
       <section className="ilio-section" style={{ padding: '100px 0', background: '#FFFFFF' }}>
         <div className="ilio-container">
           <div className="text-center mb-5">
@@ -563,7 +567,7 @@ export default function SaunasPage() {
             }}>Tap any feature to explore</p>
           </div>
           
-          {/* Desktop Grid View - Hidden on mobile/tablet */}
+          {/* Desktop Grid View */}
           <div className="desktop-grid" style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(3, 1fr)',
@@ -571,7 +575,7 @@ export default function SaunasPage() {
             maxWidth: '1200px',
             margin: '0 auto',
             willChange: 'transform',
-            transform: 'translateZ(0)' // Force GPU acceleration
+            transform: 'translateZ(0)'
           }}>
             {premiumFeatures.map((feature, index) => (
               <div 
@@ -603,12 +607,10 @@ export default function SaunasPage() {
                   e.currentTarget.style.boxShadow = 'none';
                 }}
               >
-                {feature.image && (
-                  <LazyImage 
-                    src={feature.image}
-                    alt={feature.title}
-                  />
-                )}
+                <LazyImage 
+                  src={feature.image}
+                  alt={feature.title}
+                />
                 <div 
                   className="card-overlay"
                   style={{
@@ -645,13 +647,25 @@ export default function SaunasPage() {
             ))}
           </div>
           
-          {/* Mobile/Tablet View - Full width stacked */}
+          {/* Mobile/Tablet Grid View with Framer Motion */}
           <div className="mobile-tablet-grid" style={{ display: 'none' }}>
             {premiumFeatures.map((feature, index) => (
-              <div 
-                key={feature.id}
-                className={`reveal-on-scroll reveal-delay-${Math.min(index + 3, 8)}`}
+              <motion.div 
+                key={`mobile-${feature.id}`}
                 onClick={() => setActiveModal(feature.id)}
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 25,
+                    delay: Math.min(index * 0.05, 0.2),
+                    duration: 0.6
+                  }
+                }}
+                viewport={{ once: true, margin: "-100px" }}
                 style={{
                   position: 'relative',
                   height: '400px',
@@ -661,17 +675,31 @@ export default function SaunasPage() {
                   cursor: 'pointer'
                 }}
               >
-                {feature.image && (
-                  <LazyImage 
-                    src={feature.image}
-                    alt={feature.title}
-                  />
-                )}
+                <div style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  background: '#f0f0f0'
+                }} />
+                <img 
+                  src={feature.image}
+                  alt={feature.title}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover'
+                  }}
+                />
                 <div style={{
                   position: 'absolute',
                   inset: 0,
-                  background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)',
-                }}/>
+                  background: 'linear-gradient(to top, rgba(0,0,0,0.8), transparent)'
+                }} />
                 <div style={{
                   position: 'absolute',
                   bottom: 0,
@@ -696,13 +724,13 @@ export default function SaunasPage() {
                   }}>{feature.description}</p>
                   <span style={{ fontSize: '1rem', color: 'white' }}>Tap to explore →</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Guarantee & FAQ Section */}
+      {/* 30-Day Promise & Common Questions Section */}
       <section style={{ padding: '100px 0', background: '#f8f8f8' }}>
         <div className="ilio-container">
           <div style={{
@@ -712,46 +740,8 @@ export default function SaunasPage() {
             maxWidth: '1200px',
             margin: '0 auto'
           }}>
-            {/* Guarantee */}
+            {/* Common Questions */}
             <div className="reveal-on-scroll" style={{
-              background: '#F9FAFB',
-              padding: '3rem',
-              borderRadius: '12px'
-            }}>
-              <div style={{ marginBottom: '1.5rem' }}>
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2L4 7V11C4 16.5 7.5 21.3 12 22C16.5 21.3 20 16.5 20 11V7L12 2Z" stroke="#BF5813" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M9 12L11 14L15 10" stroke="#BF5813" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </div>
-              <h3 style={{ 
-                fontSize: '1.75rem',
-                fontWeight: 300,
-                marginBottom: '1rem',
-                color: '#333'
-              }}>30-Day Löyly-Love Promise</h3>
-              <p style={{ 
-                color: '#666',
-                lineHeight: '1.6',
-                marginBottom: '1.5rem'
-              }}>
-                We&apos;re so confident you&apos;ll love your Ilio sauna that we offer a full 30-day trial. 
-                If you&apos;re not experiencing deeper sleep, less stress, and that post-sauna glow—we&apos;ll 
-                arrange pickup and issue a complete refund. No questions, no hassle.
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 1.5rem 0' }}>
-                <li style={{ padding: '0.5rem 0', color: '#374151' }}>✓ 100% money-back guarantee</li>
-                <li style={{ padding: '0.5rem 0', color: '#374151' }}>✓ We handle removal & shipping</li>
-                <li style={{ padding: '0.5rem 0', color: '#374151' }}>✓ Keep all accessories as our gift</li>
-                <li style={{ padding: '0.5rem 0', color: '#374151' }}>✓ No restocking fees ever</li>
-              </ul>
-              <p style={{ fontSize: '0.875rem', color: '#9CA3AF', fontStyle: 'italic' }}>
-                *In 3 years, we&apos;ve had exactly 2 returns. Both customers bought larger models.
-              </p>
-            </div>
-            
-            {/* FAQ */}
-            <div className="reveal-on-scroll reveal-delay-1" style={{
               background: 'white',
               padding: '3rem',
               borderRadius: '12px'
@@ -773,26 +763,22 @@ export default function SaunasPage() {
               <div style={{ marginBottom: '1.25rem', paddingBottom: '1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                 <h4 style={{ fontWeight: 500, color: '#111', marginBottom: '0.4rem' }}>Do I need a building permit?</h4>
                 <p style={{ color: '#6B7280', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Most municipalities don&apos;t require permits for structures under 108 sq ft. 
-                  We provide all documentation needed for your local bylaws.
+                  Most municipalities don't require permits for structures under 108 sq ft. We provide all documentation needed for your local bylaws.
                 </p>
               </div>
-              
               <div style={{ marginBottom: '1.25rem', paddingBottom: '1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                 <h4 style={{ fontWeight: 500, color: '#111', marginBottom: '0.4rem' }}>Can my electrician handle the wiring?</h4>
                 <p style={{ color: '#6B7280', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Yes! Any licensed electrician can install the 40A/240V connection. 
-                  We include detailed wiring diagrams and offer free phone support.
+                  Yes! Any licensed electrician can install the 40A/240V connection. We include detailed wiring diagrams and offer free phone support.
                 </p>
               </div>
-              
               <div style={{ marginBottom: '1.5rem' }}>
                 <h4 style={{ fontWeight: 500, color: '#111', marginBottom: '0.4rem' }}>How much maintenance is required?</h4>
                 <p style={{ color: '#6B7280', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Almost none. Wipe benches monthly, oil exterior annually. 
-                  The HUUM heater self-cleans with each use. Total: 20 minutes/year.
+                  Almost none. Wipe benches monthly, oil exterior annually. The HUUM heater self-cleans with each use. Total: 20 minutes/year.
                 </p>
               </div>
+              
               <Link 
                 href="/contact"
                 style={{
@@ -819,7 +805,7 @@ export default function SaunasPage() {
       </section>
 
       {/* Modal */}
-      {activeModal && (
+      {activeModal && modalContent[activeModal as keyof typeof modalContent] && (
         <div 
           style={{
             position: 'fixed',
@@ -840,38 +826,48 @@ export default function SaunasPage() {
               maxWidth: '900px',
               width: '100%',
               maxHeight: '90vh',
-              overflow: 'auto',
-              position: 'relative'
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column'
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <button
-              onClick={() => setActiveModal(null)}
-              style={{
-                position: 'absolute',
-                top: '1.5rem',
-                right: '1.5rem',
-                background: 'white',
-                border: 'none',
-                borderRadius: '50%',
-                width: '40px',
-                height: '40px',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                cursor: 'pointer',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                zIndex: 10
-              }}
-            >
-              ✕
-            </button>
+            <div style={{ overflow: 'auto', flex: 1, position: 'relative' }}>
+              <motion.button
+                onClick={() => setActiveModal(null)}
+                whileHover={{ rotate: 90 }}
+                whileTap={{ scale: 0.9, rotate: 90 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 17
+                }}
+                style={{
+                  position: 'sticky',
+                  top: '1.5rem',
+                  float: 'right',
+                  marginRight: '1.5rem',
+                  marginTop: '1.5rem',
+                  background: 'white',
+                  border: '1px solid #d1d5db',
+                  borderRadius: '50%',
+                  width: '40px',
+                  height: '40px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  cursor: 'pointer',
+                  boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                  zIndex: 10
+                }}
+              >
+                <span style={{ fontSize: '18px', color: '#6b7280' }}>✕</span>
+              </motion.button>
             
-            {modalContent[activeModal as keyof typeof modalContent] && (() => {
+            {(() => {
               const content = modalContent[activeModal as keyof typeof modalContent];
               return (
                 <div style={{ padding: '3rem' }}>
-                  {/* Award badge if present */}
                   {content.award && (
                     <div style={{
                       background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
@@ -887,7 +883,6 @@ export default function SaunasPage() {
                     </div>
                   )}
                   
-                  {/* Title and subtitle - centered */}
                   <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
                     <h2 style={{ fontSize: '2rem', fontWeight: 300, marginBottom: '0.5rem', color: '#111' }}>
                       {content.title}
@@ -897,7 +892,6 @@ export default function SaunasPage() {
                     </p>
                   </div>
                   
-                  {/* Award text if present */}
                   {content.awardText && (
                     <p style={{ 
                       fontStyle: 'italic',
@@ -910,7 +904,6 @@ export default function SaunasPage() {
                     </p>
                   )}
                   
-                  {/* Main image */}
                   {content.mainImage && (
                     <img 
                       src={content.mainImage}
@@ -926,35 +919,77 @@ export default function SaunasPage() {
                     />
                   )}
                   
-                  {/* Gallery if present */}
                   {content.gallery && (
-                    <div style={{
-                      display: 'grid',
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                      gap: '1rem',
-                      marginBottom: '2rem'
-                    }}>
-                      {content.gallery.map((img, idx) => img ? (
+                    <>
+                      {/* Desktop/Tablet Gallery */}
+                      <div className="desktop-tablet-gallery" style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gap: '1rem',
+                        marginBottom: '2rem'
+                      }}>
+                        {content.gallery.map((img, idx) => img ? (
+                          <img 
+                            key={idx}
+                            src={img}
+                            alt={`${content.title} ${idx + 1}`}
+                            onClick={() => setFullscreenImage(img)}
+                            style={{
+                              width: '100%',
+                              height: '150px',
+                              objectFit: 'cover',
+                              borderRadius: '8px',
+                              cursor: 'zoom-in'
+                            }}
+                          />
+                        ) : null)}
+                      </div>
+                      
+                      {/* Mobile Gallery - First image only */}
+                      <div className="mobile-gallery-first" style={{ display: 'none', marginBottom: '2rem' }}>
+                        {content.gallery && content.gallery[0] && (
+                          <img 
+                            src={content.gallery[0]}
+                            alt={`${content.title} 1`}
+                            onClick={() => setFullscreenImage(content.gallery[0])}
+                            style={{
+                              width: '100%',
+                              height: '200px',
+                              objectFit: 'cover',
+                              borderRadius: '8px',
+                              cursor: 'zoom-in'
+                            }}
+                          />
+                        )}
+                      </div>
+                    </>
+                  )}
+                  
+                  {/* Render all modal sections */}
+                  {content.sections && content.sections.map((section, idx) => {
+                    // Insert mobile gallery images between sections (skip first image, start from index 1)
+                    const mobileGalleryImage = content.gallery && content.gallery.length > 1 && content.gallery[idx + 1] && (
+                      <div key={`mobile-img-${idx}`} className="mobile-gallery-inline" style={{ display: 'none', marginBottom: '2rem' }}>
                         <img 
-                          key={idx}
-                          src={img}
-                          alt={`${content.title} ${idx + 1}`}
-                          onClick={() => setFullscreenImage(img)}
+                          src={content.gallery[idx + 1]}
+                          alt={`${content.title} ${idx + 2}`}
+                          onClick={() => setFullscreenImage(content.gallery[idx + 1])}
                           style={{
                             width: '100%',
-                            height: '150px',
+                            height: '200px',
                             objectFit: 'cover',
                             borderRadius: '8px',
                             cursor: 'zoom-in'
                           }}
                         />
-                      ) : null)}
-                    </div>
-                  )}
-                  
-                  {/* Sections */}
-                  {content.sections && content.sections.map((section, idx) => {
-                    switch(section.type) {
+                      </div>
+                    );
+                    
+                    return (
+                      <div key={idx}>
+                        {mobileGalleryImage}
+                        {(() => {
+                          switch(section.type) {
                       case 'grid':
                         return (
                           <div key={idx} style={{
@@ -968,18 +1003,8 @@ export default function SaunasPage() {
                                 background: '#f8f8f8',
                                 borderRadius: '12px',
                                 padding: '1.5rem',
-                                border: '1px solid #e5e7eb',
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-2px)';
-                                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
-                              }}
-                              >
+                                border: '1px solid #e5e7eb'
+                              }}>
                                 <h4 style={{ 
                                   marginBottom: '1rem', 
                                   fontSize: '1.2rem', 
@@ -998,48 +1023,40 @@ export default function SaunasPage() {
                                   {item.title}
                                 </h4>
                                 <div style={{ display: 'grid', gap: '0.5rem' }}>
-                                  {item.list?.map((li: string, liIdx: number) => {
-                                    const [title, ...desc] = li.split(' - ');
-                                    const description = desc.join(' - ');
-                                    return (
-                                      <div key={liIdx} style={{
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
-                                        gap: '0.75rem'
-                                      }}>
-                                        <div style={{
-                                          minWidth: '6px',
-                                          minHeight: '6px',
-                                          width: '6px',
-                                          height: '6px',
-                                          background: '#BF5813',
-                                          borderRadius: '50%',
-                                          marginTop: '7px',
-                                          opacity: 0.6
-                                        }}></div>
-                                        <div>
-                                          <span style={{
-                                            color: '#111',
-                                            fontWeight: description ? 500 : 400,
-                                            display: 'block'
-                                          }}>
-                                            {title}
-                                          </span>
-                                          {description && (
-                                            <span style={{
-                                              color: '#555',
-                                              fontSize: '0.9rem',
-                                              lineHeight: '1.4',
-                                              display: 'block',
-                                              marginTop: '0.25rem'
-                                            }}>
-                                              {description}
-                                            </span>
-                                          )}
-                                        </div>
+                                  {item.list?.map((li: string, liIdx: number) => (
+                                    <div key={liIdx} style={{
+                                      display: 'flex',
+                                      alignItems: 'flex-start',
+                                      gap: '0.75rem'
+                                    }}>
+                                      <div style={{
+                                        minWidth: '6px',
+                                        minHeight: '6px',
+                                        width: '6px',
+                                        height: '6px',
+                                        background: '#BF5813',
+                                        borderRadius: '50%',
+                                        marginTop: '7px',
+                                        opacity: 0.6
+                                      }}></div>
+                                      <div>
+                                        <span style={{ 
+                                          color: '#111', 
+                                          fontWeight: 500, 
+                                          display: 'block'
+                                        }}>{li.split(' - ')[0]}</span>
+                                        {li.includes(' - ') && (
+                                          <span style={{ 
+                                            color: '#555', 
+                                            fontSize: '0.9rem', 
+                                            lineHeight: 1.4, 
+                                            display: 'block', 
+                                            marginTop: '0.25rem'
+                                          }}>{li.split(' - ')[1]}</span>
+                                        )}
                                       </div>
-                                    );
-                                  })}
+                                    </div>
+                                  ))}
                                 </div>
                               </div>
                             ))}
@@ -1049,11 +1066,11 @@ export default function SaunasPage() {
                       case 'callout':
                         return (
                           <div key={idx} style={{
-                            background: 'linear-gradient(135deg, #fff5f0 0%, #f8f8f8 100%)',
+                            background: 'linear-gradient(135deg, rgb(255, 245, 240) 0%, rgb(248, 248, 248) 100%)',
                             padding: '2rem',
                             borderRadius: '12px',
                             marginBottom: '2rem',
-                            border: '1px solid #e5e7eb',
+                            border: '1px solid rgb(229, 231, 235)',
                             position: 'relative',
                             overflow: 'hidden'
                           }}>
@@ -1063,11 +1080,11 @@ export default function SaunasPage() {
                               left: 0,
                               width: '4px',
                               height: '100%',
-                              background: '#BF5813'
+                              background: 'rgb(191, 88, 19)'
                             }}></div>
                             <div className="modal-grid-responsive" style={{
                               display: 'grid',
-                              gridTemplateColumns: section.image ? 'minmax(250px, 300px) 1fr' : '1fr',
+                              gridTemplateColumns: 'minmax(250px, 300px) 1fr',
                               gap: '1.5rem',
                               alignItems: 'flex-start'
                             }}>
@@ -1075,23 +1092,23 @@ export default function SaunasPage() {
                                 <img 
                                   src={section.image}
                                   alt={section.title}
-                                  onClick={() => setFullscreenImage(section.image || null)}
+                                  onClick={() => setFullscreenImage(section.image)}
                                   style={{
                                     width: '100%',
                                     height: '200px',
                                     objectFit: 'cover',
                                     borderRadius: '8px',
                                     cursor: 'zoom-in',
-                                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                                    boxShadow: 'rgba(0, 0, 0, 0.1) 0px 2px 8px'
                                   }}
                                 />
                               )}
                               <div>
-                                <h4 style={{ 
-                                  marginBottom: '1rem', 
-                                  fontSize: '1.2rem', 
-                                  fontWeight: 500, 
-                                  color: '#111',
+                                <h4 style={{
+                                  marginBottom: '1rem',
+                                  fontSize: '1.2rem',
+                                  fontWeight: 500,
+                                  color: 'rgb(17, 17, 17)',
                                   display: 'flex',
                                   alignItems: 'center',
                                   gap: '0.5rem'
@@ -1102,7 +1119,7 @@ export default function SaunasPage() {
                                   </svg>
                                   {section.title}
                                 </h4>
-                                <p style={{ lineHeight: '1.8', color: '#333' }}>{section.text}</p>
+                                <p style={{ lineHeight: '1.8', color: 'rgb(51, 51, 51)' }}>{section.text}</p>
                               </div>
                             </div>
                           </div>
@@ -1110,16 +1127,26 @@ export default function SaunasPage() {
                       
                       case 'detail':
                         return (
-                          <div key={idx} style={{ 
-                            marginBottom: '2rem',
-                            background: 'linear-gradient(135deg, #f8f8f8 0%, #fff 100%)',
-                            borderRadius: '12px',
-                            padding: '1.5rem',
-                            border: '1px solid #e5e7eb'
+                          <div key={idx} style={{
+                            marginBottom: '2rem'
                           }}>
-                            <h4 style={{ 
-                              marginBottom: '1.5rem', 
-                              fontSize: '1.2rem', 
+                            {section.image && (
+                              <img 
+                                src={section.image}
+                                alt={section.title}
+                                onClick={() => setFullscreenImage(section.image)}
+                                style={{
+                                  width: '100%',
+                                  height: 'auto',
+                                  borderRadius: '8px',
+                                  marginBottom: '2rem',
+                                  cursor: 'zoom-in'
+                                }}
+                              />
+                            )}
+                            <h4 style={{
+                              marginBottom: '0.5rem',
+                              fontSize: '1.2rem',
                               fontWeight: 500,
                               color: '#111',
                               display: 'flex',
@@ -1129,16 +1156,61 @@ export default function SaunasPage() {
                               <span style={{
                                 width: '4px',
                                 height: '20px',
-                                background: '#BF5813',
+                                background: 'rgb(191, 88, 19)',
                                 borderRadius: '2px'
                               }}></span>
                               {section.title}
                             </h4>
-                            <div style={{ display: 'grid', gap: '0.75rem' }}>
-                              {section.list?.map((item, itemIdx) => {
-                                const [title, ...desc] = item.split(' - ');
-                                const description = desc.join(' - ');
-                                return (
+                            {section.subtitle && (
+                              <p style={{
+                                color: '#666',
+                                marginBottom: '1.5rem',
+                                fontSize: '1.1rem'
+                              }}>
+                                {section.subtitle}
+                              </p>
+                            )}
+                            {section.content && (
+                              <div style={{
+                                color: '#666',
+                                marginBottom: '1.5rem',
+                                lineHeight: '1.6'
+                              }}>
+                                {section.content.includes('\n') ? (
+                                  <div style={{ display: 'grid', gap: '0.5rem' }}>
+                                    {section.content.split('\n').map((item: string, itemIdx: number) => (
+                                      <div key={itemIdx} style={{
+                                        display: 'flex',
+                                        alignItems: 'flex-start',
+                                        gap: '0.75rem'
+                                      }}>
+                                        <div style={{
+                                          minWidth: '6px',
+                                          minHeight: '6px',
+                                          width: '6px',
+                                          height: '6px',
+                                          background: 'rgb(191, 88, 19)',
+                                          borderRadius: '50%',
+                                          marginTop: '7px',
+                                          flexShrink: 0
+                                        }}></div>
+                                        <span style={{
+                                          color: '#333',
+                                          lineHeight: '1.8'
+                                        }}>
+                                          {item.replace('• ', '')}
+                                        </span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                ) : (
+                                  <p>{section.content}</p>
+                                )}
+                              </div>
+                            )}
+                            {section.list && (
+                              <div style={{ display: 'grid', gap: '0.75rem' }}>
+                                {section.list.map((item: string, itemIdx: number) => (
                                   <div key={itemIdx} style={{
                                     display: 'flex',
                                     alignItems: 'flex-start',
@@ -1150,345 +1222,321 @@ export default function SaunasPage() {
                                       minHeight: '8px',
                                       width: '8px',
                                       height: '8px',
-                                      background: '#BF5813',
+                                      background: 'rgb(191, 88, 19)',
                                       borderRadius: '50%',
                                       marginTop: '6px'
                                     }}></div>
                                     <div>
-                                      <span style={{
-                                        color: '#111',
-                                        fontWeight: description ? 500 : 400,
+                                      <span style={{ 
+                                        color: '#111', 
+                                        fontWeight: 500, 
                                         display: 'block'
-                                      }}>
-                                        {title}
-                                      </span>
-                                      {description && (
-                                        <span style={{
-                                          color: '#555',
-                                          fontSize: '0.9rem',
-                                          lineHeight: '1.4',
-                                          display: 'block',
+                                      }}>{item.split(' - ')[0]}</span>
+                                      {item.includes(' - ') && (
+                                        <span style={{ 
+                                          color: '#555', 
+                                          fontSize: '0.9rem', 
+                                          lineHeight: 1.4, 
+                                          display: 'block', 
                                           marginTop: '0.25rem'
-                                        }}>
-                                          {description}
-                                        </span>
+                                        }}>{item.split(' - ')[1]}</span>
                                       )}
                                     </div>
                                   </div>
-                                );
-                              })}
-                            </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         );
                       
-                      case 'cards':
+                      case 'engineering-details':
                         return (
                           <div key={idx} style={{ marginBottom: '2rem' }}>
-                            {section.title && (
-                              <h4 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                                {section.title}
-                              </h4>
-                            )}
-                            <div style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))',
-                              gap: '1rem'
+                            <h4 style={{
+                              marginBottom: '2rem',
+                              fontSize: '1.4rem',
+                              fontWeight: 500,
+                              color: '#333'
                             }}>
-                              {section.items?.map((card, cardIdx) => (
-                                <div key={cardIdx} style={{
-                                  background: 'white',
-                                  border: '1px solid #e5e7eb',
+                              {section.title}
+                            </h4>
+                            <div className="engineering-details-grid" style={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(2, 1fr)',
+                              gap: '2rem'
+                            }}>
+                              {section.content?.map((detail, detailIdx) => (
+                                <div key={detailIdx} style={{
+                                  background: '#fff',
                                   borderRadius: '8px',
-                                  padding: '1rem',
-                                  textAlign: 'center'
+                                  overflow: 'hidden',
+                                  border: '1px solid #e5e7eb'
                                 }}>
-                                  <div style={{ fontSize: '1.75rem', fontWeight: 600, color: '#333' }}>
-                                    {card.value}
+                                  <img
+                                    src={detail.image}
+                                    alt={detail.subtitle}
+                                    onClick={() => setFullscreenImage(detail.image)}
+                                    style={{
+                                      width: '100%',
+                                      height: '200px',
+                                      objectFit: 'cover',
+                                      cursor: 'zoom-in'
+                                    }}
+                                  />
+                                  <div style={{ padding: '1.5rem' }}>
+                                    <h5 style={{
+                                      fontSize: '1.1rem',
+                                      fontWeight: 500,
+                                      marginBottom: '0.75rem',
+                                      color: '#333'
+                                    }}>
+                                      {detail.subtitle}
+                                    </h5>
+                                    <p style={{
+                                      lineHeight: '1.6',
+                                      color: '#333',
+                                      fontSize: '0.95rem'
+                                    }}>
+                                      {detail.text}
+                                    </p>
                                   </div>
-                                  <div style={{ fontSize: '0.875rem', color: '#333', marginTop: '0.25rem' }}>
-                                    {card.label}
-                                  </div>
-                                  {card.description && (
-                                    <div style={{ fontSize: '0.75rem', color: '#999', marginTop: '0.25rem' }}>
-                                      {card.description}
-                                    </div>
-                                  )}
                                 </div>
                               ))}
+                            </div>
+                          </div>
+                        );
+
+                      case 'diagram':
+                        return (
+                          <div key={idx} style={{ marginBottom: '2rem' }}>
+                            <h4 style={{
+                              marginBottom: '1.5rem',
+                              fontSize: '1.4rem',
+                              fontWeight: 500,
+                              color: '#333'
+                            }}>
+                              {section.title}
+                            </h4>
+                            <div style={{
+                              display: 'flex',
+                              flexDirection: 'column',
+                              gap: '1rem',
+                              maxWidth: '600px'
+                            }}>
+                              {section.points?.map((point, pointIdx) => (
+                                <div key={pointIdx} style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '1rem',
+                                  padding: '0.5rem 0'
+                                }}>
+                                  <div style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    background: 'linear-gradient(135deg, #BF5813 0%, #d96c2c 100%)',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0,
+                                    boxShadow: '0 2px 4px rgba(191, 88, 19, 0.2)'
+                                  }}>
+                                    <span style={{
+                                      color: 'white',
+                                      fontSize: '14px',
+                                      fontWeight: 'bold'
+                                    }}>
+                                      {pointIdx + 1}
+                                    </span>
+                                  </div>
+                                  <p style={{
+                                    color: '#333',
+                                    lineHeight: '1.6',
+                                    fontSize: '1rem',
+                                    margin: '0',
+                                    flex: 1
+                                  }}>
+                                    {point}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+
+                      case 'image-showcase':
+                        return (
+                          <div key={idx} style={{ marginBottom: '2rem' }}>
+                            <h4 style={{
+                              marginBottom: '2rem',
+                              fontSize: '1.4rem',
+                              fontWeight: 500,
+                              color: '#333'
+                            }}>
+                              {section.title}
+                            </h4>
+                            <div style={{
+                              display: 'grid',
+                              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+                              gap: '1.5rem'
+                            }}>
+                              {section.images?.map((imageObj, imageIdx) => {
+                                // Handle both formats: {src, caption} and string
+                                const src = typeof imageObj === 'string' ? imageObj : imageObj.src;
+                                const caption = typeof imageObj === 'string' ? null : imageObj.caption;
+                                const alt = caption || `${section.title} ${imageIdx + 1}`;
+
+                                return (
+                                  <div key={imageIdx} style={{
+                                    background: '#fff',
+                                    borderRadius: '8px',
+                                    overflow: 'hidden',
+                                    border: '1px solid #e5e7eb'
+                                  }}>
+                                    <img
+                                      src={src}
+                                      alt={alt}
+                                      onClick={() => setFullscreenImage(src)}
+                                      style={{
+                                        width: '100%',
+                                        height: '200px',
+                                        objectFit: 'cover',
+                                        cursor: 'zoom-in'
+                                      }}
+                                    />
+                                    {caption && (
+                                      <div style={{ padding: '1rem' }}>
+                                        <p style={{
+                                          fontSize: '0.9rem',
+                                          color: '#666',
+                                          textAlign: 'center',
+                                          fontStyle: 'italic',
+                                          margin: '0'
+                                        }}>
+                                          {caption}
+                                        </p>
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
                             </div>
                           </div>
                         );
                       
                       case 'specs-grid':
                         return (
-                          <div key={idx} className="specs-grid-container" style={{ 
-                            marginBottom: '2rem',
-                            display: 'grid',
-                            gap: '1.5rem'
+                          <div key={idx} style={{
+                            marginBottom: '2rem'
                           }}>
-                            {section.columns?.map((column, colIdx) => (
-                              <div key={colIdx} style={{ 
-                                background: '#f8f8f8',
-                                borderRadius: '12px',
-                                padding: '1.5rem',
-                                border: '1px solid #e5e7eb'
+                            {section.title && (
+                              <h4 style={{
+                                marginBottom: '1rem',
+                                fontSize: '1.2rem',
+                                fontWeight: 500,
+                                color: '#111'
                               }}>
-                                <h4 style={{ 
-                                  marginBottom: '1.5rem', 
-                                  fontSize: '1.2rem', 
-                                  fontWeight: 500,
-                                  color: '#111',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '0.5rem'
-                                }}>
-                                  <span style={{
-                                    width: '4px',
-                                    height: '20px',
-                                    background: '#BF5813',
-                                    borderRadius: '2px'
-                                  }}></span>
-                                  {column.title}
-                                </h4>
-                                <div style={{ display: 'grid', gap: '0.75rem' }}>
-                                  {column.items?.map((item, itemIdx) => {
-                                    const [title, ...desc] = item.split(' - ');
-                                    const description = desc.join(' - ');
-                                    return (
-                                      <div key={itemIdx} style={{ 
-                                        display: 'flex',
-                                        alignItems: 'flex-start',
-                                        gap: '0.75rem',
-                                        padding: '0.75rem',
-                                        background: 'white',
-                                        borderRadius: '8px',
-                                        transition: 'transform 0.2s ease',
-                                        cursor: 'default'
-                                      }}
-                                      onMouseEnter={(e) => {
-                                        e.currentTarget.style.transform = 'translateX(4px)';
-                                      }}
-                                      onMouseLeave={(e) => {
-                                        e.currentTarget.style.transform = 'translateX(0)';
-                                      }}
-                                      >
-                                        <div style={{
-                                          minWidth: '8px',
-                                          minHeight: '8px',
-                                          width: '8px',
-                                          height: '8px',
-                                          background: '#BF5813',
-                                          borderRadius: '50%',
-                                          marginTop: '6px'
-                                        }}></div>
-                                        <div>
-                                          <span style={{ 
-                                            fontWeight: 500, 
-                                            color: '#111',
-                                            display: 'block',
-                                            marginBottom: description ? '0.25rem' : '0'
-                                          }}>
-                                            {title}
-                                          </span>
-                                          {description && (
-                                            <span style={{ 
-                                              color: '#555',
-                                              fontSize: '0.9rem',
-                                              lineHeight: '1.4'
-                                            }}>
-                                              {description}
-                                            </span>
-                                          )}
-                                        </div>
-                                      </div>
-                                    );
-                                  })}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        );
-                      
-                      case 'specs':
-                        return (
-                          <div key={idx} style={{ 
-                            marginBottom: '2rem',
-                            background: '#f8f8f8',
-                            borderRadius: '12px',
-                            padding: '1.5rem',
-                            border: '1px solid #e5e7eb'
-                          }}>
-                            <h4 style={{ 
-                              marginBottom: '1.5rem', 
-                              fontSize: '1.2rem', 
-                              fontWeight: 500,
-                              color: '#111',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '0.5rem'
-                            }}>
-                              <span style={{
-                                width: '4px',
-                                height: '20px',
-                                background: '#BF5813',
-                                borderRadius: '2px'
-                              }}></span>
-                              {section.title}
-                            </h4>
-                            <div style={{ display: 'grid', gap: '0.75rem' }}>
-                              {section.items?.map((item, itemIdx) => {
-                                const [title, ...desc] = item.split(' - ');
-                                const description = desc.join(' - ');
-                                return (
-                                  <div key={itemIdx} style={{ 
-                                    display: 'flex',
-                                    alignItems: 'flex-start',
-                                    gap: '0.75rem',
-                                    padding: '0.75rem',
-                                    background: 'white',
+                                {section.title}
+                              </h4>
+                            )}
+                            {section.specs ? (
+                              <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                                gap: '1rem'
+                              }}>
+                                {section.specs.map((spec, specIdx) => (
+                                  <div key={specIdx} style={{
+                                    background: '#f8f8f8',
+                                    padding: '1rem',
                                     borderRadius: '8px',
-                                    transition: 'transform 0.2s ease',
-                                    cursor: 'default'
-                                  }}
-                                  onMouseEnter={(e) => {
-                                    e.currentTarget.style.transform = 'translateX(4px)';
-                                  }}
-                                  onMouseLeave={(e) => {
-                                    e.currentTarget.style.transform = 'translateX(0)';
-                                  }}
-                                  >
+                                    textAlign: 'center'
+                                  }}>
                                     <div style={{
-                                      minWidth: '8px',
-                                      minHeight: '8px',
-                                      width: '8px',
-                                      height: '8px',
-                                      background: '#BF5813',
-                                      borderRadius: '50%',
-                                      marginTop: '6px'
-                                    }}></div>
-                                    <div>
-                                      <span style={{ 
-                                        fontWeight: 500, 
-                                        color: '#111',
-                                        display: 'block',
-                                        marginBottom: description ? '0.25rem' : '0'
-                                      }}>
-                                        {title}
-                                      </span>
-                                      {description && (
-                                        <span style={{ 
-                                          color: '#555',
-                                          fontSize: '0.9rem',
-                                          lineHeight: '1.4'
-                                        }}>
-                                          {description}
-                                        </span>
-                                      )}
+                                      fontSize: '1.5rem',
+                                      fontWeight: 500,
+                                      color: '#BF5813',
+                                      marginBottom: '0.25rem'
+                                    }}>
+                                      {spec.label}
+                                    </div>
+                                    <div style={{
+                                      fontSize: '0.875rem',
+                                      color: '#666'
+                                    }}>
+                                      {spec.value}
                                     </div>
                                   </div>
-                                );
-                              })}
-                            </div>
-                          </div>
-                        );
-                      
-                      case 'comparison':
-                        return (
-                          <div key={idx} style={{
-                            background: 'linear-gradient(135deg, #fff5f0 0%, #f8f8f8 100%)',
-                            padding: '2rem',
-                            borderRadius: '12px',
-                            borderLeft: '4px solid #BF5813',
-                            marginBottom: '2rem',
-                            position: 'relative'
-                          }}>
-                            <div style={{
-                              position: 'absolute',
-                              top: '1.5rem',
-                              right: '1.5rem',
-                              width: '40px',
-                              height: '40px',
-                              background: '#BF5813',
-                              borderRadius: '50%',
-                              display: 'flex',
-                              alignItems: 'center',
-                              justifyContent: 'center',
-                              opacity: 0.1
-                            }}>
-                              <span style={{ fontSize: '24px', color: 'white' }}>✓</span>
-                            </div>
-                            <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500, color: '#111' }}>
-                              {section.title}
-                            </h4>
-                            <p style={{ lineHeight: '1.8', color: '#333' }}>{section.text}</p>
-                          </div>
-                        );
-                      
-                      case 'diagram':
-                        return (
-                          <div key={idx} style={{ 
-                            marginBottom: '2rem',
-                            background: '#f8f8f8',
-                            borderRadius: '12px',
-                            padding: '1.5rem',
-                            border: '1px solid #e5e7eb'
-                          }}>
-                            <h4 style={{ 
-                              marginBottom: '1.5rem', 
-                              fontSize: '1.2rem', 
-                              fontWeight: 500,
-                              color: '#111',
-                              display: 'flex',
-                              alignItems: 'center',
-                              gap: '0.5rem'
-                            }}>
-                              <span style={{
-                                width: '4px',
-                                height: '20px',
-                                background: '#BF5813',
-                                borderRadius: '2px'
-                              }}></span>
-                              {section.title}
-                            </h4>
-                            <div style={{ display: 'grid', gap: '0.75rem' }}>
-                              {section.points?.map((point, pointIdx) => (
-                                <div key={pointIdx} style={{
-                                  display: 'flex',
-                                  alignItems: 'flex-start',
-                                  gap: '0.75rem',
-                                  padding: '0.75rem',
-                                  background: 'white',
-                                  borderRadius: '8px'
-                                }}>
-                                  <div style={{
-                                    minWidth: '24px',
-                                    minHeight: '24px',
-                                    width: '24px',
-                                    height: '24px',
-                                    background: '#BF5813',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    color: 'white',
-                                    fontSize: '12px',
-                                    fontWeight: 600,
-                                    flexShrink: 0
+                                ))}
+                              </div>
+                            ) : (
+                              <div style={{
+                                display: 'grid',
+                                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                                gap: '2rem'
+                              }}>
+                                {section.columns?.map((column, colIdx) => (
+                                  <div key={colIdx} style={{
+                                    background: '#f8f8f8',
+                                    borderRadius: '12px',
+                                    padding: '1.5rem',
+                                    border: '1px solid #e5e7eb'
                                   }}>
-                                    {pointIdx + 1}
+                                    <h4 style={{
+                                      marginBottom: '1rem',
+                                      fontSize: '1.2rem',
+                                      fontWeight: 500,
+                                      color: '#111'
+                                    }}>
+                                      {column.title}
+                                    </h4>
+                                    <div style={{ display: 'grid', gap: '0.75rem' }}>
+                                      {column.items?.map((item: string, itemIdx: number) => (
+                                        <div key={itemIdx} style={{
+                                          display: 'flex',
+                                          alignItems: 'flex-start',
+                                          gap: '0.75rem'
+                                        }}>
+                                          <div style={{
+                                            minWidth: '6px',
+                                            minHeight: '6px',
+                                            width: '6px',
+                                            height: '6px',
+                                            background: '#BF5813',
+                                            borderRadius: '50%',
+                                            marginTop: '7px'
+                                          }}></div>
+                                          <div>
+                                            <span style={{
+                                              color: '#111',
+                                              fontWeight: 500,
+                                              display: 'block'
+                                            }}>{item.split(' - ')[0]}</span>
+                                            {item.includes(' - ') && (
+                                              <span style={{
+                                                color: '#555',
+                                                fontSize: '0.9rem',
+                                                lineHeight: 1.4,
+                                                display: 'block',
+                                                marginTop: '0.25rem'
+                                              }}>{item.split(' - ')[1]}</span>
+                                            )}
+                                          </div>
+                                        </div>
+                                      ))}
+                                    </div>
                                   </div>
-                                  <span style={{ color: '#333', lineHeight: '1.6' }}>{point}</span>
-                                </div>
-                              ))}
-                            </div>
+                                ))}
+                              </div>
+                            )}
                           </div>
                         );
                       
                       case 'feature-cards':
                         return (
-                          <div key={idx} style={{
+                          <div key={idx} className="feature-cards" style={{
                             display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                            gridTemplateColumns: section.items?.length === 2 ? 'repeat(2, 1fr)' : 'repeat(auto-fit, minmax(280px, 1fr))',
                             gap: '1.5rem',
                             marginBottom: '2rem'
                           }}>
@@ -1497,20 +1545,11 @@ export default function SaunasPage() {
                                 background: 'white',
                                 borderRadius: '12px',
                                 overflow: 'hidden',
-                                border: '1px solid #e5e7eb',
-                                transition: 'transform 0.2s ease, box-shadow 0.2s ease'
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'translateY(-4px)';
-                                e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.12)';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'translateY(0)';
-                                e.currentTarget.style.boxShadow = 'none';
-                              }}
-                              >
-                                {item.image && (
-                                  <img
+                                border: '1px solid rgb(229, 231, 235)',
+                                transition: 'transform 0.2s, box-shadow 0.2s'
+                              }}>
+                                {item.image ? (
+                                  <img 
                                     src={item.image}
                                     alt={item.title}
                                     onClick={() => setFullscreenImage(item.image)}
@@ -1521,13 +1560,13 @@ export default function SaunasPage() {
                                       cursor: 'zoom-in'
                                     }}
                                   />
-                                )}
+                                ) : null}
                                 <div style={{ padding: '1.5rem' }}>
                                   <h5 style={{
                                     fontSize: '1.1rem',
                                     fontWeight: 500,
                                     marginBottom: '0.75rem',
-                                    color: '#111',
+                                    color: 'rgb(17, 17, 17)',
                                     display: 'flex',
                                     alignItems: 'center',
                                     gap: '0.75rem'
@@ -1536,7 +1575,7 @@ export default function SaunasPage() {
                                       <div style={{
                                         width: '32px',
                                         height: '32px',
-                                        background: 'linear-gradient(135deg, #BF5813 0%, #D96C2C 100%)',
+                                        background: 'linear-gradient(135deg, #BF5813 0%, #d96c2c 100%)',
                                         borderRadius: '8px',
                                         display: 'flex',
                                         alignItems: 'center',
@@ -1545,71 +1584,71 @@ export default function SaunasPage() {
                                       }}>
                                         {item.icon === 'sun' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <circle cx="12" cy="12" r="5"></circle>
-                                            <line x1="12" y1="1" x2="12" y2="3"></line>
-                                            <line x1="12" y1="21" x2="12" y2="23"></line>
-                                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                                            <line x1="1" y1="12" x2="3" y2="12"></line>
-                                            <line x1="21" y1="12" x2="23" y2="12"></line>
-                                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                                            <circle cx="12" cy="12" r="5"/>
+                                            <line x1="12" y1="1" x2="12" y2="3"/>
+                                            <line x1="12" y1="21" x2="12" y2="23"/>
+                                            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+                                            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+                                            <line x1="1" y1="12" x2="3" y2="12"/>
+                                            <line x1="21" y1="12" x2="23" y2="12"/>
+                                            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+                                            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
                                           </svg>
                                         )}
                                         {item.icon === 'lightning' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
                                           </svg>
                                         )}
                                         {item.icon === 'shield' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
                                           </svg>
                                         )}
                                         {item.icon === 'clock' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <circle cx="12" cy="12" r="10"></circle>
-                                            <polyline points="12 6 12 12 16 14"></polyline>
+                                            <circle cx="12" cy="12" r="10"/>
+                                            <polyline points="12 6 12 12 16 14"/>
                                           </svg>
                                         )}
                                         {item.icon === 'smartphone' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
-                                            <line x1="12" y1="18" x2="12" y2="18"></line>
+                                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
+                                            <line x1="12" y1="18" x2="12" y2="18"/>
                                           </svg>
                                         )}
                                         {item.icon === 'calendar' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                                            <line x1="16" y1="2" x2="16" y2="6"></line>
-                                            <line x1="8" y1="2" x2="8" y2="6"></line>
-                                            <line x1="3" y1="10" x2="21" y2="10"></line>
+                                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/>
+                                            <line x1="16" y1="2" x2="16" y2="6"/>
+                                            <line x1="8" y1="2" x2="8" y2="6"/>
+                                            <line x1="3" y1="10" x2="21" y2="10"/>
                                           </svg>
                                         )}
                                         {item.icon === 'chart' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <line x1="12" y1="20" x2="12" y2="10"></line>
-                                            <line x1="18" y1="20" x2="18" y2="4"></line>
-                                            <line x1="6" y1="20" x2="6" y2="16"></line>
+                                            <line x1="12" y1="20" x2="12" y2="10"/>
+                                            <line x1="18" y1="20" x2="18" y2="4"/>
+                                            <line x1="6" y1="20" x2="6" y2="16"/>
                                           </svg>
                                         )}
                                         {item.icon === 'bell' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
-                                            <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
                                           </svg>
                                         )}
                                         {item.icon === 'thermometer' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"></path>
+                                            <path d="M14 14.76V3.5a2.5 2.5 0 0 0-5 0v11.26a4.5 4.5 0 1 0 5 0z"/>
                                           </svg>
                                         )}
                                         {item.icon === 'users' && (
                                           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                            <circle cx="9" cy="7" r="4"></circle>
-                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                                            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                            <circle cx="9" cy="7" r="4"/>
+                                            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
                                           </svg>
                                         )}
                                       </div>
@@ -1617,7 +1656,7 @@ export default function SaunasPage() {
                                       <div style={{
                                         width: '8px',
                                         height: '8px',
-                                        background: '#BF5813',
+                                        background: 'rgb(191, 88, 19)',
                                         borderRadius: '50%'
                                       }}></div>
                                     )}
@@ -1625,7 +1664,7 @@ export default function SaunasPage() {
                                   </h5>
                                   <p style={{
                                     lineHeight: '1.6',
-                                    color: '#333',
+                                    color: 'rgb(51, 51, 51)',
                                     fontSize: '0.95rem'
                                   }}>
                                     {item.text}
@@ -1636,452 +1675,18 @@ export default function SaunasPage() {
                           </div>
                         );
                       
-                      case 'features':
-                        return (
-                          <div key={idx} style={{
-                            display: 'grid',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                            gap: '1.5rem',
-                            marginBottom: '2rem'
-                          }}>
-                            {section.items?.map((feature, featIdx) => (
-                              <div key={featIdx}>
-                                <h5 style={{ fontSize: '1rem', fontWeight: 500, marginBottom: '0.5rem' }}>
-                                  {feature.title}
-                                </h5>
-                                <p style={{ fontSize: '0.875rem', color: '#666' }}>
-                                  {feature.description}
-                                </p>
-                              </div>
-                            ))}
-                          </div>
-                        );
-                      
-                      case 'solution':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
-                              {section.features?.map((feat, featIdx) => (
-                                <li key={featIdx} style={{ marginBottom: '0.5rem', color: '#666' }}>{feat}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      
-                      case 'technical':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
-                              {section.specs?.map((spec, specIdx) => (
-                                <li key={specIdx} style={{ marginBottom: '0.5rem', color: '#666' }}>{spec}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      
-                      case 'compatibility':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
-                              {section.items?.map((item, itemIdx) => (
-                                <li key={itemIdx} style={{ marginBottom: '0.5rem', color: '#666' }}>{item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      
-                      case 'philosophy':
-                        return (
-                          <div key={idx} style={{
-                            background: '#f8f8f8',
-                            padding: '1.5rem',
-                            borderRadius: '8px',
-                            marginBottom: '2rem'
-                          }}>
-                            <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <p style={{ lineHeight: '1.8', color: '#333' }}>{section.text}</p>
-                          </div>
-                        );
-                      
-                      case 'engineering-details':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '2rem', fontSize: '1.4rem', fontWeight: 500, color: '#333' }}>
-                              {section.title}
-                            </h4>
-                            
-                            {/* Grid layout for desktop (3x2), tablet (side-by-side), mobile (stacked) */}
-                            <div className="engineering-details-grid" style={{
-                              display: 'grid',
-                              gap: '2rem'
-                            }}>
-                              {section.content?.map((item, contentIdx) => (
-                                <div key={contentIdx} className="engineering-detail-card" style={{
-                                  background: '#fff',
-                                  borderRadius: '8px',
-                                  overflow: 'hidden',
-                                  border: '1px solid #e5e7eb'
-                                }}>
-                                  {/* Image */}
-                                  {item.image && (
-                                    <img 
-                                      src={item.image}
-                                      alt={item.subtitle}
-                                      onClick={() => setFullscreenImage(item.image || null)}
-                                      className="zoomable-image"
-                                      style={{
-                                        width: '100%',
-                                        height: '200px',
-                                        objectFit: 'cover',
-                                        cursor: 'zoom-in'
-                                      }}
-                                    />
-                                  )}
-                                  
-                                  {/* Text content */}
-                                  <div style={{ padding: '1.5rem' }}>
-                                    <h5 style={{
-                                      fontSize: '1.1rem',
-                                      fontWeight: 500,
-                                      marginBottom: '0.75rem',
-                                      color: '#333'
-                                    }}>
-                                      {item.subtitle}
-                                    </h5>
-                                    <p style={{
-                                      lineHeight: '1.6',
-                                      color: '#333',
-                                      fontSize: '0.95rem'
-                                    }}>
-                                      {item.text}
-                                    </p>
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      
-                      case 'problem-solution':
-                        return (
-                          <div key={idx} style={{
-                            display: 'grid',
-                            gap: '1.5rem',
-                            marginBottom: '2rem',
-                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
-                          }}>
-                            {/* Problem Section */}
-                            <div style={{
-                              background: '#1a1a1a',
-                              color: 'white',
-                              padding: '2rem',
-                              borderRadius: '12px'
-                            }}>
-                              <h4 style={{
-                                fontSize: '1.1rem',
-                                marginBottom: '1.5rem',
-                                color: 'white'
-                              }}>
-                                {typeof section.problem === 'object' && !Array.isArray(section.problem) ? section.problem.title : 'Problems'}
-                              </h4>
-                              <div style={{ display: 'grid', gap: '1rem' }}>
-                                {typeof section.problem === 'object' && !Array.isArray(section.problem) && section.problem.items?.map((item: any, itemIdx: number) => (
-                                  <div key={itemIdx} style={{ display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
-                                    <span style={{ color: '#EF4444', fontSize: '1.2rem' }}>✗</span>
-                                    <div>
-                                      <strong style={{ display: 'block', marginBottom: '0.25rem' }}>{item.title}</strong>
-                                      <p style={{ fontSize: '0.875rem', opacity: 0.9, lineHeight: '1.5' }}>{item.text}</p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                            
-                            {/* Solution Section */}
-                            <div style={{
-                              background: '#f9fafb',
-                              padding: '2rem',
-                              borderRadius: '12px',
-                              border: '1px solid #e5e7eb'
-                            }}>
-                              <h4 style={{
-                                color: '#111',
-                                marginBottom: '1.5rem',
-                                fontSize: '1.1rem'
-                              }}>
-                                {typeof section.solution === 'object' && !Array.isArray(section.solution) ? section.solution.title : 'Solution'}
-                              </h4>
-                              <div style={{ display: 'grid', gap: '1rem' }}>
-                                {typeof section.solution === 'object' && !Array.isArray(section.solution) && section.solution.items?.map((item: any, itemIdx: number) => (
-                                  <div key={itemIdx} style={{ display: 'flex', alignItems: 'start', gap: '0.75rem' }}>
-                                    <span style={{ color: '#BF5813', fontSize: '1.2rem' }}>✓</span>
-                                    <div>
-                                      <strong style={{ color: '#111', display: 'block', marginBottom: '0.25rem' }}>{item.title}</strong>
-                                      <p style={{ fontSize: '0.875rem', color: '#6b7280', lineHeight: '1.5' }}>{item.text}</p>
-                                    </div>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-                          </div>
-                        );
-                      
-                      case 'app-download':
-                        return (
-                          <div key={idx} style={{
-                            textAlign: 'center',
-                            padding: '2rem 0',
-                            marginBottom: '2rem',
-                            borderTop: '1px solid #e5e7eb',
-                            borderBottom: '1px solid #e5e7eb'
-                          }}>
-                            <h4 style={{ marginBottom: '0.5rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <p style={{ color: '#666', marginBottom: '1.5rem' }}>{section.subtitle}</p>
-                            <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-                              <a href={section.appStore} target="_blank" rel="noopener noreferrer" style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '10px 20px',
-                                background: '#000',
-                                color: 'white',
-                                borderRadius: '8px',
-                                textDecoration: 'none',
-                                fontSize: '0.95rem',
-                                fontWeight: 500,
-                                transition: 'transform 0.2s ease',
-                                border: '1px solid #000'
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'scale(1.05)';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'scale(1)';
-                              }}
-                              >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
-                                  <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
-                                </svg>
-                                <span>App Store</span>
-                              </a>
-                              <a href={section.googlePlay} target="_blank" rel="noopener noreferrer" style={{
-                                display: 'inline-flex',
-                                alignItems: 'center',
-                                gap: '8px',
-                                padding: '10px 20px',
-                                background: '#000',
-                                color: 'white',
-                                borderRadius: '8px',
-                                textDecoration: 'none',
-                                fontSize: '0.95rem',
-                                fontWeight: 500,
-                                transition: 'transform 0.2s ease',
-                                border: '1px solid #000'
-                              }}
-                              onMouseEnter={(e) => {
-                                e.currentTarget.style.transform = 'scale(1.05)';
-                              }}
-                              onMouseLeave={(e) => {
-                                e.currentTarget.style.transform = 'scale(1)';
-                              }}
-                              >
-                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                                  <path d="M3.609 1.814L13.792 12l-10.183 10.186a1.5 1.5 0 0 1-.396-1.008V2.822a1.5 1.5 0 0 1 .396-1.008zM14.75 12.958l2.849 2.849-12.047 6.896a1.5 1.5 0 0 1-1.218.024l10.416-10.727zm0-1.916L4.334 1.273a1.5 1.5 0 0 1 1.218.024l12.047 6.896-2.849 2.849zm.208.958l3.462 3.462a1.5 1.5 0 0 1 0 2.122l-3.462 3.462L22.392 12l-7.434-7.434v7.434z" fill="#01D277"/>
-                                  <path d="M3.609 1.814L13.792 12l-10.183 10.186a1.5 1.5 0 0 1-.396-1.008V2.822a1.5 1.5 0 0 1 .396-1.008z" fill="#00F076"/>
-                                  <path d="M14.75 12.958l2.849 2.849-12.047 6.896a1.5 1.5 0 0 1-1.218.024l10.416-10.727z" fill="#00E0FF"/>
-                                  <path d="M14.75 11.042L4.334 1.273a1.5 1.5 0 0 1 1.218.024l12.047 6.896-2.849 2.849z" fill="#FFEF00"/>
-                                  <path d="M14.958 12l3.462 3.462a1.5 1.5 0 0 1 0 2.122l-3.462 3.462L22.392 12l-7.434-7.434v7.434z" fill="#FF3A44"/>
-                                </svg>
-                                <span>Google Play</span>
-                              </a>
-                            </div>
-                          </div>
-                        );
-                      
-                      case 'how-it-works':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <div style={{ display: 'grid', gap: '1rem' }}>
-                              {section.steps?.map((step, stepIdx) => (
-                                <div key={stepIdx} style={{
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '1rem'
-                                }}>
-                                  <div style={{
-                                    width: '32px',
-                                    height: '32px',
-                                    background: '#BF5813',
-                                    color: 'white',
-                                    borderRadius: '50%',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                    flexShrink: 0,
-                                    fontWeight: 500
-                                  }}>
-                                    {stepIdx + 1}
-                                  </div>
-                                  <p style={{ color: '#333', lineHeight: '1.6' }}>
-                                    {typeof step === 'string' ? step : `${step.title}: ${step.description}`}
-                                  </p>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      
-                      case 'testimonials':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '1.5rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <div style={{ display: 'grid', gap: '1.5rem' }}>
-                              {section.items?.map((item, itemIdx) => (
-                                <blockquote key={itemIdx} style={{
-                                  borderLeft: '3px solid #BF5813',
-                                  paddingLeft: '1.5rem',
-                                  margin: 0
-                                }}>
-                                  <p style={{
-                                    fontStyle: 'italic',
-                                    color: '#333',
-                                    marginBottom: '0.5rem',
-                                    lineHeight: '1.6'
-                                  }}>
-                                    "{item.quote}"
-                                  </p>
-                                  <cite style={{
-                                    fontSize: '0.875rem',
-                                    color: '#666',
-                                    fontStyle: 'normal'
-                                  }}>
-                                    — {item.author}
-                                  </cite>
-                                </blockquote>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      
-                      case 'fischer-legacy':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '0.5rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <p style={{ color: '#666', marginBottom: '1.5rem', lineHeight: '1.6' }}>
-                              {section.text}
-                            </p>
-                            <div style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-                              gap: '1rem'
-                            }}>
-                              {section.items?.map((item, itemIdx) => (
-                                <div key={itemIdx} style={{
-                                  background: '#f8f8f8',
-                                  padding: '1rem',
-                                  borderRadius: '8px',
-                                  textAlign: 'center'
-                                }}>
-                                  <div style={{
-                                    fontSize: '1.5rem',
-                                    fontWeight: 500,
-                                    color: '#BF5813',
-                                    marginBottom: '0.25rem'
-                                  }}>
-                                    {item.value}
-                                  </div>
-                                  <div style={{
-                                    fontSize: '0.875rem',
-                                    color: '#666'
-                                  }}>
-                                    {item.label}
-                                  </div>
-                                </div>
-                              ))}
-                            </div>
-                          </div>
-                        );
-                      
-                      case 'model-features':
-                        return (
-                          <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                              {section.title}
-                            </h4>
-                            <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
-                              {section.items?.map((item, itemIdx) => (
-                                <li key={itemIdx} style={{ marginBottom: '0.5rem', color: '#333' }}>{item}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        );
-                      
-                      case 'quote':
-                        return (
-                          <div key={idx} style={{
-                            background: 'linear-gradient(135deg, #f8f8f8 0%, #fff 100%)',
-                            padding: '2rem',
-                            borderRadius: '12px',
-                            marginBottom: '2rem',
-                            borderLeft: '4px solid #BF5813'
-                          }}>
-                            <blockquote style={{ margin: 0 }}>
-                              <p style={{
-                                fontStyle: 'italic',
-                                fontSize: '1.1rem',
-                                color: '#333',
-                                marginBottom: '1rem',
-                                lineHeight: '1.7'
-                              }}>
-                                "{section.text}"
-                              </p>
-                              <cite style={{
-                                fontSize: '0.95rem',
-                                color: '#666',
-                                fontStyle: 'normal',
-                                fontWeight: 500
-                              }}>
-                                — {section.author}
-                              </cite>
-                            </blockquote>
-                          </div>
-                        );
-                      
                       case 'installation-features':
                         return (
                           <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ 
-                              marginBottom: '1.5rem', 
-                              fontSize: '1.2rem', 
+                            <h4 style={{
+                              marginBottom: '1.5rem',
+                              fontSize: '1.2rem',
                               fontWeight: 500,
                               color: '#111'
                             }}>
                               {section.title}
                             </h4>
-                            <div style={{
-                              display: 'grid',
-                              gap: '1.5rem'
-                            }}>
+                            <div style={{ display: 'grid', gap: '1.5rem' }}>
                               {section.items?.map((item, itemIdx) => (
                                 <div key={itemIdx} style={{
                                   background: '#f9fafb',
@@ -2119,12 +1724,224 @@ export default function SaunasPage() {
                           </div>
                         );
                       
+                      case 'solution':
+                        return (
+                          <div key={idx} style={{
+                            background: '#f9fafb',
+                            padding: '2rem',
+                            borderRadius: '12px',
+                            border: '1px solid #e5e7eb',
+                            marginBottom: '2rem'
+                          }}>
+                            {section.title && (
+                              <h4 style={{
+                                color: '#111',
+                                marginBottom: '1.5rem',
+                                fontSize: '1.1rem'
+                              }}>
+                                {section.title}
+                              </h4>
+                            )}
+                            <div style={{ display: 'grid', gap: '1rem' }}>
+                              {section.items?.map((item, itemIdx) => (
+                                <div key={itemIdx} style={{
+                                  display: 'flex',
+                                  alignItems: 'start',
+                                  gap: '0.75rem'
+                                }}>
+                                  <span style={{
+                                    color: '#BF5813',
+                                    fontSize: '1.2rem'
+                                  }}>✓</span>
+                                  <div>
+                                    <strong style={{
+                                      color: '#111',
+                                      display: 'block',
+                                      marginBottom: '0.25rem'
+                                    }}>
+                                      {item.title}
+                                    </strong>
+                                    <p style={{
+                                      fontSize: '0.875rem',
+                                      color: '#666',
+                                      lineHeight: '1.5'
+                                    }}>
+                                      {item.text}
+                                    </p>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      
+                      case 'problem-solution':
+                        return (
+                          <div key={idx} style={{
+                            display: 'grid',
+                            gap: '1.5rem',
+                            marginBottom: '2rem',
+                            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))'
+                          }}>
+                            <div style={{
+                              background: '#1a1a1a',
+                              color: 'white',
+                              padding: '2rem',
+                              borderRadius: '12px'
+                            }}>
+                              <h4 style={{
+                                fontSize: '1.1rem',
+                                marginBottom: '1.5rem',
+                                color: 'white'
+                              }}>
+                                {section.problem?.title}
+                              </h4>
+                              <div style={{ display: 'grid', gap: '1rem' }}>
+                                {section.problem?.items?.map((item, itemIdx) => (
+                                  <div key={itemIdx} style={{
+                                    display: 'flex',
+                                    alignItems: 'start',
+                                    gap: '0.75rem'
+                                  }}>
+                                    <span style={{
+                                      color: '#ef4444',
+                                      fontSize: '1.2rem'
+                                    }}>✗</span>
+                                    <div>
+                                      <strong style={{
+                                        display: 'block',
+                                        marginBottom: '0.25rem'
+                                      }}>
+                                        {item.title}
+                                      </strong>
+                                      <p style={{
+                                        fontSize: '0.875rem',
+                                        opacity: 0.9,
+                                        lineHeight: '1.5'
+                                      }}>
+                                        {item.text}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                            <div style={{
+                              background: '#f9fafb',
+                              padding: '2rem',
+                              borderRadius: '12px',
+                              border: '1px solid #e5e7eb'
+                            }}>
+                              <h4 style={{
+                                color: '#111',
+                                marginBottom: '1.5rem',
+                                fontSize: '1.1rem'
+                              }}>
+                                {section.solution?.title}
+                              </h4>
+                              <div style={{ display: 'grid', gap: '1rem' }}>
+                                {section.solution?.items?.map((item, itemIdx) => (
+                                  <div key={itemIdx} style={{
+                                    display: 'flex',
+                                    alignItems: 'start',
+                                    gap: '0.75rem'
+                                  }}>
+                                    <span style={{
+                                      color: '#16a34a',
+                                      fontSize: '1.2rem'
+                                    }}>✓</span>
+                                    <div>
+                                      <strong style={{
+                                        color: '#111',
+                                        display: 'block',
+                                        marginBottom: '0.25rem'
+                                      }}>
+                                        {item.title}
+                                      </strong>
+                                      <p style={{
+                                        fontSize: '0.875rem',
+                                        color: '#6b7280',
+                                        lineHeight: '1.5'
+                                      }}>
+                                        {item.text}
+                                      </p>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      
+                      case 'specs':
+                        return (
+                          <div key={idx} style={{
+                            marginBottom: '2rem',
+                            background: '#f8f8f8',
+                            borderRadius: '12px',
+                            padding: '1.5rem',
+                            border: '1px solid #e5e7eb'
+                          }}>
+                            <h4 style={{
+                              marginBottom: '1.5rem',
+                              fontSize: '1.2rem',
+                              fontWeight: 500,
+                              color: '#111',
+                              display: 'flex',
+                              alignItems: 'center',
+                              gap: '0.5rem'
+                            }}>
+                              <span style={{
+                                width: '4px',
+                                height: '20px',
+                                background: '#BF5813',
+                                borderRadius: '2px'
+                              }}></span>
+                              {section.title}
+                            </h4>
+                            <div style={{ display: 'grid', gap: '0.75rem' }}>
+                              {section.items?.map((item: string, itemIdx: number) => (
+                                <div key={itemIdx} style={{
+                                  display: 'flex',
+                                  alignItems: 'flex-start',
+                                  gap: '0.75rem',
+                                  padding: '0.75rem',
+                                  background: 'white',
+                                  borderRadius: '8px',
+                                  transition: 'transform 0.2s',
+                                  cursor: 'default'
+                                }}>
+                                  <div style={{
+                                    minWidth: '8px',
+                                    minHeight: '8px',
+                                    width: '8px',
+                                    height: '8px',
+                                    background: '#BF5813',
+                                    borderRadius: '50%',
+                                    marginTop: '6px'
+                                  }}></div>
+                                  <div>
+                                    <span style={{
+                                      fontWeight: 500,
+                                      color: '#111',
+                                      display: 'block',
+                                      marginBottom: 0
+                                    }}>
+                                      {item}
+                                    </span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      
                       case 'specs-list':
                         return (
                           <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ 
-                              marginBottom: '1.5rem', 
-                              fontSize: '1.2rem', 
+                            <h4 style={{
+                              marginBottom: '1.5rem',
+                              fontSize: '1.2rem',
                               fontWeight: 500,
                               color: '#111'
                             }}>
@@ -2136,20 +1953,283 @@ export default function SaunasPage() {
                               borderRadius: '12px',
                               border: '1px solid #e5e7eb'
                             }}>
-                              <ul style={{ 
-                                paddingLeft: '1.5rem', 
-                                lineHeight: '1.8',
-                                margin: 0
-                              }}>
-                                {section.items?.map((item, itemIdx) => (
-                                  <li key={itemIdx} style={{ 
-                                    marginBottom: '0.5rem', 
-                                    color: '#333' 
+                              <div style={{ display: 'grid', gap: '0.75rem' }}>
+                                {section.items?.map((item: string, itemIdx: number) => (
+                                  <div key={itemIdx} style={{
+                                    display: 'flex',
+                                    alignItems: 'flex-start',
+                                    gap: '0.75rem'
                                   }}>
-                                    {item}
-                                  </li>
+                                    <div style={{
+                                      minWidth: '6px',
+                                      minHeight: '6px',
+                                      width: '6px',
+                                      height: '6px',
+                                      background: '#BF5813',
+                                      borderRadius: '50%',
+                                      marginTop: '7px',
+                                      flexShrink: 0
+                                    }}></div>
+                                    <span style={{
+                                      color: '#333',
+                                      lineHeight: '1.8'
+                                    }}>
+                                      {item}
+                                    </span>
+                                  </div>
                                 ))}
-                              </ul>
+                              </div>
+                            </div>
+                          </div>
+                        );
+                      
+                      case 'quote':
+                        return (
+                          <div key={idx} style={{
+                            background: 'linear-gradient(135deg, rgb(248, 248, 248) 0%, rgb(255, 255, 255) 100%)',
+                            padding: '2rem',
+                            borderRadius: '12px',
+                            marginBottom: '2rem',
+                            borderLeft: '4px solid rgb(191, 88, 19)'
+                          }}>
+                            <blockquote style={{ margin: '0px' }}>
+                              <p style={{
+                                fontStyle: 'italic',
+                                fontSize: '1.1rem',
+                                color: 'rgb(51, 51, 51)',
+                                marginBottom: '1rem',
+                                lineHeight: '1.7'
+                              }}>
+                                "{section.quote || section.text}"
+                              </p>
+                              <cite style={{
+                                fontSize: '0.95rem',
+                                color: 'rgb(102, 102, 102)',
+                                fontStyle: 'normal',
+                                fontWeight: 500
+                              }}>
+                                — {section.author}
+                              </cite>
+                            </blockquote>
+                          </div>
+                        );
+                      
+                      case 'comparison':
+                        return (
+                          <div key={idx} style={{
+                            background: 'linear-gradient(135deg, #fff5f0 0%, #f8f8f8 100%)',
+                            borderRadius: '12px',
+                            padding: '1.5rem',
+                            marginBottom: '2rem',
+                            border: '1px solid #e5e7eb',
+                            borderLeft: '4px solid #BF5813'
+                          }}>
+                            <h4 style={{
+                              marginBottom: '1rem',
+                              fontSize: '1.2rem',
+                              fontWeight: 500,
+                              color: '#111'
+                            }}>
+                              {section.title}
+                            </h4>
+                            <p style={{ lineHeight: '1.8', color: '#333' }}>{section.text}</p>
+                          </div>
+                        );
+                      
+                      case 'single-image':
+                        return (
+                          <div key={idx} style={{ marginBottom: '2rem', textAlign: 'center', width: '100%' }}>
+                            <img
+                              src={section.image}
+                              alt={section.caption}
+                              onClick={() => setFullscreenImage(section.image)}
+                              style={{
+                                width: '100%',
+                                height: 'auto',
+                                borderRadius: '8px',
+                                cursor: 'zoom-in',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                              }}
+                            />
+                            {section.caption && (
+                              <div style={{
+                                marginTop: '1rem',
+                                padding: '0 1rem',
+                                textAlign: 'center'
+                              }}>
+                                <p style={{
+                                  fontSize: '0.9rem',
+                                  color: '#666',
+                                  fontStyle: 'italic',
+                                  margin: 0
+                                }}>
+                                  {section.caption}
+                                </p>
+                              </div>
+                            )}
+                          </div>
+                        );
+                      
+                      case 'app-download':
+                        return (
+                          <div key={idx} style={{
+                            textAlign: 'center',
+                            padding: '2rem 0',
+                            marginBottom: '2rem',
+                            borderTop: '1px solid #e5e7eb',
+                            borderBottom: '1px solid #e5e7eb'
+                          }}>
+                            <h4 style={{
+                              marginBottom: '0.5rem',
+                              fontSize: '1.2rem',
+                              fontWeight: 500
+                            }}>
+                              {section.title}
+                            </h4>
+                            <p style={{
+                              color: '#666',
+                              marginBottom: '1.5rem'
+                            }}>
+                              {section.subtitle}
+                            </p>
+                            <div style={{
+                              display: 'flex',
+                              gap: '1rem',
+                              justifyContent: 'center',
+                              flexWrap: 'wrap'
+                            }}>
+                              <a 
+                                href={section.appStore}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '8px',
+                                  padding: '10px 20px',
+                                  background: '#000',
+                                  color: 'white',
+                                  borderRadius: '8px',
+                                  textDecoration: 'none',
+                                  fontSize: '0.95rem',
+                                  fontWeight: 500,
+                                  transition: 'transform 0.2s',
+                                  border: '1px solid #000'
+                                }}
+                              >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                                  <path d="M18.71 19.5C17.88 20.74 17 21.95 15.66 21.97C14.32 22 13.89 21.18 12.37 21.18C10.84 21.18 10.37 21.95 9.09997 22C7.78997 22.05 6.79997 20.68 5.95997 19.47C4.24997 17 2.93997 12.45 4.69997 9.39C5.56997 7.87 7.12997 6.91 8.81997 6.88C10.1 6.86 11.32 7.75 12.11 7.75C12.89 7.75 14.37 6.68 15.92 6.84C16.57 6.87 18.39 7.1 19.56 8.82C19.47 8.88 17.39 10.1 17.41 12.63C17.44 15.65 20.06 16.66 20.09 16.67C20.06 16.74 19.67 18.11 18.71 19.5ZM13 3.5C13.73 2.67 14.94 2.04 15.94 2C16.07 3.17 15.6 4.35 14.9 5.19C14.21 6.04 13.07 6.7 11.95 6.61C11.8 5.46 12.36 4.26 13 3.5Z"/>
+                                </svg>
+                                <span>App Store</span>
+                              </a>
+                              <a 
+                                href={section.googlePlay}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  display: 'inline-flex',
+                                  alignItems: 'center',
+                                  gap: '8px',
+                                  padding: '10px 20px',
+                                  background: '#000',
+                                  color: 'white',
+                                  borderRadius: '8px',
+                                  textDecoration: 'none',
+                                  fontSize: '0.95rem',
+                                  fontWeight: 500,
+                                  transition: 'transform 0.2s',
+                                  border: '1px solid #000'
+                                }}
+                              >
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                                  <path d="M3.609 1.814L13.792 12l-10.183 10.186a1.5 1.5 0 0 1-.396-1.008V2.822a1.5 1.5 0 0 1 .396-1.008z" fill="#01D277"/>
+                                  <path d="M14.75 12.958l2.849 2.849-12.047 6.896a1.5 1.5 0 0 1-1.218.024l10.416-10.727z" fill="#00E0FF"/>
+                                  <path d="M14.75 11.042L4.334 1.273a1.5 1.5 0 0 1 1.218.024l12.047 6.896-2.849 2.849z" fill="#FFEF00"/>
+                                  <path d="M14.958 12l3.462 3.462a1.5 1.5 0 0 1 0 2.122l-3.462 3.462L22.392 12l-7.434-7.434v7.434z" fill="#FF3A44"/>
+                                </svg>
+                                <span>Google Play</span>
+                              </a>
+                            </div>
+                          </div>
+                        );
+                      
+                      case 'how-it-works':
+                        return (
+                          <div key={idx} style={{ marginBottom: '2rem' }}>
+                            <h4 style={{
+                              marginBottom: '1.5rem',
+                              fontSize: '1.2rem',
+                              fontWeight: 500
+                            }}>
+                              {section.title}
+                            </h4>
+                            <div style={{ display: 'grid', gap: '1rem' }}>
+                              {section.steps?.map((step: string, stepIdx: number) => (
+                                <div key={stepIdx} style={{
+                                  display: 'flex',
+                                  alignItems: 'center',
+                                  gap: '1rem'
+                                }}>
+                                  <div style={{
+                                    width: '32px',
+                                    height: '32px',
+                                    background: '#BF5813',
+                                    color: 'white',
+                                    borderRadius: '50%',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    justifyContent: 'center',
+                                    flexShrink: 0,
+                                    fontWeight: 500
+                                  }}>
+                                    {stepIdx + 1}
+                                  </div>
+                                  <p style={{
+                                    color: '#333',
+                                    lineHeight: '1.6'
+                                  }}>
+                                    {step}
+                                  </p>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        );
+                      
+                      case 'testimonials':
+                        return (
+                          <div key={idx} style={{ marginBottom: '2rem' }}>
+                            <h4 style={{
+                              marginBottom: '1.5rem',
+                              fontSize: '1.2rem',
+                              fontWeight: 500
+                            }}>
+                              {section.title}
+                            </h4>
+                            <div style={{ display: 'grid', gap: '1.5rem' }}>
+                              {section.items?.map((testimonial, testIdx) => (
+                                <blockquote key={testIdx} style={{
+                                  borderLeft: '3px solid #BF5813',
+                                  paddingLeft: '1.5rem',
+                                  margin: 0
+                                }}>
+                                  <p style={{
+                                    fontStyle: 'italic',
+                                    color: '#333',
+                                    marginBottom: '0.5rem',
+                                    lineHeight: '1.6'
+                                  }}>
+                                    "{testimonial.quote}"
+                                  </p>
+                                  <cite style={{
+                                    fontSize: '0.875rem',
+                                    color: '#666',
+                                    fontStyle: 'normal'
+                                  }}>
+                                    — {testimonial.author}
+                                  </cite>
+                                </blockquote>
+                              ))}
                             </div>
                           </div>
                         );
@@ -2157,11 +2237,11 @@ export default function SaunasPage() {
                       case 'commercial-specs':
                         return (
                           <div key={idx} style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ 
-                              marginBottom: '1.5rem', 
-                              fontSize: '1.2rem', 
+                            <h4 style={{
+                              marginBottom: '1.5rem',
+                              fontSize: '1.2rem',
                               fontWeight: 500,
-                              color: '#111'
+                              color: 'rgb(17, 17, 17)'
                             }}>
                               {section.title}
                             </h4>
@@ -2172,13 +2252,13 @@ export default function SaunasPage() {
                             }}>
                               {section.items?.map((item, itemIdx) => (
                                 <div key={itemIdx} style={{
-                                  background: '#f9fafb',
+                                  background: 'rgb(249, 250, 251)',
                                   padding: '1.25rem',
                                   borderRadius: '12px',
-                                  borderLeft: '3px solid #BF5813'
+                                  borderLeft: '3px solid rgb(191, 88, 19)'
                                 }}>
                                   <h5 style={{
-                                    color: '#111',
+                                    color: 'rgb(17, 17, 17)',
                                     fontSize: '1rem',
                                     fontWeight: 600,
                                     marginBottom: '0.5rem'
@@ -2186,9 +2266,9 @@ export default function SaunasPage() {
                                     {item.spec}
                                   </h5>
                                   <p style={{
-                                    color: '#666',
+                                    color: 'rgb(102, 102, 102)',
                                     fontSize: '0.875rem',
-                                    margin: 0,
+                                    margin: '0px',
                                     lineHeight: '1.5'
                                   }}>
                                     {item.detail}
@@ -2199,117 +2279,24 @@ export default function SaunasPage() {
                           </div>
                         );
                       
-                      case 'image-showcase':
+                      default:
                         return (
                           <div key={idx} style={{ marginBottom: '2rem' }}>
-                            {section.title && (
-                              <h4 style={{ 
-                                marginBottom: '1.5rem', 
-                                fontSize: '1.2rem', 
-                                fontWeight: 500,
-                                color: '#111'
-                              }}>
-                                {section.title}
-                              </h4>
-                            )}
-                            <div style={{
-                              display: 'grid',
-                              gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                              gap: '1.5rem'
-                            }}>
-                              {section.images?.map((img, imgIdx) => (
-                                <div key={imgIdx} style={{
-                                  borderRadius: '12px',
-                                  overflow: 'hidden',
-                                  background: 'white',
-                                  border: '1px solid #e5e7eb'
-                                }}>
-                                  <img
-                                    src={typeof img === 'string' ? img : img.src}
-                                    alt={typeof img === 'string' ? '' : img.caption}
-                                    onClick={() => setFullscreenImage(typeof img === 'string' ? img : img.src)}
-                                    style={{
-                                      width: '100%',
-                                      height: '250px',
-                                      objectFit: 'cover',
-                                      cursor: 'zoom-in'
-                                    }}
-                                  />
-                                  {typeof img !== 'string' && img.caption && (
-                                    <p style={{
-                                      padding: '1rem',
-                                      fontSize: '0.9rem',
-                                      color: '#666',
-                                      margin: 0,
-                                      borderTop: '1px solid #f0f0f0'
-                                    }}>
-                                      {img.caption}
-                                    </p>
-                                  )}
-                                </div>
-                              ))}
-                            </div>
+                            <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500 }}>
+                              {section.title}
+                            </h4>
+                            <p style={{ lineHeight: '1.8', color: '#333' }}>{section.text}</p>
                           </div>
                         );
-                      
-                      case 'single-image':
-                        return (
-                          <div key={idx} style={{ 
-                            marginBottom: '2rem',
-                            borderRadius: '12px',
-                            overflow: 'hidden',
-                            border: '1px solid #e5e7eb'
-                          }}>
-                            <img
-                              src={section.image}
-                              alt={section.caption || ''}
-                              onClick={() => setFullscreenImage(section.image || null)}
-                              style={{
-                                width: '100%',
-                                height: 'auto',
-                                display: 'block',
-                                cursor: 'zoom-in'
-                              }}
-                            />
-                            {section.caption && (
-                              <p style={{
-                                padding: '1rem 1.5rem',
-                                fontSize: '0.95rem',
-                                color: '#666',
-                                margin: 0,
-                                background: '#f9fafb',
-                                borderTop: '1px solid #e5e7eb',
-                                fontStyle: 'italic'
-                              }}>
-                                {section.caption}
-                              </p>
-                            )}
-                          </div>
-                        );
-                      
-                      default:
-                        return null;
-                    }
-                  })}
-                  
-                  {/* Problem list for comparison sections */}
-                  {content.sections && content.sections.some(s => s.problems) && 
-                    content.sections.filter(s => s.problems).map((section, idx) => (
-                      <div key={`problems-${idx}`} style={{ marginBottom: '2rem' }}>
-                        <h4 style={{ marginBottom: '1rem', fontSize: '1.2rem', fontWeight: 500 }}>
-                          {section.title}
-                        </h4>
-                        <ul style={{ paddingLeft: '1.5rem', lineHeight: '1.8' }}>
-                          {section.problems?.map((problem, probIdx) => (
-                            <li key={probIdx} style={{ marginBottom: '0.5rem', color: '#666' }}>{problem}</li>
-                          ))}
-                        </ul>
+                          }
+                        })()}
                       </div>
-                    ))
-                  }
+                    );
+                  })}
                 </div>
               );
             })()}
+            </div>
           </div>
         </div>
       )}
@@ -2342,34 +2329,38 @@ export default function SaunasPage() {
               setFullscreenImage(null);
             }}
           />
-          <button
+          <motion.button
             onClick={() => setFullscreenImage(null)}
+            whileHover={{ 
+              rotate: 90,
+              backgroundColor: 'rgba(255,255,255,0.2)'
+            }}
+            whileTap={{ 
+              scale: 0.9, 
+              rotate: 90 
+            }}
+            transition={{ 
+              type: "spring",
+              stiffness: 400,
+              damping: 17
+            }}
             style={{
               position: 'absolute',
               top: '2rem',
               right: '2rem',
               background: 'rgba(255,255,255,0.1)',
               border: '1px solid rgba(255,255,255,0.3)',
-              color: 'white',
               borderRadius: '50%',
               width: '50px',
               height: '50px',
-              fontSize: '24px',
               cursor: 'pointer',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              transition: 'background 0.3s ease'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.2)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'rgba(255,255,255,0.1)';
+              justifyContent: 'center'
             }}
           >
-            ✕
-          </button>
+            <span style={{ fontSize: '24px', color: 'white' }}>✕</span>
+          </motion.button>
         </div>
       )}
 
@@ -2384,44 +2375,23 @@ export default function SaunasPage() {
             display: block !important;
           }
         }
-        @media (min-width: 1025px) {
-          .mobile-tablet-grid {
-            display: none !important;
-          }
-        }
-        
-        /* Responsive grid for callouts */
         @media (max-width: 768px) {
+          .feature-cards {
+            grid-template-columns: 1fr !important;
+          }
           .modal-grid-responsive {
             grid-template-columns: 1fr !important;
+            gap: 1rem !important;
           }
-        }
-        
-        /* Engineering details grid - Desktop & Tablet (2 columns) */
-        @media (min-width: 769px) {
-          .engineering-details-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-        }
-        
-        /* Engineering details grid - Mobile (1 column) */
-        @media (max-width: 768px) {
           .engineering-details-grid {
             grid-template-columns: 1fr !important;
           }
-        }
-        
-        /* Specs grid - Desktop (2 columns) */
-        @media (min-width: 769px) {
-          .specs-grid-container {
-            grid-template-columns: repeat(2, 1fr) !important;
+          .desktop-tablet-gallery {
+            display: none !important;
           }
-        }
-        
-        /* Specs grid - Mobile/Tablet (1 column) */
-        @media (max-width: 768px) {
-          .specs-grid-container {
-            grid-template-columns: 1fr !important;
+          .mobile-gallery-first,
+          .mobile-gallery-inline {
+            display: block !important;
           }
         }
       `}</style>

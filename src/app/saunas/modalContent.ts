@@ -2,8 +2,8 @@ import { ModalContentMap } from './types';
 
 export const modalContent: ModalContentMap = {
   structural: {
-    title: 'Built Like a House, Performs Like a Fortress',
-    subtitle: '20+ year structural warranty backed by commercial-grade construction',
+    title: 'Crafted with Precision, Built to Endure',
+    subtitle: 'Exceptional construction meets timeless design',
     mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689e787c914f6a78afadce42.jpeg',
     sections: [
       {
@@ -21,28 +21,12 @@ export const modalContent: ModalContentMap = {
           {
             title: 'Foundation System',
             list: [
-              'Adjustable Steel Legs - 4-8" range, galvanized',
-              'No Concrete Required - Installs on any surface',
-              '10° Slope Compensation - Auto-leveling capability',
-              'Pressure-Treated Base - Marine-grade plywood subfloor'
+              'Adjustable Steel Legs - 2-4" range, galvanized',
+              'Installs on pavers or flat surfaces',
+              'Manual leveling for perfect alignment',
+              'Pressure-Treated Base - Plywood subfloor'
             ]
           }
-        ]
-      },
-      {
-        type: 'callout',
-        image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689e6cf7d382f28d8a139d30.jpeg',
-        title: 'The Detail That Matters',
-        text: 'Our fascia features a 45° rain-kick angle with metal wrapping—a detail you\'d find in $100K commercial builds. Water never touches wood, extending life by decades.'
-      },
-      {
-        type: 'detail',
-        title: 'Why This Outlasts Everything Else',
-        list: [
-          'Commercial-Grade Materials - Not residential shortcuts',
-          'BC Building Code Compliance - Meets permanent structure standards',
-          'Modular Design - Individual components serviceable',
-          'Future-Proof Engineering - Pre-wired for upgrades'
         ]
       },
       {
@@ -52,7 +36,7 @@ export const modalContent: ModalContentMap = {
           {
             subtitle: 'Weatherproof Power Hub',
             image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689ed6085bdfcf282ad2012d.jpeg',
-            text: 'IP65-rated electrical enclosure protects all connections from moisture and weather. Commercial-grade components rated for outdoor installation ensure years of trouble-free operation in any climate.'
+            text: 'Weather-resistant electrical enclosure protects all connections from moisture and the elements. Commercial-grade components rated for outdoor installation ensure years of trouble-free operation in any climate.'
           },
           {
             subtitle: 'Clean Power Integration',
@@ -62,17 +46,17 @@ export const modalContent: ModalContentMap = {
           {
             subtitle: 'Lifetime Metal Roof',
             image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689e746ae0fe54aca848ff6e.jpeg',
-            text: 'Standing seam metal roofing with hidden fasteners. Zero maintenance required, 50-year warranty against leaks. Snow slides off naturally, rain channels away instantly.'
+            text: 'Standing seam metal roofing with hidden fasteners. Zero maintenance required. Snow slides off naturally, rain channels away instantly.'
           },
           {
             subtitle: 'Commercial Door Hardware',
             image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48410f6e924ab6dfae.jpeg',
-            text: 'Self-closing hinges rated for 100,000+ cycles. Stainless steel pins with bronze bushings ensure smooth operation for decades. Magnetic weather stripping creates an airtight seal.'
+            text: 'Premium hinges with stainless steel pins and bronze bushings ensure smooth operation for decades. Magnetic weather stripping creates a perfect seal every time, keeping heat in and elements out.'
           },
           {
             subtitle: 'Precision Leveling System',
             image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689eb70024858a7e2ef98b1d.jpeg',
-            text: 'Heavy-duty threaded steel feet with 4-8" adjustment range. Each rated for 2,000 lbs, allowing perfect leveling on any terrain. No concrete pad required.'
+            text: 'Heavy-duty threaded steel feet with 2-4" adjustment range. Each rated for 2,000 lbs, allowing perfect leveling on any terrain. Installs on pavers or flat surfaces.'
           },
           {
             subtitle: 'Elevated Foundation',
@@ -84,8 +68,8 @@ export const modalContent: ModalContentMap = {
     ]
   },
   doors: {
-    title: 'Crystal Clear Views, Solid Security',
-    subtitle: 'Premium tempered glass meets old-growth cedar craftsmanship',
+    title: 'Crystal Clear Views',
+    subtitle: 'Premium tempered glass meets quality craftsmanship',
     mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6dd9c1c1203c2dc791.jpeg',
     sections: [
       {
@@ -94,18 +78,19 @@ export const modalContent: ModalContentMap = {
           {
             title: 'Glass Door Specifications',
             items: [
-              '8mm Tempered Safety Glass - Impact rated, shatterproof',
-              'Cedar Frame - Clear vertical grain, kiln-dried to 8% moisture',
-              'Magnetic Seal System - Airtight closure, no slam design',
-              'Premium Hardware - Stainless steel hinges, wooden handle',
-              'Dimensions - 24" × 72" clear opening'
+              '8mm Tempered Safety Glass - Sauna-rated, withstands extreme temperature variations',
+              'Aspen Black Frame - Stained and lacquered for moisture resistance and aesthetic elegance',
+              'Pre-Hung Installation - Complete frame assembly for ease of installation',
+              'Premium Hardware - All hardware finished in matching black, included in package',
+              'Rough Opening - 28" × 75" with 3.5" jamb depth',
+              'Door Size - 27⅛" × 74⅜" including frame (690×1890mm)',
+              'Reversible Hinge - Left or right door opening orientation'
             ]
           },
           {
             title: 'Panoramic Windows',
             items: [
-              'Double-Pane Insulated - Argon-filled for maximum efficiency',
-              'Low-E Coating - Reflects heat back inside, UV protection',
+              'Double-Pane Insulated - Enhanced thermal efficiency',
               'Fixed Installation - No moving parts, maximum seal integrity',
               'Cedar Trim - Matches door frame perfectly',
               'Lifetime Seal Warranty - Against fogging or failure'
@@ -119,30 +104,20 @@ export const modalContent: ModalContentMap = {
         images: [
           {
             src: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689e787c914f6a78afadce42.jpeg',
-            caption: 'Full glass door view with cedar frame'
+            caption: 'Full glass door view with black Aspen frame'
           },
           {
             src: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689eb8385bdfcf7391ce0084.jpeg',
-            caption: 'Magnetic seal detail - perfect closure every time'
+            caption: 'Magnetic seal detail - secure closure every time'
           }
         ]
-      },
-      {
-        type: 'comparison',
-        title: 'Why Our Glass Lasts',
-        text: 'Most saunas use 6mm single-pane glass that cracks from thermal shock. Our 8mm tempered glass with gradual heat zones has never had a warranty claim in 5 years.'
-      },
-      {
-        type: 'single-image',
-        image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48f9fb836c3eeddb83.jpeg',
-        caption: 'Premium hardware detail - built to last generations'
       }
     ]
   },
   flooring: {
     title: 'The Floor That Solved Sauna\'s Biggest Problem',
     subtitle: '90% of saunas fail at the floor. Here\'s why ours doesn\'t.',
-    mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6de916f4ccf63c46c1.jpeg',
+    mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689ecad6c6ba4e59e89d6e5b.jpeg',
     sections: [
       {
         type: 'diagram',
@@ -171,11 +146,9 @@ export const modalContent: ModalContentMap = {
             title: 'Performance Features',
             items: [
               'Soft Underfoot - Even at high temperatures',
-              'Same Material - Used in $2M spa installations',
-              '10-Year Warranty - Against delamination',
-              'Zero Maintenance - Just mop clean',
-              'No Refinishing - Ever needed',
-              'Chemical Resistant - Any cleaner safe'
+              'Durable Construction - Built to last',
+              'Low Maintenance - Easy to clean',
+              'No Refinishing - Ever needed'
             ]
           }
         ]
@@ -186,26 +159,21 @@ export const modalContent: ModalContentMap = {
           {
             title: 'Commercial Spa-Grade Material',
             image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689eca8d1ef51b7794589ebd.jpeg',
-            text: '3mm thickness, rated -40°F to 200°F. Same material used in $2M spa installations. Soft underfoot even at high temperatures.'
+            text: '3mm thickness, rated -40°F to 200°F. Soft underfoot even at high temperatures.'
           },
           {
-            title: 'Maintenance: Just Mop',
+            title: 'Low Maintenance Design',
             image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6de916f4ccf63c46c1.jpeg',
-            text: 'No special cleaners, no resealing, no refinishing. Wipe clean with any household cleaner. 10-year warranty against delamination.'
+            text: 'No resealing, no refinishing needed. Built to withstand years of regular use.'
           }
         ]
-      },
-      {
-        type: 'comparison',
-        title: 'The $50K Lesson We Learned',
-        text: 'After replacing 47 rotted wood floors in competitor saunas, we engineered this solution. Zero maintenance. Zero rot. Zero callbacks. Your grandkids will use this floor.'
       }
     ]
   },
   lighting: {
     title: 'The Glow That Transforms Everything',
-    subtitle: '3000K warm white LED creates the ambiance that makes people stay longer, relax deeper, and book again.',
-    mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6da6e2ac105564b218.jpeg',
+    subtitle: '',
+    mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68bf5577db3e00fc3fda71a8.jpeg',
     sections: [
       {
         type: 'feature-cards',
@@ -231,40 +199,12 @@ export const modalContent: ModalContentMap = {
             text: '17 years at 8 hours daily use'
           }
         ]
-      },
-      {
-        type: 'installation-features',
-        title: 'Installation & Control',
-        items: [
-          {
-            title: 'Under-Bench Mounting',
-            text: 'Strategic placement creates an indirect glow that eliminates harsh shadows and glare, wrapping you in warm ambiance'
-          },
-          {
-            title: 'Dimmable System',
-            text: 'Adjust from bright reading light to candlelight romance with the touch of a button. Sets the perfect mood every time'
-          }
-        ]
-      },
-      {
-        type: 'specs-list',
-        title: 'Technical Specifications',
-        items: [
-          'LED Type: 3000K warm white strips, commercial grade',
-          'Power Consumption: 12W total system draw',
-          'Lifespan: 50,000 hours (25+ years of daily use)',
-          'CRI: 95+ (museum-quality color rendering)',
-          'Controls: Optional WiFi dimming via app',
-          'Installation: Pre-wired, plug-and-play system'
-        ]
       }
     ]
   },
   heater: {
     title: 'The Heart of Your Sauna',
-    subtitle: 'HUUM DROP 9 kW - Where Finnish engineering meets Red Dot design',
-    award: 'Red Dot Design Award Winner',
-    awardText: 'Recognized globally for melding revolutionary aesthetics with uncompromising performance',
+    subtitle: 'HUUM DROP 9 kW - Where Finnish engineering meets modern design',
     mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb49eefde6142a736f7c.jpeg',
     gallery: [
       'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6d7377cfc90c8828f9.jpeg',
@@ -272,49 +212,25 @@ export const modalContent: ModalContentMap = {
     ],
     sections: [
       {
-        type: 'problem-solution',
-        problem: {
-          title: 'Why 97% of Sauna Heaters Fail You',
-          items: [
-            {
-              title: 'Element Exposure',
-              text: 'Typical heaters expose elements, creating hot spots and harsh, dry heat that burns your sinuses'
-            },
-            {
-              title: 'Poor Stone Capacity',
-              text: 'Most heaters hold 40-60 lbs of stones—not enough for proper löyly (the steamy, gentle heat of authentic saunas)'
-            },
-            {
-              title: 'Cheap Controls',
-              text: 'Basic thermostats with poor accuracy. No app control. Mechanical timers that break within 2 years'
-            },
-            {
-              title: 'No Safety Features',
-              text: 'Exposed elements = burn risk. No overheat protection. No child safety locks'
-            }
-          ]
-        },
-        solution: {
-          title: 'The HUUM Engineering Advantage',
-          items: [
-            {
-              title: '122 lbs of Olivine Diabase Stones',
-              text: 'Massive thermal mass creates gentle, enveloping heat with luxurious steam—like a wood-fired sauna'
-            },
-            {
-              title: 'Hidden Elements Protected by Stone Chamber',
-              text: 'No direct infrared exposure. Even heat distribution. Perfect humidity balance'
-            },
-            {
-              title: 'WiFi Enabled with UKU App Control',
-              text: 'Start from anywhere. Schedule sessions. Energy monitoring. OTA updates'
-            },
-            {
-              title: 'Triple Safety Systems',
-              text: 'Overheat protection, timer limits, child lock—all UL and CSA certified'
-            }
-          ]
-        }
+        type: 'solution',
+        items: [
+          {
+            title: '122 lbs of Olivine Diabase Stones',
+            text: 'Massive thermal mass creates gentle, enveloping heat with luxurious steam—like a wood-fired sauna'
+          },
+          {
+            title: 'Hidden Elements Protected by Stone Chamber',
+            text: 'No direct infrared exposure. Even heat distribution. Perfect humidity balance'
+          },
+          {
+            title: 'WiFi Enabled with UKU App Control',
+            text: 'Start from anywhere. Schedule sessions. Energy monitoring. OTA updates'
+          },
+          {
+            title: 'Triple Safety Systems',
+            text: 'Overheat protection, timer limits, child lock—all UL and CSA certified'
+          }
+        ]
       },
       {
         type: 'specs',
@@ -351,11 +267,6 @@ export const modalContent: ModalContentMap = {
             icon: 'chart',
             title: 'Energy Monitoring',
             text: 'Track usage, optimize costs'
-          },
-          {
-            icon: 'bell',
-            title: 'Safety Alerts',
-            text: 'Notifications if door left open or overheating'
           },
           {
             icon: 'thermometer',
@@ -408,47 +319,27 @@ export const modalContent: ModalContentMap = {
   },
   gauge: {
     title: 'Precision Since 1945',
-    subtitle: 'The Rolex of sauna gauges',
+    subtitle: '',
     mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48e9d6715de23bf29a.jpeg',
     sections: [
       {
-        type: 'fischer-legacy',
+        type: 'detail',
         title: 'The Fischer Legacy',
-        text: 'Aircraft engineer Kurt Fischer founded the company in Drebach, Germany. Three generations later, each gauge is still hand-calibrated by master technicians.',
-        items: [
-          {
-            value: '1945',
-            label: 'Company founded in the Erzgebirge mountains'
-          },
-          {
-            value: 'Zero',
-            label: 'Electronics or batteries - purely mechanical'
-          },
-          {
-            value: '±1°C',
-            label: 'Temperature accuracy maintained for life'
-          },
-          {
-            value: '130mm',
-            label: 'Stainless steel case, readable through steam'
-          }
+        content: 'Aircraft engineer Kurt Fischer founded the company in Drebach, Germany. Three generations later, each gauge is still hand-calibrated by master technicians.'
+      },
+      {
+        type: 'specs-grid',
+        specs: [
+          { label: '1945', value: 'Company founded in the Erzgebirge mountains' },
+          { label: 'Zero', value: 'Electronics or batteries - purely mechanical' },
+          { label: '±1°C', value: 'Temperature accuracy maintained for life' },
+          { label: '130mm', value: 'Stainless steel case, readable through steam' }
         ]
       },
       {
-        type: 'model-features',
+        type: 'detail',
         title: 'Model 197.01 Features',
-        items: [
-          'Thermometer: 30-120°C range with 1°C graduations',
-          'Hygrometer: 0-100% relative humidity',
-          'Case: Marine-grade stainless steel, sealed against steam',
-          'Movement: Bimetal coil (temperature), synthetic hair (humidity)',
-          'Calibration: Factory set, no adjustment needed for life'
-        ]
-      },
-      {
-        type: 'quote',
-        text: 'We could include a $20 gauge and pocket the difference. But when you\'re creating an heirloom sauna, you don\'t cut corners on the instruments that define the experience.',
-        author: 'Jordan Klein, Ilio Founder'
+        content: '• Thermometer: 30-120°C range with 1°C graduations\n• Hygrometer: 0-100% relative humidity\n• Case: Stainless steel, sealed against steam\n• Movement: Bimetal coil (temperature), synthetic hair (humidity)\n• Calibration: Factory set, no adjustment needed for life'
       }
     ]
   },
@@ -476,17 +367,13 @@ export const modalContent: ModalContentMap = {
   },
   hooks: {
     title: 'Details That Outlast Everything',
-    subtitle: 'Marine-grade hardware that looks as good as it performs',
+    subtitle: 'Hardware that looks as good as it performs',
     mainImage: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48a6e2ac5b4164b058.jpeg',
     sections: [
       {
         type: 'commercial-specs',
         title: 'Commercial-Grade Specifications',
         items: [
-          {
-            spec: '316 Stainless Steel',
-            detail: 'Same grade used in surgical instruments and yacht fittings'
-          },
           {
             spec: 'Matte Black Powder Coat',
             detail: 'Baked at 400°F for a finish that won\'t chip, fade, or corrode'
@@ -496,23 +383,19 @@ export const modalContent: ModalContentMap = {
             detail: 'Each hook tested to 3x working load'
           },
           {
-            spec: 'Through-Bolt Mounting',
-            detail: 'Not screws—these will never pull out or loosen'
-          },
-          {
-            spec: '6 Double Hooks Included',
-            detail: 'Enough for robes, towels, and accessories for 4 people'
+            spec: '3 Double Hooks Included',
+            detail: 'For robes, towels, and accessories'
           }
         ]
       },
       {
         type: 'detail',
         title: 'The Difference Is In The Details',
-        text: 'We use the same hardware spec\'d for yacht builders. Salt air, constant moisture, temperature swings—nothing affects these. Your towels might wear out, but these hooks never will.'
+        content: 'We use the same hardware spec\'d for yacht builders. Salt air, constant moisture, temperature swings—nothing affects these. Your towels might wear out, but these hooks never will.'
       },
       {
         type: 'quote',
-        text: 'The black hardware makes this look like it belongs in a boutique hotel, not someone\'s backyard.',
+        quote: 'The black hardware makes this look like it belongs in a boutique hotel, not someone\'s backyard.',
         author: 'Sarah Chen, Airbnb Photography Specialist'
       }
     ]

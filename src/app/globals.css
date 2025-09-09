@@ -108,9 +108,27 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Text Selection Styling */
+::selection {
+  background-color: rgba(191, 88, 19, 0.25); /* Brand orange with transparency */
+  color: var(--dark-brown);
+}
+
+::-moz-selection {
+  background-color: rgba(191, 88, 19, 0.25); /* Brand orange with transparency */
+  color: var(--dark-brown);
+}
+
+/* For webkit browsers */
+::-webkit-selection {
+  background-color: rgba(191, 88, 19, 0.25); /* Brand orange with transparency */
+  color: var(--dark-brown);
+}
+
 html {
   scroll-behavior: smooth;
-  overflow-x: hidden;
+  /* Removed overflow-x: hidden to fix sticky positioning */
+  /* overflow-x: hidden; */
   font-size: 16px;
 }
 
@@ -118,7 +136,9 @@ body {
   font-family: var(--font-primary);
   line-height: 1.6;
   color: var(--color-gray);
-  overflow-x: hidden;
+  /* Removed overflow-x: hidden to fix sticky positioning */
+  /* Use clip instead to prevent horizontal scroll without breaking sticky */
+  overflow-x: clip;
   background: var(--color-white);
 }
 

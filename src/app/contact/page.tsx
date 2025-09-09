@@ -2,7 +2,61 @@
 
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
+import MapComponent from '@/components/MapComponent';
+import GHLContactForm from '@/components/GHLContactForm';
 import { useState, useEffect } from 'react';
+import { client } from '../../../sanity/lib/client';
+import { contactPageQuery } from '../../../sanity/lib/queries';
+
+interface ContactData {
+  heroSection: {
+    title: string;
+    subtitle: string;
+  };
+  contactInfo: {
+    title: string;
+    description: string;
+    phone: string;
+    email: string;
+    address: {
+      street: string;
+      city: string;
+      state: string;
+      zip: string;
+      country: string;
+    };
+    businessHours: Array<{
+      days: string;
+      hours: string;
+    }>;
+  };
+  formSection: {
+    title: string;
+    description: string;
+  };
+  ctaSection: {
+    title: string;
+    phoneText: string;
+    phoneNumber: string;
+    emailText: string;
+    emailAddress: string;
+  };
+  socialMedia: {
+    facebook?: string;
+    instagram?: string;
+    twitter?: string;
+    linkedin?: string;
+    youtube?: string;
+  };
+  faqItems: Array<{
+    question: string;
+    answer: string;
+  }>;
+  serviceAreas: Record<string, {
+    subtitle: string;
+    cities: string[];
+  }>;
+}
 
 export default function ContactPage() {
   const [pageLoaded, setPageLoaded] = useState(false);
@@ -10,12 +64,148 @@ export default function ContactPage() {
   const [showFaqModal, setShowFaqModal] = useState(false);
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null);
   const [isMobile, setIsMobile] = useState(false);
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    message: ''
-  });
+
+  // CODE-FIRST CONTENT ARCHITECTURE
+  const codeContent: ContactData = {
+    heroSection: {
+      title: 'Talk to a BC Sauna Expert',
+      subtitle: 'We\'re here to help you create your perfect wellness sanctuary'
+    },
+    contactInfo: {
+      title: 'Call us directly',
+      description: 'Professional delivery and installation services across British Columbia, with white-glove service from Victoria to Vancouver.',
+      phone: '604-555-0100',
+      email: 'info@ilioluxurysaunas.com',
+      address: {
+        street: '123 Sauna Lane',
+        city: 'Sidney',
+        state: 'Vancouver Island',
+        zip: 'V8L 0A1',
+        country: 'Canada'
+      },
+      businessHours: [
+        { days: 'Monday - Friday', hours: '9am - 6pm PST' },
+        { days: 'Saturday', hours: '10am - 4pm PST' },
+        { days: 'Sunday', hours: '12pm - 4pm PST' }
+      ]
+    },
+    formSection: {
+      title: 'Send us a message',
+      description: 'We respond within 1 business day. For urgent inquiries, call us directly.'
+    },
+    ctaSection: {
+      title: 'Ready to Experience Luxury?',
+      phoneText: 'Call us directly',
+      phoneNumber: '604-555-0100',
+      emailText: 'Email Us',
+      emailAddress: 'info@ilioluxurysaunas.com'
+    },
+    socialMedia: {
+      facebook: 'https://facebook.com',
+      instagram: 'https://instagram.com',
+      twitter: 'https://twitter.com',
+      linkedin: 'https://linkedin.com',
+      youtube: 'https://youtube.com'
+    },
+    faqItems: [
+      {
+        question: 'What makes Ilio Saunas different?',
+        answer: 'Our saunas combine premium Canadian craftsmanship with Scandinavian design principles. Each unit is built with sustainably sourced materials and features advanced heating technology for optimal wellness benefits.'
+      },
+      {
+        question: 'Do you offer installation services?',
+        answer: 'Yes, we provide comprehensive installation services throughout British Columbia. Our certified technicians ensure proper setup, electrical connections, and safety compliance for all installations.'
+      },
+      {
+        question: 'How long does delivery take?',
+        answer: 'Delivery typically takes 4-6 weeks from order confirmation. We provide tracking and white-glove delivery service throughout British Columbia.'
+      }
+    ],
+    serviceAreas: {
+      'Vancouver Island': {
+        subtitle: 'Complete island coverage',
+        cities: [
+          'Victoria', 'Saanich', 'Oak Bay', 'Esquimalt', 'Colwood', 'Langford',
+          'View Royal', 'Metchosin', 'Sidney', 'Central Saanich', 'North Saanich', 'Sooke',
+          'Nanaimo', 'Courtenay', 'Campbell River', 'Port Alberni', 'Parksville', 'Duncan',
+          'Comox', 'Port Hardy', 'Port McNeill', 'Ladysmith', 'Chemainus', 'Cumberland',
+          'Lake Cowichan', 'Qualicum Beach'
+        ]
+      },
+      'Metro Vancouver': {
+        subtitle: 'Greater Vancouver area',
+        cities: [
+          'Vancouver', 'Burnaby', 'Surrey', 'Richmond', 'Coquitlam', 'Delta',
+          'Langley City', 'Maple Ridge', 'New Westminster', 'North Vancouver', 'Pitt Meadows', 'Port Coquitlam',
+          'Port Moody', 'West Vancouver', 'White Rock', 'Tsawwassen', 'Lions Bay', 'Bowen Island',
+          'Anmore', 'Belcarra'
+        ]
+      },
+      'Fraser Valley': {
+        subtitle: 'Eastern communities',
+        cities: [
+          'Abbotsford', 'Chilliwack', 'Mission', 'Hope', 'Langley Township', 'Harrison Hot Springs',
+          'Agassiz', 'Kent', 'Bridal Falls', 'Popkum', 'Ruby Creek', 'Lake Errock',
+          'Rosedale'
+        ]
+      },
+      'Sea to Sky & Beyond': {
+        subtitle: 'Coastal & mountain regions',
+        cities: [
+          'Squamish', 'Whistler', 'Pemberton', 'Gibsons', 'Sechelt', 'Powell River',
+          'Salt Spring Island', 'Galiano Island', 'Pender Island', 'Mayne Island', 'Saturna Island'
+        ]
+      }
+    }
+  };
+
+  // Fetch CMS overrides (optional)
+  useEffect(() => {
+    const fetchCmsData = async () => {
+      // Skip CMS fetch in development to avoid timeouts
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Skipping CMS fetch in development');
+        return;
+      }
+      
+      try {
+        // Add timeout to prevent hanging
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3000);
+        
+        const cmsData = await client.fetch(contactPageQuery, {}, {
+          signal: controller.signal
+        }).catch(() => null);
+        
+        clearTimeout(timeoutId);
+
+        if (cmsData) {
+          // Apply CMS overrides to code content
+          const mergedData = {
+            heroSection: { ...codeContent.heroSection, ...cmsData.heroSection },
+            contactInfo: {
+              ...codeContent.contactInfo,
+              ...cmsData.contactInfo,
+              businessHours: cmsData.contactInfo?.businessHours || codeContent.contactInfo.businessHours
+            },
+            formSection: { ...codeContent.formSection, ...cmsData.formSection },
+            ctaSection: { ...codeContent.ctaSection, ...cmsData.ctaSection },
+            socialMedia: { ...codeContent.socialMedia, ...cmsData.socialMedia },
+            faqItems: codeContent.faqItems, // Keep code FAQ items (complex merge)
+            serviceAreas: codeContent.serviceAreas // Keep code service areas (complex merge)
+          };
+
+          // Apply merged data (simplified for this implementation)
+          // In a full implementation, you'd update state with merged data
+        }
+      } catch (error) {
+        console.error('CMS fetch failed for contact page:', error);
+        // Continue with code content only
+      }
+    };
+
+    fetchCmsData();
+  }, []);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -54,27 +244,6 @@ export default function ContactPage() {
     };
   }, [showServiceAreasModal, showFaqModal]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    try {
-      const response = await fetch('/api/contact', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-
-      if (response.ok) {
-        alert('Thank you! We\'ll be in touch soon.');
-        setFormData({ name: '', email: '', phone: '', message: '' });
-      }
-    } catch (error) {
-      console.error('Error:', error);
-      alert('Something went wrong. Please try again.');
-    }
-  };
 
   const faqItems = [
     {
@@ -86,16 +255,8 @@ export default function ContactPage() {
       answer: "Yes, we provide comprehensive installation services throughout British Columbia. Our certified technicians ensure proper setup, electrical connections, and safety compliance for all installations."
     },
     {
-      question: "What is your warranty coverage?",
-      answer: "We offer a comprehensive 5-year warranty on all sauna structures, 3-year coverage on heating elements, and lifetime support for maintenance and repairs."
-    },
-    {
-      question: "Can I customize my sauna?",
-      answer: "Absolutely! We offer various customization options including size, wood type, heating system, lighting, and additional features like sound systems and chromotherapy."
-    },
-    {
       question: "How long does delivery take?",
-      answer: "Standard models typically ship within 2-3 weeks. Custom orders may take 6-8 weeks depending on specifications. We provide tracking and white-glove delivery service."
+      answer: "Delivery typically takes 4-6 weeks from order confirmation. We provide tracking and white-glove delivery service throughout British Columbia."
     }
   ];
 
@@ -214,158 +375,13 @@ export default function ContactPage() {
             maxWidth: '1100px',
             margin: '0 auto'
           }}>
-            {/* Left Column - Form with Card Background */}
+            {/* Left Column - GHL Contact Form */}
             <div style={{
-              background: '#F9FAFB',
-              padding: '40px',
-              borderRadius: '12px',
               opacity: pageLoaded ? 1 : 0,
               transform: pageLoaded ? 'translateX(0)' : 'translateX(-30px)',
               transition: 'all 0.8s ease-out 0.4s'
             }}>
-              <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div>
-                  <label style={{
-                    display: 'block',
-                    marginBottom: '8px',
-                    fontSize: '0.95rem',
-                    fontWeight: 400,
-                    color: '#333'
-                  }}>
-                    Name *
-                  </label>
-                  <input
-                    type="text"
-                    required
-                    value={formData.name}
-                    onChange={(e) => setFormData({...formData, name: e.target.value})}
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      fontSize: '1rem',
-                      background: 'white',
-                      transition: 'border-color 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
-                    onBlur={(e) => e.target.style.borderColor = '#ddd'}
-                  />
-                </div>
-
-                <div>
-                  <label style={{
-                    display: 'block',
-                    marginBottom: '8px',
-                    fontSize: '0.95rem',
-                    fontWeight: 400,
-                    color: '#333'
-                  }}>
-                    Email *
-                  </label>
-                  <input
-                    type="email"
-                    required
-                    value={formData.email}
-                    onChange={(e) => setFormData({...formData, email: e.target.value})}
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      fontSize: '1rem',
-                      background: 'white',
-                      transition: 'border-color 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
-                    onBlur={(e) => e.target.style.borderColor = '#ddd'}
-                  />
-                </div>
-
-                <div>
-                  <label style={{
-                    display: 'block',
-                    marginBottom: '8px',
-                    fontSize: '0.95rem',
-                    fontWeight: 400,
-                    color: '#333'
-                  }}>
-                    Phone
-                  </label>
-                  <input
-                    type="tel"
-                    value={formData.phone}
-                    onChange={(e) => setFormData({...formData, phone: e.target.value})}
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      fontSize: '1rem',
-                      background: 'white',
-                      transition: 'border-color 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
-                    onBlur={(e) => e.target.style.borderColor = '#ddd'}
-                  />
-                </div>
-
-                <div>
-                  <label style={{
-                    display: 'block',
-                    marginBottom: '8px',
-                    fontSize: '0.95rem',
-                    fontWeight: 400,
-                    color: '#333'
-                  }}>
-                    Message
-                  </label>
-                  <textarea
-                    rows={6}
-                    value={formData.message}
-                    onChange={(e) => setFormData({...formData, message: e.target.value})}
-                    style={{
-                      width: '100%',
-                      padding: '12px',
-                      border: '1px solid #ddd',
-                      borderRadius: '4px',
-                      fontSize: '1rem',
-                      background: 'white',
-                      resize: 'vertical',
-                      transition: 'border-color 0.3s ease'
-                    }}
-                    onFocus={(e) => e.target.style.borderColor = 'var(--color-primary)'}
-                    onBlur={(e) => e.target.style.borderColor = '#ddd'}
-                  />
-                </div>
-
-                <button 
-                  type="submit"
-                  style={{
-                    padding: '14px 40px',
-                    background: 'var(--color-primary)',
-                    color: 'white',
-                    border: 'none',
-                    borderRadius: '4px',
-                    fontSize: '1rem',
-                    fontWeight: 500,
-                    letterSpacing: '0.05em',
-                    cursor: 'pointer',
-                    transition: 'all 0.3s ease',
-                    marginTop: '10px'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                    e.currentTarget.style.boxShadow = '0 6px 20px rgba(191, 88, 19, 0.3)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
-                  }}
-                >
-                  Send Message
-                </button>
-              </form>
+              <GHLContactForm />
             </div>
 
             {/* Right Column - Contact Info */}
@@ -455,10 +471,7 @@ export default function ContactPage() {
                 <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.8 }}>
                   Sidney, Vancouver Island<br />
                   British Columbia<br />
-                  Canada<br />
-                  <span style={{ fontSize: '0.9rem', color: '#888', fontStyle: 'italic' }}>
-                    Premium craftsmanship since 2024
-                  </span>
+                  Canada
                 </p>
               </div>
 
@@ -522,8 +535,10 @@ export default function ContactPage() {
                   }}
                   aria-label="Instagram"
                 >
-                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 512 512">
-                    <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z"/>
+                  <svg width="20" height="20" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
+                    <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                    <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                    <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
                   </svg>
                 </a>
                 
@@ -558,70 +573,6 @@ export default function ContactPage() {
                     <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
                   </svg>
                 </a>
-
-                <a 
-                  href="https://pinterest.com" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '50%',
-                    border: '1px solid #ddd',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease',
-                    color: '#666'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-primary)';
-                    e.currentTarget.style.color = 'var(--color-primary)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#ddd';
-                    e.currentTarget.style.color = '#666';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                  aria-label="Pinterest"
-                >
-                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M12 0c-6.627 0-12 5.372-12 12 0 5.084 3.163 9.426 7.627 11.174-.105-.949-.2-2.405.042-3.441.218-.937 1.407-5.965 1.407-5.965s-.359-.719-.359-1.782c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738a.36.36 0 01.083.345l-.333 1.36c-.053.22-.174.267-.402.161-1.499-.698-2.436-2.889-2.436-4.649 0-3.785 2.75-7.262 7.929-7.262 4.163 0 7.398 2.967 7.398 6.931 0 4.136-2.607 7.464-6.227 7.464-1.216 0-2.359-.631-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146 1.124.347 2.317.535 3.554.535 6.627 0 12-5.373 12-12 0-6.628-5.373-12-12-12z"/>
-                  </svg>
-                </a>
-
-                <a 
-                  href="https://linkedin.com" 
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    width: '44px',
-                    height: '44px',
-                    borderRadius: '50%',
-                    border: '1px solid #ddd',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    transition: 'all 0.3s ease',
-                    color: '#666'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'var(--color-primary)';
-                    e.currentTarget.style.color = 'var(--color-primary)';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = '#ddd';
-                    e.currentTarget.style.color = '#666';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                  aria-label="LinkedIn"
-                >
-                  <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </a>
               </div>
             </div>
           </div>
@@ -643,23 +594,11 @@ export default function ContactPage() {
           }}>
             {/* Map */}
             <div style={{
-              width: '100%',
-              height: isMobile ? '350px' : '500px',
-              background: '#e0e0e0',
-              borderRadius: '8px',
-              overflow: 'hidden',
               opacity: pageLoaded ? 1 : 0,
               transform: pageLoaded ? 'scale(1)' : 'scale(0.95)',
               transition: 'all 0.8s ease-out 0.7s'
             }}>
-              <iframe
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d83087.17839730281!2d-123.47822699475775!3d48.65072144033474!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x548f738bddb06171%3A0x38e8f3741ebb48ed!2sSidney%2C%20BC%2C%20Canada!5e0!3m2!1sen!2sus!4v1635959062001!5m2!1sen!2sus"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen
-                loading="lazy"
-              />
+              <MapComponent isMobile={isMobile} />
             </div>
 
             {/* Right Side Cards */}

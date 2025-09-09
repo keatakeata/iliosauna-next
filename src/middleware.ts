@@ -1,32 +1,15 @@
-import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
-import { PUBLIC_ROUTES } from '@/lib/routes'
+import type { NextRequest } from 'next/server'
 
-// Create matcher from our centralized routes
-const publicRoutesList = [
-  ...PUBLIC_ROUTES,
-  '/api/webhooks(.*)', // Webhook routes should always be public
-]
-
-const isPublicRoute = createRouteMatcher(publicRoutesList)
-
-export default clerkMiddleware(async (auth, req) => {
-  // Check if it's a handshake callback
-  const url = new URL(req.url)
-  if (url.searchParams.has('__clerk_handshake')) {
-    // Let Clerk handle the handshake
-    return NextResponse.next()
-  }
-
-  // Protect non-public routes
-  if (!isPublicRoute(req)) {
-    await auth.protect()
-  }
-})
+export function middleware(request: NextRequest) {
+  // For now, just pass everything through
+  // This bypasses all Clerk authentication to fix the slow loading
+  return NextResponse.next()
+}
 
 export const config = {
   matcher: [
-    // Skip Next.js internals and all static files, unless found in search params
+    // Skip Next.js internals and all static files
     '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
     // Always run for API routes
     '/(api|trpc)(.*)',

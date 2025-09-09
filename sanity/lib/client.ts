@@ -10,8 +10,9 @@ export const client = createClient({
   projectId,
   dataset,
   apiVersion,
-  useCdn: false, // Set to false for fresh data
+  useCdn: true, // Use CDN for better performance
   perspective: 'published',
+  stega: false,
 })
 
 // Image URL builder
@@ -21,20 +22,36 @@ export function urlFor(source: any) {
   return builder.image(source)
 }
 
-// Helper function for fetching data with proper typing
+// Helper function for fetching data with proper typing and timeout
 export async function sanityFetch<QueryResponse>({
   query,
   params = {},
   tags,
+  allowInDev = false,
 }: {
   query: string
   params?: any
   tags?: string[]
-}): Promise<QueryResponse> {
-  return client.fetch<QueryResponse>(query, params, {
-    next: {
-      revalidate: 30, // Revalidate every 30 seconds
-      tags,
-    },
-  })
+  allowInDev?: boolean
+}): Promise<QueryResponse | null> {
+  try {
+    // For critical pages like Journal, always try to fetch
+    if (allowInDev || process.env.NODE_ENV === 'production') {
+      const result = await client.fetch<QueryResponse>(query, params, {
+        next: {
+          revalidate: 60, // Cache for 1 minute
+          tags,
+        },
+      });
+      
+      return result;
+    }
+    
+    console.log('Skipping Sanity fetch in development');
+    return null as QueryResponse;
+  } catch (error) {
+    console.error('Sanity fetch error:', error);
+    // Return null instead of throwing to prevent page crashes
+    return null as QueryResponse;
+  }
 }

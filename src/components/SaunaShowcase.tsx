@@ -1,9 +1,26 @@
 'use client';
 
 import Link from 'next/link';
+import { sanityImageUrl } from '@/lib/sanity.config';
 
-export default function SaunaShowcase() {
-  const saunas = [
+interface SaunaShowcaseProps {
+  homepageData?: {
+    saunaShowcaseSection?: {
+      title?: string;
+      subtitle?: string;
+      buttonText?: string;
+      cards?: Array<{
+        title: string;
+        description: string;
+        image?: any;
+      }>;
+    };
+  };
+}
+
+export default function SaunaShowcase({ homepageData }: SaunaShowcaseProps) {
+  const showcaseData = homepageData?.saunaShowcaseSection;
+  const defaultSaunas = [
     {
       name: 'Contemporary Design',
       image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb49eefde6142a736f7c.jpeg',
@@ -20,13 +37,15 @@ export default function SaunaShowcase() {
       description: 'Engineered for optimal heat distribution and therapeutic benefits'
     }
   ];
+  
+  const saunas = showcaseData?.cards || defaultSaunas;
 
   return (
     <section id="saunas" className="ilio-section ilio-section-full" style={{ background: '#f8f8f8', padding: '100px 0' }}>
       <div className="ilio-container">
         <div className="text-center mb-5">
           <h2 className="section-header h2-animate reveal-on-scroll" style={{ marginBottom: '2rem' }}>
-            Ilio Sauna
+            {showcaseData?.title || 'Ilio Sauna'}
           </h2>
           <div className="section-divider reveal-on-scroll reveal-delay-1" style={{
             width: '75%',
@@ -41,7 +60,7 @@ export default function SaunaShowcase() {
             lineHeight: '1.8',
             color: '#5a5a5a'
           }}>
-            Thoughtfully designed saunas that seamlessly integrate into your lifestyle and space
+            {showcaseData?.subtitle || 'Thoughtfully designed saunas that seamlessly integrate into your lifestyle and space'}
           </p>
         </div>
 
@@ -64,7 +83,7 @@ export default function SaunaShowcase() {
                 marginBottom: '1.5rem'
               }}>
                 <img
-                  src={sauna.image}
+                  src={sauna.imageUrl || (sauna.imageFile ? sanityImageUrl(sauna.imageFile.asset._ref, 600) : (sauna.image?.asset ? sanityImageUrl(sauna.image.asset._ref, 600) : sauna.image))}
                   alt={sauna.name}
                   style={{
                     position: 'absolute',
@@ -84,7 +103,7 @@ export default function SaunaShowcase() {
                   color: '#333',
                   letterSpacing: '0.05em'
                 }}>
-                  {sauna.name}
+                  {sauna.title || sauna.name}
                 </h3>
                 <p style={{ 
                   color: '#666', 
@@ -126,7 +145,7 @@ export default function SaunaShowcase() {
               e.currentTarget.style.color = '#BF5813';
             }}
           >
-            Explore Sauna Options
+{showcaseData?.buttonText || 'Explore Sauna Options'}
           </Link>
         </div>
       </div>

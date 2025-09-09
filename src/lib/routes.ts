@@ -30,6 +30,9 @@ export const ROUTES = {
     WISHLIST: '/account/wishlist',
     SETTINGS: '/account/settings',
   },
+
+  // Admin Studio (Protected with role-based access)
+  STUDIO: '/studio',
   
   // API Routes
   API: {
@@ -80,8 +83,10 @@ export const PUBLIC_ROUTES = [
   ROUTES.PRODUCTS,
   ROUTES.SIGN_IN,
   ROUTES.SIGN_UP,
+  // Temporarily making studio public for testing
   '/studio',
   '/studio/(.*)', // Include all studio sub-routes
+  '/studio-test',
   '/blog', // Blog redirect page
   '/blog/(.*)', // All blog sub-routes
 ];

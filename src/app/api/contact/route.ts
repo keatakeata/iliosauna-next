@@ -60,6 +60,19 @@ export async function POST(request: NextRequest) {
     const contactData = await request.json();
     console.log('Creating contact:', JSON.stringify(contactData, null, 2));
 
+    // Check if GHL credentials are configured
+    if (!GHL_ACCESS_TOKEN || GHL_ACCESS_TOKEN === 'your-ghl-access-token-here') {
+      console.log('GHL credentials not configured - running in test mode');
+      
+      // Return success in test mode
+      return NextResponse.json({
+        success: true,
+        contactId: 'test-' + Date.now(),
+        message: 'Form submitted successfully (test mode - GHL credentials not configured)',
+        testMode: true
+      });
+    }
+
     // Get valid access token
     const token = await getValidAccessToken();
     

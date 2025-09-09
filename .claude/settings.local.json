@@ -2,7 +2,26 @@
   "permissions": {
     "allow": [
       "Bash(git add:*)",
-      "Bash(timeout:*)"
+      "Bash(timeout:*)",
+      "Bash(npx shadcn@latest mcp init:*)",
+      "Bash(npx shadcn:*)",
+      "WebSearch",
+      "WebFetch(domain:ui.aceternity.com)",
+      "Bash(npx sanity:*)",
+      "Bash(npm run dev:*)",
+      "Bash(node:*)",
+      "Bash(npm install:*)",
+      "Bash(dir:*)",
+      "Bash(taskkill:*)",
+      "Bash(del sanitystructure.ts)",
+      "Bash(del \"src\\app\\studio\\[[...index]]\\layout.tsx\")",
+      "Bash(curl:*)",
+      "Bash(cmd /c:*)",
+      "Bash(npx next dev:*)",
+      "Read(c:\\Users\\Admin\\Desktop/**)",
+      "Bash(npx tsc:*)",
+      "Read(//c/Users/Admin/Desktop/**)",
+      "Bash(start http://localhost:4448/contact)"
     ],
     "deny": [],
     "ask": []
