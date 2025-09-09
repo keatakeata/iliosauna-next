@@ -96,6 +96,14 @@ const GHLContactForm: React.FC = () => {
       });
 
       const result = await response.json();
+      
+      // Log the response for debugging
+      console.log('API Response:', result);
+
+      if (!response.ok) {
+        console.error('API Error:', result);
+        throw new Error(result.message || 'Failed to submit form');
+      }
 
       if (result.success) {
         setSubmitStatus('success');
@@ -122,9 +130,12 @@ const GHLContactForm: React.FC = () => {
       } else {
         setSubmitStatus('error');
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error('Form submission error:', error);
+      console.error('Error details:', error.message);
       setSubmitStatus('error');
+      // Store error message for display
+      setFormData(prev => ({ ...prev, errorMessage: error.message || 'Something went wrong' }));
     } finally {
       setIsSubmitting(false);
     }
