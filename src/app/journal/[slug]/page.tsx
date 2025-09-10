@@ -1630,7 +1630,7 @@ export default function BlogPostPage() {
               onClick={() => setShowMobileTOC(!showMobileTOC)}
               style={{
                 position: 'fixed',
-                bottom: '35vh', // 35% from bottom for better thumb reach
+                bottom: 'calc(10vh + 60px)', // 10% from bottom + space for share button
                 right: '20px',
                 padding: '12px 16px',
                 borderRadius: '4px',
@@ -1670,7 +1670,7 @@ export default function BlogPostPage() {
             onClick={() => setShowMobileShare(!showMobileShare)}
             style={{
               position: 'fixed',
-              bottom: 'calc(35vh - 120px)', // Much more spacing from TOC button
+              bottom: '10vh', // 10% from bottom
               right: '20px',
               padding: '15px 20px',
               borderRadius: '4px',
@@ -1700,17 +1700,17 @@ export default function BlogPostPage() {
             )}
           </button>
           
-          {/* Mobile Share Buttons - Animated Half Circle */}
+          {/* Mobile Share Buttons - Animated Horizontal Line */}
           <AnimatePresence>
             {showMobileShare && (
               <>
-                {/* Copy Link - 12 o'clock */}
+                {/* Copy Link - First in horizontal line */}
                 <motion.button
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: 0, 
-                    y: -75,
+                    x: -60, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1726,7 +1726,7 @@ export default function BlogPostPage() {
                   }}
                   style={{
                     position: 'fixed',
-                    bottom: 'calc(35vh - 120px)',
+                    bottom: '10vh',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1743,13 +1743,13 @@ export default function BlogPostPage() {
                   </svg>
                 </motion.button>
                 
-                {/* X (Twitter) - 10 o'clock position */}
+                {/* X (Twitter) - Second in horizontal line */}
                 <motion.button
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -37, 
-                    y: -65,
+                    x: -120, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1760,7 +1760,7 @@ export default function BlogPostPage() {
                   onClick={shareOnTwitter}
                   style={{
                     position: 'fixed',
-                    bottom: 'calc(35vh - 120px)',
+                    bottom: '10vh',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1776,13 +1776,13 @@ export default function BlogPostPage() {
                   </svg>
                 </motion.button>
                 
-                {/* Facebook - 8 o'clock position */}
+                {/* Facebook - Third in horizontal line */}
                 <motion.button
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -65, 
-                    y: -37,
+                    x: -180, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1793,7 +1793,7 @@ export default function BlogPostPage() {
                   onClick={shareOnFacebook}
                   style={{
                     position: 'fixed',
-                    bottom: 'calc(35vh - 120px)',
+                    bottom: '10vh',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1809,13 +1809,13 @@ export default function BlogPostPage() {
                   </svg>
                 </motion.button>
                 
-                {/* LinkedIn - 8 o'clock position (mirroring Facebook at 8) */}
+                {/* LinkedIn - Fourth in horizontal line */}
                 <motion.button
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -65, 
-                    y: 37,  // Positive y to go down (mirror of -37)
+                    x: -240, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1826,7 +1826,7 @@ export default function BlogPostPage() {
                   onClick={shareOnLinkedIn}
                   style={{
                     position: 'fixed',
-                    bottom: 'calc(35vh - 120px)',
+                    bottom: '10vh',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1842,13 +1842,13 @@ export default function BlogPostPage() {
                   </svg>
                 </motion.button>
                 
-                {/* Email - 10 o'clock position (mirroring X at 10) */}
+                {/* Email - Fifth in horizontal line */}
                 <motion.button
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -37, 
-                    y: 65,  // Positive y to go down (mirror of -65)
+                    x: -300, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1859,7 +1859,7 @@ export default function BlogPostPage() {
                   onClick={shareViaEmail}
                   style={{
                     position: 'fixed',
-                    bottom: 'calc(35vh - 120px)',
+                    bottom: '10vh',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1876,13 +1876,13 @@ export default function BlogPostPage() {
                   </svg>
                 </motion.button>
                 
-                {/* WhatsApp - 6 o'clock position (bottom center, mirroring Copy Link at top) */}
+                {/* WhatsApp - Sixth in horizontal line */}
                 <motion.button
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: 0, 
-                    y: 75,  // Same distance down as Copy Link is up
+                    x: -360, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1893,7 +1893,7 @@ export default function BlogPostPage() {
                   onClick={shareOnWhatsApp}
                   style={{
                     position: 'fixed',
-                    bottom: 'calc(35vh - 120px)',
+                    bottom: '10vh',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1920,10 +1920,10 @@ export default function BlogPostPage() {
                 exit={{ opacity: 0, x: 100 }}
                 style={{
                   position: 'fixed',
-                  top: '100px',
+                  bottom: 'calc(10vh + 120px)', // Position above the navigation button
                   right: '20px',
                   width: '280px',
-                  maxHeight: 'calc(100vh - 200px)',
+                  maxHeight: 'calc(80vh - 160px)', // Adjust max height for bottom positioning
                   backgroundColor: 'white',
                   borderRadius: '4px',
                   boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
@@ -1942,7 +1942,7 @@ export default function BlogPostPage() {
                   }}>Table of Contents</h3>
                 </div>
                 <div style={{
-                  maxHeight: 'calc(100vh - 280px)',
+                  maxHeight: 'calc(70vh - 200px)', // Adjust for bottom positioning
                   overflowY: 'auto',
                   padding: '0.5rem'
                 }}>
