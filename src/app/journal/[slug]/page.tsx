@@ -1621,7 +1621,7 @@ export default function BlogPostPage() {
         </section>
       )}
 
-      {/* Mobile Floating Action Buttons */}
+      {/* Mobile Floating Action Buttons - UPDATED POSITIONS */}
       {windowWidth <= 1200 && (
         <>
           {/* Mobile Table of Contents Button */}
