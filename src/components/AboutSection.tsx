@@ -40,22 +40,27 @@ export default function AboutSection({ homepageData }: AboutSectionProps) {
             
             {/* Video Section */}
             <div className="video-container reveal-on-scroll reveal-delay-3" style={{
-              maxWidth: '800px',
+              maxWidth: '900px',
               margin: '3rem auto 0',
               borderRadius: '8px',
               overflow: 'hidden',
               boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
             }}>
               <video 
-                controls 
+                controls
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
                 style={{
                   width: '100%',
                   height: 'auto',
                   display: 'block'
                 }}
-                poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48eefde667db736f79.jpeg"
+                poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg"
               >
-                <source src={aboutData?.videoUrl || 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4'} type="video/mp4" />
+                <source src={aboutData?.videoUrl || 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0ebafd8a0cd83ab30.mp4'} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
