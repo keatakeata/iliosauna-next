@@ -3,12 +3,13 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+// Temporarily disabled framer-motion to fix build
+// import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import ExpandableSearch from '@/components/ExpandableSearch';
 // Temporarily disabled to fix build
-// import { analytics } from '@/lib/analytics';
+// import ExpandableSearch from '@/components/ExpandableSearch';
+import { useAnalytics, usePageView } from '@/hooks/useAnalytics';
 
 // Helper function to build Sanity image URLs
 function getImageUrl(image: any, width: number, height: number): string {
@@ -57,6 +58,9 @@ interface Category {
 }
 
 export default function JournalPage() {
+  // Initialize analytics with proper SSR handling
+  const analytics = useAnalytics();
+  
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BlogPost[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
@@ -66,9 +70,11 @@ export default function JournalPage() {
   const [loading, setLoading] = useState(true);
   const [pageLoaded, setPageLoaded] = useState(false);
 
-  // Track page view
+  // Track page view automatically
+  usePageView('/journal', 'Wellness Journal');
+
+  // Initialize page
   useEffect(() => {
-    // analytics.pageView('/journal', 'Wellness Journal');
     
     // Trigger animations
     const timer = setTimeout(() => setPageLoaded(true), 50);
@@ -137,10 +143,10 @@ export default function JournalPage() {
       );
       
       // Track search
-      // analytics.track('Blog Search', { 
-      //   search_term: searchTerm,
-      //   results_count: filtered.length 
-      // });
+      analytics.track('Blog Search', { 
+        search_term: searchTerm,
+        results_count: filtered.length 
+      });
     }
     
     // Filter by category
@@ -155,10 +161,10 @@ export default function JournalPage() {
       );
       
       // Track category filter
-      // analytics.track('Blog Category Filtered', { 
-      //   category: selectedCategory,
-      //   results_count: filtered.length 
-      // });
+      analytics.track('Blog Category Filtered', { 
+        category: selectedCategory,
+        results_count: filtered.length 
+      });
     }
     
     // Filter by tag
@@ -168,10 +174,10 @@ export default function JournalPage() {
       );
       
       // Track tag filter
-      // analytics.track('Blog Tag Filtered', { 
-      //   tag: selectedTag,
-      //   results_count: filtered.length 
-      // });
+      analytics.track('Blog Tag Filtered', { 
+        tag: selectedTag,
+        results_count: filtered.length 
+      });
     }
     
     setFilteredPosts(filtered);
@@ -181,13 +187,13 @@ export default function JournalPage() {
   const allTags = Array.from(new Set(posts.flatMap(post => post.tags || [])));
 
   const handlePostClick = (post: BlogPost) => {
-    // analytics.track('Blog Post Clicked', {
-    //   post_id: post._id,
-    //   post_title: post.title,
-    //   post_slug: post.slug.current,
-    //   categories: post.categories?.map(c => c.title) || [],
-    //   tags: post.tags || []
-    // });
+    analytics.track('Blog Post Clicked', {
+      post_id: post._id,
+      post_title: post.title,
+      post_slug: post.slug.current,
+      categories: post.categories?.map(c => c.title) || [],
+      tags: post.tags || []
+    });
   };
 
   return (
@@ -272,15 +278,25 @@ export default function JournalPage() {
               justifyContent: 'center'
             }}>
               {/* Search Component */}
-              <ExpandableSearch
-                searchTerm={searchTerm}
-                onSearchChange={setSearchTerm}
+              {/* Temporarily disabled ExpandableSearch to fix build */}
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
                 placeholder="Search articles"
+                style={{
+                  padding: '12px 16px',
+                  borderRadius: '8px',
+                  border: '1px solid #d1d5db',
+                  fontSize: '16px',
+                  width: '100%',
+                  maxWidth: '400px'
+                }}
               />
               
               {/* Category Filter Badges */}
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                <motion.button
+                <button
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   transition={{ delay: 0.1, type: 'spring', bounce: 0.3 }}
@@ -300,14 +316,14 @@ export default function JournalPage() {
                   }}
                 >
                   All Posts {loading ? '' : `(${posts.length})`}
-                </motion.button>
+                </button>
                 
                 {categories.map((category, index) => {
                   const cleanSlug = (category.slug.current.split(/[A-Z]/)[0] || category.slug.current);
                   const isSelected = selectedCategory === cleanSlug;
                   
                   return (
-                    <motion.button
+                    <button
                       key={category._id}
                       initial={{ opacity: 0, scale: 0.9 }}
                       animate={{ opacity: 1, scale: 1 }}
@@ -328,7 +344,7 @@ export default function JournalPage() {
                       }}
                     >
                       {category.title} {loading ? '' : `(${category.postCount || 0})`}
-                    </motion.button>
+                    </button>
                   );
                 })}
               </div>
@@ -358,7 +374,7 @@ export default function JournalPage() {
                     flexWrap: 'wrap' 
                   }}>
                     {allTags.map((tag, index) => (
-                      <motion.button
+                      <button
                         key={tag}
                         initial={{ opacity: 0, y: 5 }}
                         animate={{ opacity: 1, y: 0 }}
@@ -378,7 +394,7 @@ export default function JournalPage() {
                         }}
                       >
                         #{tag}
-                      </motion.button>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -479,7 +495,7 @@ export default function JournalPage() {
                 >
                   No articles found matching your criteria.
                 </motion.p>
-                <motion.button
+                <button
                   initial={{ opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3 }}
@@ -493,7 +509,7 @@ export default function JournalPage() {
                   className="px-6 py-2 border border-[#9B8B7E] rounded-lg bg-transparent text-[#9B8B7E] hover:bg-[#9B8B7E] hover:text-white transition-all duration-200"
                 >
                   Clear Filters
-                </motion.button>
+                </button>
               </motion.div>
             ) : (
               <motion.div

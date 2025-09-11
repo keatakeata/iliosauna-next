@@ -2,25 +2,25 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-// Temporarily disabled to fix build
-// import { analytics } from '@/lib/analytics'
+import { useAnalytics } from '@/hooks/useAnalytics'
 
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
+  const analytics = useAnalytics()
 
-  // Track page views on route change
+  // Track page views on route change (for global navigation)
   useEffect(() => {
-    if (pathname) {
+    if (pathname && analytics.isReady) {
       try {
-        // analytics.pageView(pathname)
+        analytics.pageView(pathname)
       } catch (error) {
-        // Silently handle analytics errors in development
+        // Silently handle analytics errors
         if (process.env.NODE_ENV === 'development') {
-          console.log('Analytics pageView skipped in dev');
+          console.log('Analytics pageView error:', error);
         }
       }
     }
-  }, [pathname])
+  }, [pathname, analytics])
 
   return <>{children}</>
 }

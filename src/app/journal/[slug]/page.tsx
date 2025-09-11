@@ -27,8 +27,7 @@ function getImageUrl(image: any, width: number, height: number): string {
   
   return `https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${dimensions}.${format}?w=${width}&h=${height}&fit=crop`;
 }
-// Temporarily disabled to fix build
-// import { analytics } from '@/lib/analytics';
+import { useAnalytics, usePageView } from '@/hooks/useAnalytics';
 import { PortableText } from '@portabletext/react';
 
 interface BlogPost {
@@ -55,6 +54,11 @@ interface BlogPost {
 }
 
 export default function BlogPostPage() {
+  // Initialize analytics with proper SSR handling
+  const analytics = useAnalytics();
+  const params = useParams();
+  const slug = typeof params.slug === 'string' ? params.slug : params.slug?.[0] || '';
+
   // Add CSS animations and sticky styles
   React.useEffect(() => {
     if (typeof window === 'undefined') return;
@@ -112,8 +116,7 @@ export default function BlogPostPage() {
       document.head.removeChild(style);
     };
   }, []);
-  const params = useParams();
-  const slug = params?.slug as string;
+  // params and slug already declared above
   const [post, setPost] = useState<BlogPost | null>(null);
   const [loading, setLoading] = useState(true);
   const [relatedPosts, setRelatedPosts] = useState<BlogPost[]>([]);
@@ -206,14 +209,14 @@ export default function BlogPostPage() {
           
           updateMetaTags();
           
-          // Track blog view
-          // analytics.track('Blog Post Viewed', {
-          //   post_id: data._id,
-          //   post_title: data.title,
-          //   post_slug: slug,
-          //   categories: data.categories?.map((c: any) => c.title) || [],
-          //   tags: data.tags || []
-          // });
+          // Track blog view with SSR-safe analytics
+          analytics.track('Blog Post Viewed', {
+            post_id: data._id,
+            post_title: data.title,
+            post_slug: slug,
+            categories: data.categories?.map((c: any) => c.title) || [],
+            tags: data.tags || []
+          });
           
           // Set related posts if available
           if (data.relatedPosts) {
