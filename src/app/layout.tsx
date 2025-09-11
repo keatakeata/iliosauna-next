@@ -3,7 +3,7 @@ import { Montserrat } from "next/font/google";
 import { ClerkProviderWrapper } from "@/components/ClerkProviderWrapper";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/CartDrawer";
-import { AnalyticsProvider } from "@/components/AnalyticsProvider";
+// Analytics removed for build fix
 import { SupabaseProvider } from "@/components/SupabaseProvider";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import "./globals.css";
@@ -37,9 +37,7 @@ export default function RootLayout({
           <ClerkProviderWrapper>
             <SupabaseProvider>
               <CartProvider>
-                <AnalyticsProvider>
-                  {children}
-                </AnalyticsProvider>
+                {children}
                 <CartDrawer />
               </CartProvider>
             </SupabaseProvider>

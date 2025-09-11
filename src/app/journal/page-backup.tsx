@@ -7,13 +7,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ExpandableSearch from '@/components/ExpandableSearch';
-// Analytics removed for build fix
+import { useAnalytics, usePageView } from '@/hooks/useAnalytics';
 
 // Temporary simplified journal page to fix localhost
 export default function JournalPage() {
-  // Analytics removed for build fix
+  const analytics = useAnalytics();
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Track page view automatically
+  usePageView('/journal', 'Wellness Journal');
 
   useEffect(() => {
     // Simple loading simulation

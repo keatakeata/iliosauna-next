@@ -33,7 +33,9 @@
       "Bash(npx kill-port:*)",
       "Bash(start http://localhost:4448)",
       "Bash(npm run vercel-build:*)",
-      "Bash(start http://localhost:4448/journal/welcome-to-ilio-sauna-blog)"
+      "Bash(start http://localhost:4448/journal/welcome-to-ilio-sauna-blog)",
+      "Bash(rimraf:*)",
+      "Bash(npm uninstall:*)"
     ],
     "deny": [],
     "ask": []

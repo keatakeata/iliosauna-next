@@ -38,7 +38,6 @@
     "clsx": "^2.1.1",
     "framer-motion": "^12.23.12",
     "lucide-react": "^0.542.0",
-    "mixpanel-browser": "^2.69.1",
     "next": "15.5.0",
     "next-sanity": "^10.0.16",
     "react": "19.1.0",

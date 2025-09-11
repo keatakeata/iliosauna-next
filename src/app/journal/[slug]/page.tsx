@@ -26,7 +26,7 @@ function getImageUrl(image: any, width: number, height: number): string {
   
   return `https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${dimensions}.${format}?w=${width}&h=${height}&fit=crop`;
 }
-import { useAnalytics, usePageView } from '@/hooks/useAnalytics';
+// Analytics removed for build fix
 import { PortableText } from '@portabletext/react';
 
 interface BlogPost {
@@ -53,8 +53,7 @@ interface BlogPost {
 }
 
 export default function BlogPostPage() {
-  // Initialize analytics with proper SSR handling
-  const analytics = useAnalytics();
+  // Analytics removed for build fix
   const params = useParams();
   const slug = typeof params.slug === 'string' ? params.slug : params.slug?.[0] || '';
 
@@ -208,8 +207,8 @@ export default function BlogPostPage() {
           
           updateMetaTags();
           
-          // Track blog view with SSR-safe analytics
-          analytics.track('Blog Post Viewed', {
+          // Analytics tracking removed for build fix
+          console.log('Blog Post Viewed:', {
             post_id: data._id,
             post_title: data.title,
             post_slug: slug,
