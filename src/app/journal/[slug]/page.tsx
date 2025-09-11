@@ -1,5 +1,5 @@
 'use client';
-// DEPLOYMENT TEST #3: Mobile UI buttons at 10vh - SHOULD BE LIVE NOW
+// BUILD FIX v2: Added browser guards - FORCE REBUILD 2024-01-11
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
