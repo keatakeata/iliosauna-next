@@ -29,7 +29,9 @@
       "Bash(npm run build:*)",
       "Bash(start http://localhost:3000/our-story)",
       "Bash(start http://localhost:4448/our-story)",
-      "Bash(git fetch:*)"
+      "Bash(git fetch:*)",
+      "Bash(npx kill-port:*)",
+      "Bash(start http://localhost:4448)"
     ],
     "deny": [],
     "ask": []

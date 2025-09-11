@@ -15,6 +15,7 @@
     "sync-content": "node scripts/extract-content.js",
     "build": "cross-env NODE_OPTIONS='--max-old-space-size=8192' next build",
     "vercel-build": "cross-env NODE_OPTIONS='--max-old-space-size=8192' next build",
+    "force-deploy": "rimraf .next && cross-env NODE_OPTIONS='--max-old-space-size=8192' next build",
     "start": "next start",
     "clean": "rimraf .next .build node_modules/.cache"
   },

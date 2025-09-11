@@ -19,5 +19,5 @@
   "env": {
     "NODE_OPTIONS": "--max-old-space-size=8192"
   },
-  "buildCommand": "npm run vercel-build"
+  "buildCommand": "npm run force-deploy"
 }
