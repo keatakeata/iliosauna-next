@@ -1,4 +1,9 @@
-import mixpanel from 'mixpanel-browser'
+// Conditional import to avoid SSR issues
+let mixpanel: any = null;
+if (typeof window !== 'undefined') {
+  mixpanel = require('mixpanel-browser');
+}
+
 import { supabase } from './supabase'
 
 // Initialize Mixpanel
@@ -9,7 +14,7 @@ const IS_DEV = process.env.NODE_ENV === 'development'
 let mixpanelInitialized = false;
 
 // Only initialize in production or if explicitly enabled
-if (typeof window !== 'undefined' && !IS_DEV && MIXPANEL_TOKEN && MIXPANEL_TOKEN !== 'your-mixpanel-token-here') {
+if (typeof window !== 'undefined' && mixpanel && !IS_DEV && MIXPANEL_TOKEN && MIXPANEL_TOKEN !== 'your-mixpanel-token-here') {
   try {
     mixpanel.init(MIXPANEL_TOKEN, {
       debug: false,
@@ -30,7 +35,7 @@ if (typeof window !== 'undefined' && !IS_DEV && MIXPANEL_TOKEN && MIXPANEL_TOKEN
 export const analytics = {
   // Identify a user (call after login)
   identify: (userId: string, traits?: Record<string, any>) => {
-    if (IS_DEV || !mixpanelInitialized || !MIXPANEL_TOKEN || MIXPANEL_TOKEN === 'your-mixpanel-token-here') return
+    if (IS_DEV || !mixpanel || !mixpanelInitialized || !MIXPANEL_TOKEN || MIXPANEL_TOKEN === 'your-mixpanel-token-here') return
     
     try {
       mixpanel.identify(userId)
@@ -51,7 +56,7 @@ export const analytics = {
     }
 
     // Send to Mixpanel only if initialized
-    if (mixpanelInitialized && MIXPANEL_TOKEN && MIXPANEL_TOKEN !== 'your-mixpanel-token-here') {
+    if (mixpanel && mixpanelInitialized && MIXPANEL_TOKEN && MIXPANEL_TOKEN !== 'your-mixpanel-token-here') {
       try {
         mixpanel.track(eventName, {
           ...properties,
@@ -82,6 +87,8 @@ export const analytics = {
 
   // Track page view
   pageView: (pagePath: string, pageTitle?: string) => {
+    if (typeof window === 'undefined') return;
+    
     analytics.track('Page Viewed', {
       path: pagePath,
       title: pageTitle || document.title,
@@ -126,7 +133,7 @@ export const analytics = {
     analytics.track('Purchase Completed', order)
     
     // Track revenue in Mixpanel
-    if (mixpanelInitialized && MIXPANEL_TOKEN && MIXPANEL_TOKEN !== 'your-mixpanel-token-here') {
+    if (mixpanel && mixpanelInitialized && MIXPANEL_TOKEN && MIXPANEL_TOKEN !== 'your-mixpanel-token-here') {
       try {
         mixpanel.people.track_charge(order.total)
       } catch (error) {
@@ -178,6 +185,8 @@ export const analytics = {
 
 // Helper function to get or create session ID
 function getSessionId(): string {
+  if (typeof window === 'undefined') return 'ssr_session';
+  
   const SESSION_KEY = 'iliosauna_session_id'
   let sessionId = sessionStorage.getItem(SESSION_KEY)
   
@@ -193,7 +202,7 @@ function getSessionId(): string {
 if (typeof window !== 'undefined' && !IS_DEV) {
   // Delay initial tracking to ensure initialization
   setTimeout(() => {
-    if (mixpanelInitialized) {
+    if (mixpanel && mixpanelInitialized) {
       analytics.pageView(window.location.pathname)
       
       // Track route changes (for Next.js)

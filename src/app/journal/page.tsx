@@ -7,7 +7,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ExpandableSearch from '@/components/ExpandableSearch';
-import { analytics } from '@/lib/analytics';
+// Temporarily disabled to fix build
+// import { analytics } from '@/lib/analytics';
 
 // Helper function to build Sanity image URLs
 function getImageUrl(image: any, width: number, height: number): string {
@@ -67,7 +68,7 @@ export default function JournalPage() {
 
   // Track page view
   useEffect(() => {
-    analytics.pageView('/journal', 'Wellness Journal');
+    // analytics.pageView('/journal', 'Wellness Journal');
     
     // Trigger animations
     const timer = setTimeout(() => setPageLoaded(true), 50);
@@ -136,10 +137,10 @@ export default function JournalPage() {
       );
       
       // Track search
-      analytics.track('Blog Search', { 
-        search_term: searchTerm,
-        results_count: filtered.length 
-      });
+      // analytics.track('Blog Search', { 
+      //   search_term: searchTerm,
+      //   results_count: filtered.length 
+      // });
     }
     
     // Filter by category
@@ -154,10 +155,10 @@ export default function JournalPage() {
       );
       
       // Track category filter
-      analytics.track('Blog Category Filtered', { 
-        category: selectedCategory,
-        results_count: filtered.length 
-      });
+      // analytics.track('Blog Category Filtered', { 
+      //   category: selectedCategory,
+      //   results_count: filtered.length 
+      // });
     }
     
     // Filter by tag
@@ -167,10 +168,10 @@ export default function JournalPage() {
       );
       
       // Track tag filter
-      analytics.track('Blog Tag Filtered', { 
-        tag: selectedTag,
-        results_count: filtered.length 
-      });
+      // analytics.track('Blog Tag Filtered', { 
+      //   tag: selectedTag,
+      //   results_count: filtered.length 
+      // });
     }
     
     setFilteredPosts(filtered);
@@ -180,13 +181,13 @@ export default function JournalPage() {
   const allTags = Array.from(new Set(posts.flatMap(post => post.tags || [])));
 
   const handlePostClick = (post: BlogPost) => {
-    analytics.track('Blog Post Clicked', {
-      post_id: post._id,
-      post_title: post.title,
-      post_slug: post.slug.current,
-      categories: post.categories?.map(c => c.title) || [],
-      tags: post.tags || []
-    });
+    // analytics.track('Blog Post Clicked', {
+    //   post_id: post._id,
+    //   post_title: post.title,
+    //   post_slug: post.slug.current,
+    //   categories: post.categories?.map(c => c.title) || [],
+    //   tags: post.tags || []
+    // });
   };
 
   return (

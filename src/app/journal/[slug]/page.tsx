@@ -27,7 +27,8 @@ function getImageUrl(image: any, width: number, height: number): string {
   
   return `https://cdn.sanity.io/images/${projectId}/${dataset}/${id}-${dimensions}.${format}?w=${width}&h=${height}&fit=crop`;
 }
-import { analytics } from '@/lib/analytics';
+// Temporarily disabled to fix build
+// import { analytics } from '@/lib/analytics';
 import { PortableText } from '@portabletext/react';
 
 interface BlogPost {
@@ -206,13 +207,13 @@ export default function BlogPostPage() {
           updateMetaTags();
           
           // Track blog view
-          analytics.track('Blog Post Viewed', {
-            post_id: data._id,
-            post_title: data.title,
-            post_slug: slug,
-            categories: data.categories?.map((c: any) => c.title) || [],
-            tags: data.tags || []
-          });
+          // analytics.track('Blog Post Viewed', {
+          //   post_id: data._id,
+          //   post_title: data.title,
+          //   post_slug: slug,
+          //   categories: data.categories?.map((c: any) => c.title) || [],
+          //   tags: data.tags || []
+          // });
           
           // Set related posts if available
           if (data.relatedPosts) {

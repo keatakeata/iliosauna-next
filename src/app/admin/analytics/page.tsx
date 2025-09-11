@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { analytics } from '@/lib/analytics';
+// Temporarily disabled to fix build
+// import { analytics } from '@/lib/analytics';
 
 // Mixpanel API configuration
 const MIXPANEL_TOKEN = process.env.NEXT_PUBLIC_MIXPANEL_TOKEN;

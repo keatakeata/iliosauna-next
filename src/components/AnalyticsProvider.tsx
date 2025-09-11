@@ -2,7 +2,8 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { analytics } from '@/lib/analytics'
+// Temporarily disabled to fix build
+// import { analytics } from '@/lib/analytics'
 
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -11,7 +12,7 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (pathname) {
       try {
-        analytics.pageView(pathname)
+        // analytics.pageView(pathname)
       } catch (error) {
         // Silently handle analytics errors in development
         if (process.env.NODE_ENV === 'development') {
