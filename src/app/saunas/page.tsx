@@ -645,7 +645,7 @@ export default function SaunasPage() {
           {/* Mobile/Tablet Grid View with Framer Motion */}
           <div className="mobile-tablet-grid" style={{ display: 'none' }}>
             {premiumFeatures.map((feature, index) => (
-              <motion.div 
+              <div 
                 key={`mobile-${feature.id}`}
                 onClick={() => setActiveModal(feature.id)}
                 initial={{ opacity: 0, y: 100 }}
@@ -719,7 +719,7 @@ export default function SaunasPage() {
                   }}>{feature.description}</p>
                   <span style={{ fontSize: '1rem', color: 'white' }}>Tap to explore →</span>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -828,7 +828,7 @@ export default function SaunasPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ overflow: 'auto', flex: 1, position: 'relative' }}>
-              <motion.button
+              <button
                 onClick={() => setActiveModal(null)}
                 whileHover={{ rotate: 90 }}
                 whileTap={{ scale: 0.9, rotate: 90 }}
@@ -857,7 +857,7 @@ export default function SaunasPage() {
                 }}
               >
                 <span style={{ fontSize: '18px', color: '#6b7280' }}>✕</span>
-              </motion.button>
+              </button>
             
             {(() => {
               const content = modalContent[activeModal as keyof typeof modalContent];
@@ -2324,7 +2324,7 @@ export default function SaunasPage() {
               setFullscreenImage(null);
             }}
           />
-          <motion.button
+          <button
             onClick={() => setFullscreenImage(null)}
             whileHover={{ 
               rotate: 90,
@@ -2355,7 +2355,7 @@ export default function SaunasPage() {
             }}
           >
             <span style={{ fontSize: '24px', color: 'white' }}>✕</span>
-          </motion.button>
+          </button>
         </div>
       )}
 

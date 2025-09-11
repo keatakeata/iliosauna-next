@@ -204,7 +204,7 @@ const GHLContactForm: React.FC = () => {
       </div>
 
       {submitStatus === 'success' ? (
-        <motion.div
+        <div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           style={{
@@ -230,13 +230,13 @@ const GHLContactForm: React.FC = () => {
           <p style={{ color: '#5C4E3F' }}>
             We've received your inquiry and will contact you within 1 business day.
           </p>
-        </motion.div>
+        </div>
       ) : (
         <form onSubmit={handleSubmit}>
-          <AnimatePresence mode="wait">
+          <div>
             {/* Step 1: Purchase Timeline */}
             {currentStep === 0 && (
-              <motion.div
+              <div
                 key="step1"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -273,12 +273,12 @@ const GHLContactForm: React.FC = () => {
                     </label>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {/* Step 2: Primary Interest */}
             {currentStep === 1 && (
-              <motion.div
+              <div
                 key="step2"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -321,12 +321,12 @@ const GHLContactForm: React.FC = () => {
                     </label>
                   ))}
                 </div>
-              </motion.div>
+              </div>
             )}
 
             {/* Step 3: Details */}
             {currentStep === 2 && (
-              <motion.div
+              <div
                 key="step3"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -424,7 +424,7 @@ const GHLContactForm: React.FC = () => {
                 </div>
 
                 {formData.lead_source === 'Referral' && (
-                  <motion.div
+                  <div
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: 'auto' }}
                     style={{ marginBottom: '20px' }}
@@ -445,14 +445,14 @@ const GHLContactForm: React.FC = () => {
                         fontSize: '1rem'
                       }}
                     />
-                  </motion.div>
+                  </div>
                 )}
-              </motion.div>
+              </div>
             )}
 
             {/* Step 4: Contact Information */}
             {currentStep === 3 && (
-              <motion.div
+              <div
                 key="step4"
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
@@ -610,9 +610,9 @@ const GHLContactForm: React.FC = () => {
                     Send me exclusive offers and sauna wellness tips
                   </span>
                 </label>
-              </motion.div>
+              </div>
             )}
-          </AnimatePresence>
+          </div>
 
           {/* Navigation Buttons */}
           <div style={{
@@ -684,7 +684,7 @@ const GHLContactForm: React.FC = () => {
           </div>
 
           {submitStatus === 'error' && (
-            <motion.div
+            <div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               style={{
@@ -699,7 +699,7 @@ const GHLContactForm: React.FC = () => {
               }}
             >
               Something went wrong. Please try again or call us directly at 604-555-0100.
-            </motion.div>
+            </div>
           )}
         </form>
       )}
