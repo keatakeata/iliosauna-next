@@ -1,13 +1,7 @@
 'use client'
 
 import { useEffect, useState, useCallback } from 'react'
-
-// Types for better TypeScript support
-interface AnalyticsConfig {
-  mixpanelToken?: string
-  isProduction: boolean
-  isDevelopment: boolean
-}
+import { getAnalytics } from '@/lib/analytics-safe'
 
 interface TrackingData {
   [key: string]: any
@@ -21,75 +15,21 @@ interface AnalyticsInstance {
 }
 
 export function useAnalytics(): AnalyticsInstance {
-  const [mixpanel, setMixpanel] = useState<any>(null)
-  const [isInitialized, setIsInitialized] = useState(false)
-  const [isHydrated, setIsHydrated] = useState(false)
+  const [isClient, setIsClient] = useState(false)
   
-  const config: AnalyticsConfig = {
-    mixpanelToken: process.env.NEXT_PUBLIC_MIXPANEL_TOKEN,
-    isProduction: process.env.NODE_ENV === 'production',
-    isDevelopment: process.env.NODE_ENV === 'development'
-  }
-
-  // Wait for hydration before initializing anything
+  // Ensure we're on the client side
   useEffect(() => {
-    setIsHydrated(true)
+    setIsClient(true)
   }, [])
 
-  // Initialize Mixpanel only after hydration and in browser
-  useEffect(() => {
-    if (!isHydrated || typeof window === 'undefined') return
-    
-    // Only initialize in production with valid token
-    if (!config.isProduction || !config.mixpanelToken || config.mixpanelToken === 'your-mixpanel-token-here') {
-      if (config.isDevelopment) {
-        console.log('📊 Analytics: Skipping Mixpanel in development')
-      }
-      setIsInitialized(true) // Mark as "ready" even if skipped
-      return
-    }
-
-    // Temporarily use simple console logging instead of Mixpanel
-    // TODO: Re-enable Mixpanel after resolving SSR issues
-    console.log('📊 Analytics: Using console-based tracking (Mixpanel disabled temporarily)')
-    setIsInitialized(true)
-  }, [isHydrated, config.isProduction, config.mixpanelToken, config.isDevelopment])
-
-  // Safe tracking function (console-based for now)
-  const track = useCallback((eventName: string, properties?: TrackingData) => {
-    // Always use console logging for now (Mixpanel temporarily disabled)
-    console.log('📊 Track Event:', eventName, {
-      ...properties,
-      timestamp: new Date().toISOString(),
-      url: typeof window !== 'undefined' ? window.location.href : 'ssr',
-    })
-  }, [])  
-
-  // Safe identify function (console-based for now)
-  const identify = useCallback((userId: string, traits?: TrackingData) => {
-    console.log('📊 Identify User:', userId, traits)
-  }, [])
-
-  // Safe page view tracking
-  const pageView = useCallback((path: string, title?: string) => {
-    if (typeof window === 'undefined') return
-
-    const pageData = {
-      path,
-      title: title || document.title,
-      referrer: document.referrer,
-      url: window.location.href
-    }
-
-    track('Page Viewed', pageData)
-  }, [track])
-
-  return {
-    track,
-    identify,
-    pageView,
-    isReady: isHydrated && isInitialized
+  const analytics = isClient ? getAnalytics() : {
+    track: () => {},
+    identify: () => {},
+    pageView: () => {},
+    isReady: false
   }
+
+  return analytics
 }
 
 // Utility hook for page view tracking

@@ -64,12 +64,18 @@ const nextConfig = {
       };
     }
 
-    // Exclude browser-only packages from server bundles
+    // Completely exclude browser-only packages from server bundles
     if (isServer) {
       config.externals = config.externals || [];
       config.externals.push({
-        'mixpanel-browser': 'commonjs mixpanel-browser'
+        'mixpanel-browser': 'mixpanel-browser'
       });
+      
+      // Additional isolation for analytics
+      config.resolve.alias = {
+        ...config.resolve.alias,
+        'mixpanel-browser': false,
+      };
     }
     
     if (!dev) {

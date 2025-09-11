@@ -2,11 +2,10 @@
 
 import { useEffect } from 'react'
 import { usePathname } from 'next/navigation'
-import { useAnalytics } from '@/hooks/useAnalytics'
+import { analytics } from '@/lib/analytics-safe'
 
 export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const analytics = useAnalytics()
 
   // Track page views on route change (for global navigation)
   useEffect(() => {
@@ -20,7 +19,7 @@ export function AnalyticsProvider({ children }: { children: React.ReactNode }) {
         }
       }
     }
-  }, [pathname, analytics])
+  }, [pathname])
 
   return <>{children}</>
 }

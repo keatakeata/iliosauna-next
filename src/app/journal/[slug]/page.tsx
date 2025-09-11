@@ -7,8 +7,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-// Temporarily disabled framer-motion to fix build
-// import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { client } from '../../../../sanity/lib/client';
@@ -823,7 +822,7 @@ export default function BlogPostPage() {
                     />
                   )}
                                 {tableOfContents.map((item, index) => (
-                  <button
+                  <motion.button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     style={{
@@ -862,7 +861,7 @@ export default function BlogPostPage() {
                     }}
                   >
                     {item.text}
-                  </button>
+                  </motion.button>
                 ))}
               </nav>
             </div>

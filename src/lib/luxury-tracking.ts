@@ -1,4 +1,4 @@
-import { analytics } from './analytics'
+import { analytics } from './analytics-safe'
 import { supabase } from './supabase'
 
 // High-Intent Tracking Events for Luxury Saunas
