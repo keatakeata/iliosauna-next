@@ -1927,7 +1927,7 @@ export default function BlogPostPage() {
                   maxHeight: 'calc(80vh - 160px)', // Adjust max height for bottom positioning
                   backgroundColor: 'white',
                   borderRadius: '4px',
-                  boxShadow: '0 10px 40px rgba(0, 0, 0, 0.2)',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06), 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 20px 25px -5px rgba(0, 0, 0, 0.1)',
                   zIndex: 999,
                   overflow: 'hidden'
                 }}
