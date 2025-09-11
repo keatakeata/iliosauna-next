@@ -53,6 +53,7 @@ interface BlogPost {
 export default function BlogPostPage() {
   // Add CSS animations and sticky styles
   React.useEffect(() => {
+    if (typeof window === 'undefined') return;
     const style = document.createElement('style');
     style.textContent = `
       @keyframes fadeInUp {
@@ -161,6 +162,7 @@ export default function BlogPostPage() {
           
           // Dynamically update meta tags for social sharing
           const updateMetaTags = () => {
+            if (typeof window === 'undefined') return;
             const url = window.location.href;
             const title = data.title || 'Blog Post';
             const description = data.excerpt || '';
@@ -228,6 +230,7 @@ export default function BlogPostPage() {
 
   // Handle window resize
   useEffect(() => {
+    if (typeof window === 'undefined') return;
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
@@ -237,7 +240,7 @@ export default function BlogPostPage() {
 
   // Simple scroll handling - show buttons after hero section
   useEffect(() => {
-    if (windowWidth > 1200) return; // Only for mobile
+    if (typeof window === 'undefined' || windowWidth > 1200) return; // Only for mobile
     
     const handleScroll = () => {
       // Check if we're past the hero section
@@ -359,6 +362,7 @@ export default function BlogPostPage() {
 
   // Smooth scroll to section
   const scrollToSection = (id: string) => {
+    if (typeof window === 'undefined') return;
     const element = document.getElementById(id);
     if (element) {
       const yOffset = -120; // Increased offset to account for fixed header
@@ -378,12 +382,14 @@ export default function BlogPostPage() {
 
   // Share functions
   const shareOnTwitter = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     const text = post?.title || '';
     window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(text)}`, '_blank');
   };
 
   const shareOnFacebook = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     const title = post?.title || '';
     // Facebook sharer.php only accepts 'u' parameter for URL
@@ -392,6 +398,7 @@ export default function BlogPostPage() {
   };
 
   const shareOnLinkedIn = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     // LinkedIn simplified their sharing - now only accepts URL
     // Title and description should come from Open Graph meta tags
@@ -399,6 +406,7 @@ export default function BlogPostPage() {
   };
 
   const shareOnPinterest = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     const description = post?.excerpt || post?.title || '';
     const image = post?.mainImage ? getImageUrl(post.mainImage, 1200, 630) : '';
@@ -406,18 +414,21 @@ export default function BlogPostPage() {
   };
 
   const shareOnWhatsApp = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     const text = post?.title || '';
     window.open(`https://wa.me/?text=${encodeURIComponent(text + ' ' + url)}`, '_blank');
   };
 
   const shareOnReddit = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     const title = post?.title || '';
     window.open(`https://reddit.com/submit?url=${encodeURIComponent(url)}&title=${encodeURIComponent(title)}`, '_blank');
   };
 
   const shareViaEmail = () => {
+    if (typeof window === 'undefined') return;
     const url = window.location.href;
     const subject = post?.title || 'Check out this article';
     const body = `Check out this article: ${post?.title || ''}\n\n${post?.excerpt || ''}\n\nRead more: ${url}`;
@@ -1215,7 +1226,9 @@ export default function BlogPostPage() {
               <button
                 className="share-button"
                 onClick={() => {
-                  navigator.clipboard.writeText(window.location.href);
+                  if (typeof window !== 'undefined' && navigator?.clipboard) {
+                    navigator.clipboard.writeText(window.location.href);
+                  }
                   setShowToast(true);
                   setTimeout(() => setShowToast(false), 3000);
                 }}
@@ -1720,7 +1733,9 @@ export default function BlogPostPage() {
                   onHoverStart={() => setHoveredButton('copy')}
                   onHoverEnd={() => setHoveredButton(null)}
                   onClick={() => {
-                    navigator.clipboard.writeText(window.location.href);
+                    if (typeof window !== 'undefined' && navigator?.clipboard) {
+                      navigator.clipboard.writeText(window.location.href);
+                    }
                     setShowMobileShare(false);
                     setShowToast(true);
                     setTimeout(() => setShowToast(false), 3000);
