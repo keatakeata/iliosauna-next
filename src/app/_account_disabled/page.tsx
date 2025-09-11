@@ -57,7 +57,7 @@ export default function MinimalDashboard() {
   }
 
   if (!user) {
-    return null;
+    return <div>Loading...</div>;
   }
 
   // Mock order data - would come from database

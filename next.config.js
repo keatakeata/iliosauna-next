@@ -22,12 +22,6 @@ const nextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  experimental: {
-    // Increase worker limits for better build performance
-    cpus: Math.max(1, require('os').cpus().length - 1),
-    workerThreads: true,
-    esmExternals: true,
-  },
   // React 19 compatibility: Handle undefined env vars properly
   async redirects() {
     const clerkEnabled = String(process.env.NEXT_PUBLIC_CLERK_ENABLED || 'false') === 'true';

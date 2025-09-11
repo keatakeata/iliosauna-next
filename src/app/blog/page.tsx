@@ -11,5 +11,5 @@ export default function BlogPage() {
     router.replace('/journal');
   }, [router]);
   
-  return null;
+  return <div style={{ display: 'none' }}>Redirecting...</div>;
 }
