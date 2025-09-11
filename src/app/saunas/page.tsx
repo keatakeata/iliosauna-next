@@ -1,10 +1,10 @@
 'use client';
 
-// Force dynamic rendering to avoid DataCloneError
-export const dynamic = 'force-dynamic';
+// BUILD FIX: Removed conflicting force-dynamic export for React 19 compatibility
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-// Removed motion import for React 19 compatibility
+// React 19 compatible motion import
+import { motion } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollAnimations from '@/components/ScrollAnimations';
@@ -340,21 +340,12 @@ export default function SaunasPage() {
               }}>
                 Ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows, complete with a covered porch with a cold rinse shower.
               </p>
-              <p className="reveal-on-scroll reveal-delay-3" style={{ 
-                maxWidth: '800px', 
-                margin: '1.5rem auto 3rem',
-                fontSize: '1.1rem',
-                lineHeight: '1.8',
-                color: '#5a5a5a'
-              }}>
-                Ilio interiors are created using the finest clear western red cedar interior panelling, known for its anti-inflammatory, astringent and antimicrobial properties, durability, and pleasant aroma. The meticulously designed sauna is built for comfort and relaxation, with two deep-seat stadium benches spanning over six feet, a modern Wi-Fi-enabled heater for remote start, and a full-length glass door that provides a view corridor and a feeling of spaciousness. Bring beauty and wellness to your backyard with Ilio.
-              </p>
             </div>
             
             {/* Video Section */}
-            <div className="reveal-on-scroll reveal-delay-4" style={{ 
+            <div className="reveal-on-scroll reveal-delay-3" style={{ 
               maxWidth: '900px', 
-              margin: '3rem auto 0',
+              margin: '3rem auto',
               borderRadius: '8px',
               overflow: 'hidden',
               boxShadow: '0 10px 30px rgba(0,0,0,0.1)'
@@ -378,6 +369,18 @@ export default function SaunasPage() {
                   type="video/mp4" 
                 />
               </video>
+            </div>
+            
+            <div className="text-center">
+              <p className="reveal-on-scroll reveal-delay-4" style={{ 
+                maxWidth: '800px', 
+                margin: '1.5rem auto 3rem',
+                fontSize: '1.1rem',
+                lineHeight: '1.8',
+                color: '#5a5a5a'
+              }}>
+                Ilio interiors are created using the finest clear western red cedar interior panelling, known for its anti-inflammatory, astringent and antimicrobial properties, durability, and pleasant aroma. The meticulously designed sauna is built for comfort and relaxation, with two deep-seat stadium benches spanning over six feet, a modern Wi-Fi-enabled heater for remote start, and a full-length glass door that provides a view corridor and a feeling of spaciousness. Bring beauty and wellness to your backyard with Ilio.
+              </p>
             </div>
           </div>
         </div>
@@ -648,9 +651,22 @@ export default function SaunasPage() {
           {/* Mobile/Tablet Grid View with Framer Motion */}
           <div className="mobile-tablet-grid" style={{ display: 'none' }}>
             {premiumFeatures.map((feature, index) => (
-              <div 
+              <motion.div 
                 key={`mobile-${feature.id}`}
                 onClick={() => setActiveModal(feature.id)}
+                initial={{ opacity: 0, y: 100 }}
+                whileInView={{ 
+                  opacity: 1, 
+                  y: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 25,
+                    delay: Math.min(index * 0.05, 0.2),
+                    duration: 0.6
+                  }
+                }}
+                viewport={{ once: true, margin: "-100px" }}
                 style={{
                   position: 'relative',
                   height: '400px',
@@ -709,7 +725,7 @@ export default function SaunasPage() {
                   }}>{feature.description}</p>
                   <span style={{ fontSize: '1rem', color: 'white' }}>Tap to explore →</span>
                 </div>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
@@ -818,8 +834,15 @@ export default function SaunasPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <div style={{ overflow: 'auto', flex: 1, position: 'relative' }}>
-              <button
+              <motion.button
                 onClick={() => setActiveModal(null)}
+                whileHover={{ rotate: 90 }}
+                whileTap={{ scale: 0.9, rotate: 90 }}
+                transition={{ 
+                  type: "spring",
+                  stiffness: 400,
+                  damping: 17
+                }}
                 style={{
                   position: 'sticky',
                   top: '1.5rem',
@@ -840,7 +863,7 @@ export default function SaunasPage() {
                 }}
               >
                 <span style={{ fontSize: '18px', color: '#6b7280' }}>✕</span>
-              </button>
+              </motion.button>
             
             {(() => {
               const content = modalContent[activeModal as keyof typeof modalContent];

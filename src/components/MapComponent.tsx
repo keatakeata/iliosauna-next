@@ -1,9 +1,21 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 export default function MapComponent({ isMobile }: { isMobile: boolean }) {
   const [mapLoaded, setMapLoaded] = useState(false);
+  const [mapError, setMapError] = useState(false);
+
+  useEffect(() => {
+    // Set a timeout to show the map even if onLoad doesn't fire
+    const timeout = setTimeout(() => {
+      if (!mapLoaded && !mapError) {
+        setMapLoaded(true);
+      }
+    }, 3000);
+
+    return () => clearTimeout(timeout);
+  }, [mapLoaded, mapError]);
 
   return (
     <div style={{
@@ -27,11 +39,18 @@ export default function MapComponent({ isMobile }: { isMobile: boolean }) {
         style={{
           border: 0,
           filter: 'grayscale(20%)',
-          display: mapLoaded ? 'block' : 'none'
+          display: mapLoaded || mapError ? 'block' : 'none'
         }}
-        onLoad={() => setMapLoaded(true)}
+        onLoad={() => {
+          setMapLoaded(true);
+          setMapError(false);
+        }}
+        onError={() => {
+          setMapError(true);
+          setMapLoaded(true); // Show the iframe anyway
+        }}
       />
-      {!mapLoaded && (
+      {!mapLoaded && !mapError && (
         <div style={{
           width: '100%',
           height: '100%',

@@ -55,8 +55,7 @@ interface Category {
   postCount?: number;
 }
 
-// Force dynamic rendering to avoid DataCloneError
-export const dynamic = 'force-dynamic';
+// BUILD FIX: Removed conflicting force-dynamic export for React 19 compatibility
 
 export default function JournalPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -67,15 +66,28 @@ export default function JournalPage() {
   const [selectedTag, setSelectedTag] = useState('');
   const [loading, setLoading] = useState(true);
   const [pageLoaded, setPageLoaded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Page load animation
+  // Page load animation and mobile detection
   useEffect(() => {
     // Page view tracking removed (analytics disabled)
     console.log('Journal page loaded');
     
     // Trigger animations
     const timer = setTimeout(() => setPageLoaded(true), 50);
-    return () => clearTimeout(timer);
+    
+    // Detect mobile screen size
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('resize', checkMobile);
+    };
   }, []);
 
   // Fetch blog posts from API
@@ -204,7 +216,7 @@ export default function JournalPage() {
         minHeight: '400px',
         backgroundImage: `url('https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48eefde667db736f79.jpeg')`,
         backgroundSize: 'cover',
-        backgroundPosition: 'center',
+        backgroundPosition: isMobile ? '80% center' : 'center',
         backgroundAttachment: 'fixed',
         display: 'flex',
         alignItems: 'center',

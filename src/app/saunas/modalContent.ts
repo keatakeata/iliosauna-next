@@ -13,7 +13,7 @@ export const modalContent: ModalContentMap = {
             title: 'Frame & Insulation',
             list: [
               '2×4 Dimensional Lumber - Kiln-dried, structural grade',
-              'Rockwool R-14 - 3.5" thickness, fire-resistant to 2150°F',
+              'Rockwool R-14 - 3.5" thickness, insulation rating R14',
               'Dual Vapor Barriers - Foil-faced interior + full exterior',
               'Zero Thermal Bridging - Continuous insulation envelope'
             ]
@@ -389,13 +389,8 @@ export const modalContent: ModalContentMap = {
         ]
       },
       {
-        type: 'detail',
-        title: 'The Difference Is In The Details',
-        content: 'We use the same hardware spec\'d for yacht builders. Salt air, constant moisture, temperature swings—nothing affects these. Your towels might wear out, but these hooks never will.'
-      },
-      {
         type: 'quote',
-        quote: 'The black hardware makes this look like it belongs in a boutique hotel, not someone\'s backyard.',
+        quote: 'The black hardware makes this look like it belongs in a boutique hotel.',
         author: 'Sarah Chen, Airbnb Photography Specialist'
       }
     ]

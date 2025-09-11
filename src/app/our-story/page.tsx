@@ -1,7 +1,6 @@
 'use client';
 
-// Force dynamic rendering to avoid DataCloneError
-export const dynamic = 'force-dynamic';
+// BUILD FIX: Removed conflicting force-dynamic export for React 19 compatibility
 
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
@@ -62,8 +61,8 @@ export default function OurStoryPage() {
   const codeContent: OurStoryData = {
     heroSection: {
       title: 'Our Story',
-      subtitle: 'Redefining Luxury Wellness in BC',
-      backgroundImageUrl: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68bf404b68e75a82bca184de.jpeg'
+      subtitle: 'Expertly crafted in Vancouver Island, BC',
+      backgroundImageUrl: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68c2b2c1dee47c7da0f15a48.jpeg'
     },
     passionSection: {
       title: 'A Passion for Wellness, Made Accessible',
@@ -292,6 +291,9 @@ export default function OurStoryPage() {
       {/* Hero Section */}
       <section style={{
         minHeight: '100vh',
+        width: '100vw',
+        position: 'relative',
+        overflow: 'hidden',
         background: `linear-gradient(rgba(191, 88, 19, 0.1), rgba(0, 0, 0, 0.4)), linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.4)), url('${
           // Priority: Sanity image first, then URL fallback, then default
           ourStoryData.heroSection.backgroundImage?.asset?.url ||
@@ -299,15 +301,15 @@ export default function OurStoryPage() {
           ourStoryData.heroSection.backgroundImageUrl ||
           'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48008e7f401389f87a.jpeg'
         }')`,
-        backgroundSize: windowWidth > 1600 ? `${Math.min(windowWidth * 0.08, 120)}% auto` : 'cover',
-        backgroundPosition: isMobile ? '60% center' : '50% center',
+        backgroundSize: 'cover',
+        backgroundPosition: isMobile ? '70% 30%' : 'center center',
         backgroundRepeat: 'no-repeat',
+        backgroundAttachment: 'fixed',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         textAlign: 'center',
-        color: 'white',
-        position: 'relative'
+        color: 'white'
       }}>
         <div>
           <h1 style={{
@@ -347,10 +349,7 @@ export default function OurStoryPage() {
             margin: '0 auto'
           }}>
             <div>
-              <h2 className="h2-animate reveal-on-scroll" style={{
-                fontSize: '40px',
-                lineHeight: '44px',
-                fontWeight: 400,
+              <h2 className="h2 h2-animate reveal-on-scroll" style={{
                 marginBottom: '2rem'
               }}>
                 {ourStoryData.passionSection.title}
@@ -457,13 +456,9 @@ export default function OurStoryPage() {
           zIndex: 10
         }}>
           <div style={{ color: 'white' }}>
-            <h2 className="reveal-on-scroll" style={{
+            <h2 className="h2 reveal-on-scroll" style={{
               color: 'white',
-              fontSize: '40px',
-              lineHeight: '44px',
-              fontWeight: 400,
-              marginBottom: '2rem',
-              letterSpacing: '0.05em'
+              marginBottom: '2rem'
             }}>{ourStoryData.builtInCanadaSection.title}</h2>
             <div className="reveal-on-scroll reveal-delay-1" style={{
               width: '75%',
@@ -526,11 +521,8 @@ export default function OurStoryPage() {
         background: '#f8f8f8'
       }}>
         <div className="ilio-container">
-          <h2 className="h2-animate reveal-on-scroll" style={{
+          <h2 className="h2 h2-animate reveal-on-scroll" style={{
             textAlign: 'center',
-            fontSize: '40px',
-            lineHeight: '44px',
-            fontWeight: 400,
             marginBottom: '2rem'
           }}>{ourStoryData.craftsmanshipSection.title}</h2>
           <div className="reveal-on-scroll reveal-delay-1" style={{
@@ -596,10 +588,7 @@ export default function OurStoryPage() {
         textAlign: 'center'
       }}>
         <div className="ilio-container">
-          <h2 className="h2-animate reveal-on-scroll" style={{
-            fontSize: '40px',
-            lineHeight: '44px',
-            fontWeight: 400,
+          <h2 className="h2 h2-animate reveal-on-scroll" style={{
             marginBottom: '2rem'
           }}>
             {ourStoryData.ctaSection.title}

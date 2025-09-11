@@ -164,7 +164,7 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
               style={{
                 opacity: pageLoaded ? 1 : 0,
                 transform: pageLoaded ? 'translateY(0)' : 'translateY(30px)',
-                transition: 'opacity 1s ease-out 0.8s, transform 1s ease-out 0.8s',
+                transition: 'opacity 1s ease-out, transform 1s ease-out',
                 color: 'white',
                 fontFamily: 'var(--font-primary)',
                 fontSize: 'clamp(2.4rem, 3.6vw, 3.6rem)',
@@ -178,7 +178,7 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
             <p style={{ 
               opacity: pageLoaded ? 1 : 0,
               transform: pageLoaded ? 'translateY(0)' : 'translateY(30px)',
-              transition: 'opacity 1s ease-out 1.05s, transform 1s ease-out 1.05s',
+              transition: 'opacity 1s ease-out, transform 1s ease-out',
               color: 'rgba(255,255,255,0.8)', 
               margin: '0 0 1.5rem', 
               fontSize: '1.08rem', 
