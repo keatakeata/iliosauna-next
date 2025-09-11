@@ -43,28 +43,8 @@ interface BlogPost {
   };
 }
 
-export async function generateStaticParams() {
-  try {
-    const posts = await sanityFetch<BlogPost[]>({ 
-      query: blogPostsQuery,
-      tags: ['blog']
-    });
-
-    if (!posts || !Array.isArray(posts)) {
-      console.warn('No blog posts found during static generation');
-      return [];
-    }
-
-    return posts
-      .filter(post => post?.slug?.current) // Filter out invalid posts
-      .map((post) => ({
-        slug: post.slug.current,
-      }));
-  } catch (error) {
-    console.error('Error generating static params for blog posts:', error);
-    return []; // Return empty array to prevent build failure
-  }
-}
+// Removed generateStaticParams to prevent DataCloneError during build
+// This forces all blog pages to be rendered on-demand instead of statically
 
 export async function generateMetadata({ params }: { params: { slug: string } }) {
   try {

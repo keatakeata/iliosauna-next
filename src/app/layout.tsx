@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+
+// Force dynamic rendering globally to prevent DataCloneError
+export const dynamic = 'force-dynamic';
 import { ClerkProviderWrapper } from "@/components/ClerkProviderWrapper";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/CartDrawer";
