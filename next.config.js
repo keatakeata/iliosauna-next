@@ -29,7 +29,22 @@ const nextConfig = {
     esmExternals: true,
   },
   // Increase memory limits for build processes
-  webpack: (config, { dev }) => {
+  webpack: (config, { dev, isServer }) => {
+    // Fix 'self is not defined' error by defining self for server-side
+    if (isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        'self': false,
+      };
+      
+      // Add global self polyfill for server-side
+      config.plugins.push(
+        new config.webpack.DefinePlugin({
+          'self': 'undefined',
+        })
+      );
+    }
+    
     if (!dev) {
       config.optimization.splitChunks = {
         chunks: 'all',
