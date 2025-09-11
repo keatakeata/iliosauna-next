@@ -1641,7 +1641,7 @@ export default function BlogPostPage() {
               onClick={() => setShowMobileTOC(!showMobileTOC)}
               style={{
                 position: 'fixed',
-                bottom: '50%', // Back to original middle position
+                bottom: '15%', // 15% from bottom - stacked above share button
                 right: '20px',
                 padding: '12px 16px',
                 borderRadius: '4px',
@@ -1681,7 +1681,7 @@ export default function BlogPostPage() {
             onClick={() => setShowMobileShare(!showMobileShare)}
             style={{
               position: 'fixed',
-              bottom: '10vh', // 10% from bottom
+              bottom: '10%', // 10% from bottom - stacked below TOC button
               right: '20px',
               padding: '15px 20px',
               borderRadius: '4px',
@@ -1720,7 +1720,7 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -60, 
+                    x: -70, 
                     y: 0,
                     scale: 1 
                   }}
@@ -1739,7 +1739,7 @@ export default function BlogPostPage() {
                   }}
                   style={{
                     position: 'fixed',
-                    bottom: '50%',
+                    bottom: '10%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1761,8 +1761,8 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -60, 
-                    y: -60,
+                    x: -130, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1773,7 +1773,7 @@ export default function BlogPostPage() {
                   onClick={shareOnTwitter}
                   style={{
                     position: 'fixed',
-                    bottom: '50%',
+                    bottom: '10%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1794,8 +1794,8 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -85, 
-                    y: -85,
+                    x: -190, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1806,7 +1806,7 @@ export default function BlogPostPage() {
                   onClick={shareOnFacebook}
                   style={{
                     position: 'fixed',
-                    bottom: '50%',
+                    bottom: '10%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1827,8 +1827,8 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -100, 
-                    y: -100,
+                    x: -250, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1839,7 +1839,7 @@ export default function BlogPostPage() {
                   onClick={shareOnLinkedIn}
                   style={{
                     position: 'fixed',
-                    bottom: '50%',
+                    bottom: '10%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1860,8 +1860,8 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -110, 
-                    y: -110,
+                    x: -310, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1872,7 +1872,7 @@ export default function BlogPostPage() {
                   onClick={shareViaEmail}
                   style={{
                     position: 'fixed',
-                    bottom: '50%',
+                    bottom: '10%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1894,8 +1894,8 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -120, 
-                    y: -120,
+                    x: -370, 
+                    y: 0,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
@@ -1906,7 +1906,7 @@ export default function BlogPostPage() {
                   onClick={shareOnWhatsApp}
                   style={{
                     position: 'fixed',
-                    bottom: '50%',
+                    bottom: '10%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1933,7 +1933,7 @@ export default function BlogPostPage() {
                 exit={{ opacity: 0, x: 100 }}
                 style={{
                   position: 'fixed',
-                  bottom: 'calc(10vh + 120px)', // Position above the navigation button
+                  bottom: 'calc(15% + 60px)', // Position above the TOC button
                   right: '20px',
                   width: '280px',
                   maxHeight: 'calc(80vh - 160px)', // Adjust max height for bottom positioning
