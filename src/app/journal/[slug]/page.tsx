@@ -1,11 +1,14 @@
 'use client';
+// BUILD FIX v3: Force dynamic rendering to bypass build error
+export const dynamic = 'force-dynamic';
 // BUILD FIX v2: Added browser guards - FORCE REBUILD 2024-01-11
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+// Temporarily disabled framer-motion to fix build
+// import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { client } from '../../../../sanity/lib/client';
@@ -800,31 +803,23 @@ export default function BlogPostPage() {
               </h3>
               <nav style={{ position: 'relative' }}>
                                   {tableOfContents.length > 0 && (
-                    <motion.div
+                    <div
                       style={{
                         position: 'absolute',
                         left: 0,
                         width: '3px',
                         backgroundColor: '#BF5813',
                         zIndex: 1,
-                        borderRadius: '1.5px'
-                      }}
-                      initial={false}
-                      animate={{
+                        borderRadius: '1.5px',
                         top: activeSection ? tableOfContents.findIndex(item => item.id === activeSection) * 36 : 0,
                         height: 36,
-                        opacity: activeSection && tableOfContents.some(item => item.id === activeSection) ? 1 : 0
-                      }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 380,
-                        damping: 30,
-                        mass: 0.8
+                        opacity: activeSection && tableOfContents.some(item => item.id === activeSection) ? 1 : 0,
+                        transition: 'all 0.3s ease'
                       }}
                     />
                   )}
                                 {tableOfContents.map((item, index) => (
-                  <motion.button
+                  <button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     style={{
@@ -863,7 +858,7 @@ export default function BlogPostPage() {
                     }}
                   >
                     {item.text}
-                  </motion.button>
+                  </button>
                 ))}
               </nav>
             </div>

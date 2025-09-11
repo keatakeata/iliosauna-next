@@ -31,7 +31,8 @@
       "Bash(start http://localhost:4448/our-story)",
       "Bash(git fetch:*)",
       "Bash(npx kill-port:*)",
-      "Bash(start http://localhost:4448)"
+      "Bash(start http://localhost:4448)",
+      "Bash(npm run vercel-build:*)"
     ],
     "deny": [],
     "ask": []
