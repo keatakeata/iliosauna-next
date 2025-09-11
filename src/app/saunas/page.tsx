@@ -648,19 +648,6 @@ export default function SaunasPage() {
               <div 
                 key={`mobile-${feature.id}`}
                 onClick={() => setActiveModal(feature.id)}
-                initial={{ opacity: 0, y: 100 }}
-                whileInView={{ 
-                  opacity: 1, 
-                  y: 0,
-                  transition: {
-                    type: "spring",
-                    stiffness: 120,
-                    damping: 25,
-                    delay: Math.min(index * 0.05, 0.2),
-                    duration: 0.6
-                  }
-                }}
-                viewport={{ once: true, margin: "-100px" }}
                 style={{
                   position: 'relative',
                   height: '400px',
@@ -830,13 +817,6 @@ export default function SaunasPage() {
             <div style={{ overflow: 'auto', flex: 1, position: 'relative' }}>
               <button
                 onClick={() => setActiveModal(null)}
-                whileHover={{ rotate: 90 }}
-                whileTap={{ scale: 0.9, rotate: 90 }}
-                transition={{ 
-                  type: "spring",
-                  stiffness: 400,
-                  damping: 17
-                }}
                 style={{
                   position: 'sticky',
                   top: '1.5rem',
@@ -2326,19 +2306,6 @@ export default function SaunasPage() {
           />
           <button
             onClick={() => setFullscreenImage(null)}
-            whileHover={{ 
-              rotate: 90,
-              backgroundColor: 'rgba(255,255,255,0.2)'
-            }}
-            whileTap={{ 
-              scale: 0.9, 
-              rotate: 90 
-            }}
-            transition={{ 
-              type: "spring",
-              stiffness: 400,
-              damping: 17
-            }}
             style={{
               position: 'absolute',
               top: '2rem',
