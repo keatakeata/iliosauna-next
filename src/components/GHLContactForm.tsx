@@ -66,7 +66,7 @@ const GHLContactForm: React.FC = () => {
         email: formData.email,
         phone: formData.phone,
         customFields: {
-          sauna_vision: formData.message
+          project_details: formData.message
         },
         source: 'Website Contact Form',
         tags: ['Website Lead', 'Contact Form']
@@ -295,13 +295,13 @@ const GHLContactForm: React.FC = () => {
           textTransform: 'uppercase',
           letterSpacing: '0.05em'
         }}>
-          Tell Us About Your Dream Sauna Setup
+          Project Details
         </label>
         <textarea
           value={formData.message}
           onChange={(e) => updateFormData('message', e.target.value)}
           rows={5}
-          placeholder="Share your vision: indoor/outdoor, size preferences, special features you'd love to include, or any questions about our saunas..."
+          placeholder="Tell us about your project or ask any questions..."
           style={{
             width: '100%',
             padding: '14px 18px',
