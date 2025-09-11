@@ -789,7 +789,7 @@ export default function BlogPostPage() {
               </h3>
               <nav style={{ position: 'relative' }}>
                                   {tableOfContents.length > 0 && (
-                    <div
+                    <motion.div
                       style={{
                         position: 'absolute',
                         left: 0,
@@ -813,7 +813,7 @@ export default function BlogPostPage() {
                     />
                   )}
                                 {tableOfContents.map((item, index) => (
-                  <button
+                  <motion.button
                     key={item.id}
                     onClick={() => scrollToSection(item.id)}
                     style={{
@@ -852,7 +852,7 @@ export default function BlogPostPage() {
                     }}
                   >
                     {item.text}
-                  </button>
+                  </motion.button>
                 ))}
               </nav>
             </div>
