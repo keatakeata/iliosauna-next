@@ -3,7 +3,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+// Temporarily disabled motion for React 19 compatibility
+// import { motion, div } from 'motion/react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ExpandableSearch from '@/components/ExpandableSearch';
@@ -55,7 +56,8 @@ interface Category {
 }
 
 // Force dynamic rendering to avoid DataCloneError
-export const dynamic = 'force-dynamic';
+// Removed force-dynamic for React 19 compatibility  
+// export const dynamic = 'force-dynamic';
 
 export default function JournalPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -260,10 +262,8 @@ export default function JournalPage() {
       {/* Search and Filter Section */}
       <section style={{ background: '#f8f8f8', padding: '20px 0' }}>
         <div className="ilio-container">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: pageLoaded ? 1 : 0, y: pageLoaded ? 0 : 20 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
+          <div
+            style={{ opacity: pageLoaded ? 1 : 0, transition: 'opacity 0.3s ease' }}
           >
             {/* Search Bar and Filters Row */}
             <div style={{
@@ -329,7 +329,7 @@ export default function JournalPage() {
             </div>
             
             {/* Tags Section */}
-            <motion.div
+            <div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.4 }}
@@ -373,12 +373,12 @@ export default function JournalPage() {
                   </div>
                 </div>
               )}
-            </motion.div>
+            </div>
             
             {/* Results count */}
-            <AnimatePresence>
+            <div>
               {(searchTerm || selectedCategory !== 'all' || selectedTag) && posts.length > 0 && (
-                <motion.div
+                <div
                   initial={{ opacity: 0, scale: 0.9 }}
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.9 }}
@@ -388,19 +388,19 @@ export default function JournalPage() {
                   <p style={{ color: '#666', fontSize: '0.85rem' }}>
                     Showing {filteredPosts.length} of {posts.length} articles
                   </p>
-                </motion.div>
+                </div>
               )}
-            </AnimatePresence>
-          </motion.div>
+            </div>
+          </div>
         </div>
       </section>
       
       {/* Blog Posts Grid */}
       <section style={{ background: 'white', padding: '60px 0', flex: 1 }}>
         <div className="ilio-container">
-          <AnimatePresence mode="wait">
+          <div mode="wait">
             {loading ? (
-              <motion.div
+              <div
                 key="loading"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -408,15 +408,15 @@ export default function JournalPage() {
                 transition={{ duration: 0.3 }}
                 className="text-center py-12"
               >
-                <motion.div
+                <div
                   animate={{ rotate: 360 }}
                   transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
                   className="w-8 h-8 border-2 border-[#9B8B7E] border-t-transparent rounded-full mx-auto mb-4"
                 />
                 <p className="text-xl text-gray-600">Loading articles from Sanity...</p>
-              </motion.div>
+              </div>
             ) : posts.length === 0 ? (
-              <motion.div
+              <div
                 key="no-posts"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -424,15 +424,15 @@ export default function JournalPage() {
                 transition={{ duration: 0.4 }}
                 className="text-center py-12"
               >
-                <motion.h2
+                <h2
                   initial={{ scale: 0.9 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.2, type: 'spring', bounce: 0.3 }}
                   className="text-3xl font-light text-gray-800 mb-4"
                 >
                   Coming Soon
-                </motion.h2>
-                <motion.p
+                </h2>
+                <p
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.4 }}
@@ -440,8 +440,8 @@ export default function JournalPage() {
                 >
                   We're currently preparing exciting content about sauna wellness, design tips, and maintenance guides. 
                   Check back soon for our first articles!
-                </motion.p>
-                <motion.div
+                </p>
+                <div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.6 }}
@@ -450,10 +450,10 @@ export default function JournalPage() {
                   <p className="text-gray-500 text-sm">
                     In the meantime, explore our <Link href="/saunas" className="text-[#9B8B7E] hover:underline">sauna collection</Link> or <Link href="/contact" className="text-[#9B8B7E] hover:underline">contact us</Link> with any questions.
                   </p>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
             ) : filteredPosts.length === 0 ? (
-              <motion.div
+              <div
                 key="no-results"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -461,23 +461,23 @@ export default function JournalPage() {
                 transition={{ duration: 0.4 }}
                 className="text-center py-12"
               >
-                <motion.p
+                <p
                   initial={{ scale: 0.9 }}
                   animate={{ scale: 1 }}
                   transition={{ delay: 0.1, type: 'spring', bounce: 0.3 }}
                   className="text-xl text-gray-600 mb-6"
                 >
                   No articles found matching your criteria.
-                </motion.p>
+                </p>
                 <button
                   onClick={handleClearFilters}
                   className="clear-filters-button px-6 py-2 border border-[#9B8B7E] rounded-lg bg-transparent text-[#9B8B7E] hover:bg-[#9B8B7E] hover:text-white transition-all duration-200"
                 >
                   Clear Filters
                 </button>
-              </motion.div>
+              </div>
             ) : (
-              <motion.div
+              <div
                 key="posts"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -486,14 +486,14 @@ export default function JournalPage() {
               >
                 {/* Featured Posts */}
                 {filteredPosts.filter(post => post.featured).length > 0 && (
-                  <motion.div
+                  <div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.2 }}
                     className="mb-12"
                   >
                     <div style={{ marginBottom: '3rem' }}>
-                      <motion.h2
+                      <h2
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.3 }}
@@ -506,8 +506,8 @@ export default function JournalPage() {
                         }}
                       >
                         Featured Articles
-                      </motion.h2>
-                      <motion.div
+                      </h2>
+                      <div
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ duration: 0.6, delay: 0.4 }}
@@ -611,18 +611,18 @@ export default function JournalPage() {
                         </Link>
                       ))}
                     </div>
-                  </motion.div>
+                  </div>
                 )}
                 
                 {/* Regular Posts */}
-                <motion.div
+                <div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: filteredPosts.filter(post => post.featured).length > 0 ? 0.4 : 0.2 }}
                 >
                   {filteredPosts.filter(post => !post.featured).length > 0 && (
                     <div style={{ marginBottom: '3rem' }}>
-                      <motion.h2
+                      <h2
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
                         transition={{ duration: 0.5, delay: 0.5 }}
@@ -635,8 +635,8 @@ export default function JournalPage() {
                         }}
                       >
                         {filteredPosts.filter(post => post.featured).length > 0 ? 'Recent Articles' : 'All Articles'}
-                      </motion.h2>
-                      <motion.div
+                      </h2>
+                      <div
                         initial={{ scaleX: 0 }}
                         animate={{ scaleX: 1 }}
                         transition={{ duration: 0.6, delay: 0.6 }}
@@ -744,10 +744,10 @@ export default function JournalPage() {
                       </Link>
                     ))}
                   </div>
-                </motion.div>
-              </motion.div>
+                </div>
+              </div>
             )}
-          </AnimatePresence>
+          </div>
         </div>
       </section>
       

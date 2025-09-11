@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed motion import for React 19 compatibility
 
 interface FormData {
   // Basic fields

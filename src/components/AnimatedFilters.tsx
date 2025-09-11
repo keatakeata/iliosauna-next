@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed motion import for React 19 compatibility
 
 interface Category {
   _id: string;

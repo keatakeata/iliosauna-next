@@ -36,7 +36,8 @@
       "Bash(start http://localhost:4448/journal/welcome-to-ilio-sauna-blog)",
       "Bash(rimraf:*)",
       "Bash(npm uninstall:*)",
-      "Bash(npm run clean:*)"
+      "Bash(npm run clean:*)",
+      "WebFetch(domain:motion.dev)"
     ],
     "deny": [],
     "ask": []

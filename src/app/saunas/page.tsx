@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import { motion } from 'framer-motion';
+// Removed motion import for React 19 compatibility
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ScrollAnimations from '@/components/ScrollAnimations';

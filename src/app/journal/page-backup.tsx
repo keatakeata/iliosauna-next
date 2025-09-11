@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed motion import for React 19 compatibility
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ExpandableSearch from '@/components/ExpandableSearch';

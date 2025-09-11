@@ -28,9 +28,9 @@ const nextConfig = {
     workerThreads: true,
     esmExternals: true,
   },
-  // Temporarily exclude account pages from build if Clerk is not configured
+  // React 19 compatibility: Handle undefined env vars properly
   async redirects() {
-    const clerkEnabled = process.env.NEXT_PUBLIC_CLERK_ENABLED === 'true';
+    const clerkEnabled = String(process.env.NEXT_PUBLIC_CLERK_ENABLED || 'false') === 'true';
     if (!clerkEnabled) {
       return [
         {
@@ -43,7 +43,7 @@ const nextConfig = {
     return [];
   },
   // Skip building account pages if Clerk is not enabled
-  pageExtensions: process.env.NEXT_PUBLIC_CLERK_ENABLED === 'true' 
+  pageExtensions: String(process.env.NEXT_PUBLIC_CLERK_ENABLED || 'false') === 'true' 
     ? ['tsx', 'ts', 'jsx', 'js'] 
     : ['tsx', 'ts', 'jsx', 'js'].filter(ext => !ext.includes('account')),
 };

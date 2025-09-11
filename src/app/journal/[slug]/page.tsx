@@ -1,13 +1,13 @@
 'use client';
-// BUILD FIX v3: Force dynamic rendering to bypass build error
-export const dynamic = 'force-dynamic';
+// BUILD FIX v3: Removed force-dynamic for React 19 compatibility
+// export const dynamic = 'force-dynamic';
 // BUILD FIX v2: Added browser guards - FORCE REBUILD 2024-01-11
 
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { motion, AnimatePresence } from 'framer-motion';
+// Removed motion import for React 19 compatibility
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { client } from '../../../../sanity/lib/client';
