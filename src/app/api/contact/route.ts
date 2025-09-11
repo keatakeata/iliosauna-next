@@ -10,7 +10,14 @@ const GHL_API_BASE = process.env.GHL_API_BASE || 'https://services.leadconnector
 export async function POST(request: NextRequest) {
   try {
     const contactData = await request.json();
-    console.log('Creating contact with data:', JSON.stringify(contactData, null, 2));
+    console.log('📝 Creating contact with data:', JSON.stringify(contactData, null, 2));
+    console.log('🔑 Environment check:', {
+      hasToken: !!GHL_ACCESS_TOKEN,
+      tokenLength: GHL_ACCESS_TOKEN?.length || 0,
+      hasLocationId: !!GHL_LOCATION_ID,
+      locationId: GHL_LOCATION_ID ? `${GHL_LOCATION_ID.substring(0, 8)}...` : 'None',
+      apiBase: GHL_API_BASE
+    });
 
     // Check if GHL credentials are configured
     if (!GHL_ACCESS_TOKEN || !GHL_LOCATION_ID) {
@@ -28,11 +35,16 @@ export async function POST(request: NextRequest) {
       });
     }
 
+    // Split name into first and last names
+    const nameParts = contactData.name ? contactData.name.trim().split(' ') : [];
+    const firstName = contactData.firstName || nameParts[0] || '';
+    const lastName = contactData.lastName || nameParts.slice(1).join(' ') || '';
+
     // Prepare the contact payload
     const payload: any = {
       locationId: GHL_LOCATION_ID,
-      firstName: contactData.firstName || contactData.name?.split(' ')[0] || '',
-      lastName: contactData.lastName || contactData.name?.split(' ').slice(1).join(' ') || '',
+      firstName: firstName,
+      lastName: lastName,
       email: contactData.email,
       phone: contactData.phone || '',
       source: contactData.source || 'Website Contact Form',
@@ -73,7 +85,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    console.log('Sending to GHL:', JSON.stringify(payload, null, 2));
+    console.log('🚀 Sending to GHL:', JSON.stringify(payload, null, 2));
+    console.log('🌐 API URL:', `${GHL_API_BASE}/contacts/`);
 
     // Make API call to create contact - using PIT token directly
     const response = await axios.post(
@@ -84,16 +97,18 @@ export async function POST(request: NextRequest) {
           'Authorization': `Bearer ${GHL_ACCESS_TOKEN}`,
           'Content-Type': 'application/json',
           'Version': '2021-07-28'
-        }
+        },
+        timeout: 10000 // 10 second timeout
       }
     );
 
-    console.log('GHL Response:', response.data);
+    console.log('✅ GHL Response:', response.data);
 
     return NextResponse.json({
       success: true,
       contactId: response.data.contact?.id || response.data.id,
-      message: 'Contact created successfully'
+      message: 'Contact created successfully',
+      data: response.data
     });
 
   } catch (error: any) {
