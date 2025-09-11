@@ -1,6 +1,6 @@
 'use client';
-// BUILD FIX v3: Removed force-dynamic for React 19 compatibility
-// export const dynamic = 'force-dynamic';
+// BUILD FIX v3: Re-enabled force-dynamic to fix DataCloneError
+export const dynamic = 'force-dynamic';
 // BUILD FIX v2: Added browser guards - FORCE REBUILD 2024-01-11
 
 import React, { useState, useEffect, useRef } from 'react';

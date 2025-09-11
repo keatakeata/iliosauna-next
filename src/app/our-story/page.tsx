@@ -1,5 +1,8 @@
 'use client';
 
+// Force dynamic rendering to avoid DataCloneError
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';

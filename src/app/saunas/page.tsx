@@ -1,5 +1,8 @@
 'use client';
 
+// Force dynamic rendering to avoid DataCloneError
+export const dynamic = 'force-dynamic';
+
 import { useState, useEffect, useRef, useCallback } from 'react';
 // Removed motion import for React 19 compatibility
 import Navbar from '@/components/Navbar';

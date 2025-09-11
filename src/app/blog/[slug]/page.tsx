@@ -7,8 +7,8 @@ import { blogPostQuery, blogPostsQuery } from '../../../../sanity/lib/queries';
 import { PortableText } from '@portabletext/react';
 import { notFound } from 'next/navigation';
 
-// Enable ISR with 1 hour revalidation
-export const revalidate = 3600;
+// Force dynamic rendering to avoid DataCloneError
+export const dynamic = 'force-dynamic';
 
 interface BlogPost {
   _id: string;

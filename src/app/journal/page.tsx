@@ -56,8 +56,7 @@ interface Category {
 }
 
 // Force dynamic rendering to avoid DataCloneError
-// Removed force-dynamic for React 19 compatibility  
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 
 export default function JournalPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);

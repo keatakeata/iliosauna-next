@@ -37,7 +37,8 @@
       "Bash(rimraf:*)",
       "Bash(npm uninstall:*)",
       "Bash(npm run clean:*)",
-      "WebFetch(domain:motion.dev)"
+      "WebFetch(domain:motion.dev)",
+      "Bash(start http://localhost:4448/saunas)"
     ],
     "deny": [],
     "ask": []
