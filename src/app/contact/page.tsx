@@ -175,7 +175,7 @@ export default function ContactPage() {
         
         const cmsData = await client.fetch(contactPageQuery, {}, {
           signal: controller.signal
-        }).catch(() => null);
+        }).catch(() => undefined);
         
         clearTimeout(timeoutId);
 

@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-// Removed motion import for React 19 compatibility
+import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { client } from '../../../../sanity/lib/client';
@@ -1641,7 +1641,7 @@ export default function BlogPostPage() {
               onClick={() => setShowMobileTOC(!showMobileTOC)}
               style={{
                 position: 'fixed',
-                bottom: 'calc(10vh + 60px)', // 10% from bottom + space for share button
+                bottom: '50%', // Back to original middle position
                 right: '20px',
                 padding: '12px 16px',
                 borderRadius: '4px',
@@ -1728,7 +1728,7 @@ export default function BlogPostPage() {
                   transition={{ delay: 0, type: 'spring', bounce: 0.3 }}
                   whileTap={{ scale: 0.95 }}
                   onHoverStart={() => setHoveredButton('copy')}
-                  onHoverEnd={() => setHoveredButton(null)}
+                  onHoverEnd={() => setHoveredButton(undefined)}
                   onClick={() => {
                     if (typeof window !== 'undefined' && navigator?.clipboard) {
                       navigator.clipboard.writeText(window.location.href);
@@ -1739,7 +1739,7 @@ export default function BlogPostPage() {
                   }}
                   style={{
                     position: 'fixed',
-                    bottom: '10vh',
+                    bottom: '50%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1761,19 +1761,19 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -120, 
-                    y: 0,
+                    x: -60, 
+                    y: -60,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   transition={{ delay: 0.05, type: 'spring', bounce: 0.3 }}
                   whileTap={{ scale: 0.95 }}
                   onHoverStart={() => setHoveredButton('twitter')}
-                  onHoverEnd={() => setHoveredButton(null)}
+                  onHoverEnd={() => setHoveredButton(undefined)}
                   onClick={shareOnTwitter}
                   style={{
                     position: 'fixed',
-                    bottom: '10vh',
+                    bottom: '50%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1794,19 +1794,19 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -180, 
-                    y: 0,
+                    x: -85, 
+                    y: -85,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   transition={{ delay: 0.1, type: 'spring', bounce: 0.3 }}
                   whileTap={{ scale: 0.95 }}
                   onHoverStart={() => setHoveredButton('facebook')}
-                  onHoverEnd={() => setHoveredButton(null)}
+                  onHoverEnd={() => setHoveredButton(undefined)}
                   onClick={shareOnFacebook}
                   style={{
                     position: 'fixed',
-                    bottom: '10vh',
+                    bottom: '50%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1827,19 +1827,19 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -240, 
-                    y: 0,
+                    x: -100, 
+                    y: -100,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   transition={{ delay: 0.15, type: 'spring', bounce: 0.3 }}
                   whileTap={{ scale: 0.95 }}
                   onHoverStart={() => setHoveredButton('linkedin')}
-                  onHoverEnd={() => setHoveredButton(null)}
+                  onHoverEnd={() => setHoveredButton(undefined)}
                   onClick={shareOnLinkedIn}
                   style={{
                     position: 'fixed',
-                    bottom: '10vh',
+                    bottom: '50%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1860,19 +1860,19 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -300, 
-                    y: 0,
+                    x: -110, 
+                    y: -110,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   transition={{ delay: 0.2, type: 'spring', bounce: 0.3 }}
                   whileTap={{ scale: 0.95 }}
                   onHoverStart={() => setHoveredButton('email')}
-                  onHoverEnd={() => setHoveredButton(null)}
+                  onHoverEnd={() => setHoveredButton(undefined)}
                   onClick={shareViaEmail}
                   style={{
                     position: 'fixed',
-                    bottom: '10vh',
+                    bottom: '50%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',
@@ -1894,19 +1894,19 @@ export default function BlogPostPage() {
                   initial={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   animate={{ 
                     opacity: 1, 
-                    x: -360, 
-                    y: 0,
+                    x: -120, 
+                    y: -120,
                     scale: 1 
                   }}
                   exit={{ opacity: 0, x: 0, y: 0, scale: 0.8 }}
                   transition={{ delay: 0.25, type: 'spring', bounce: 0.3 }}
                   whileTap={{ scale: 0.95 }}
                   onHoverStart={() => setHoveredButton('whatsapp')}
-                  onHoverEnd={() => setHoveredButton(null)}
+                  onHoverEnd={() => setHoveredButton(undefined)}
                   onClick={shareOnWhatsApp}
                   style={{
                     position: 'fixed',
-                    bottom: '10vh',
+                    bottom: '50%',
                     right: '20px',
                     padding: '12px',
                     borderRadius: '4px',

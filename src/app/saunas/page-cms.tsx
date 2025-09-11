@@ -903,7 +903,7 @@ export default function SaunasPage() {
             justifyContent: 'center',
             padding: '2rem'
           }}
-          onClick={() => setActiveModal(null)}
+          onClick={() => setActiveModal(undefined)}
         >
           <div 
             style={{
@@ -918,7 +918,7 @@ export default function SaunasPage() {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={() => setActiveModal(null)}
+              onClick={() => setActiveModal(undefined)}
               style={{
                 position: 'absolute',
                 top: '1.5rem',
