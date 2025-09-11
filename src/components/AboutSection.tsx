@@ -58,9 +58,9 @@ export default function AboutSection({ homepageData }: AboutSectionProps) {
                   height: 'auto',
                   display: 'block'
                 }}
-                poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg"
+                poster="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48eefde667db736f79.jpeg"
               >
-                <source src={aboutData?.videoUrl || 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0ebafd8a0cd83ab30.mp4'} type="video/mp4" />
+                <source src={aboutData?.videoUrl || 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4'} type="video/mp4" />
                 Your browser does not support the video tag.
               </video>
             </div>
