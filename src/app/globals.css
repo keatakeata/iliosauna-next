@@ -686,3 +686,51 @@ h1, h2, h3, h4, h5, h6, p {
     @apply bg-background text-foreground;
   }
 }
+
+/* Journal page post card hover effects */
+.featured-post-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.featured-post-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+}
+
+.regular-post-card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.regular-post-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+/* Motion button hover effects */
+.category-button {
+  transition: all 0.2s ease;
+}
+
+.category-button:hover {
+  transform: scale(1.02);
+}
+
+.tag-button {
+  transition: all 0.2s ease;
+}
+
+.tag-button:hover {
+  transform: scale(1.02);
+}
+
+.clear-filters-button {
+  transition: all 0.2s ease;
+}
+
+.clear-filters-button:hover {
+  transform: scale(1.05);
+}
+
+.clear-filters-button:active {
+  transform: scale(0.95);
+}

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -53,6 +53,9 @@ interface Category {
   color?: string;
   postCount?: number;
 }
+
+// Force dynamic rendering to avoid DataCloneError
+export const dynamic = 'force-dynamic';
 
 export default function JournalPage() {
   const [posts, setPosts] = useState<BlogPost[]>([]);
@@ -170,10 +173,24 @@ export default function JournalPage() {
   // Get all unique tags
   const allTags = Array.from(new Set(posts.flatMap(post => post.tags || [])));
 
-  const handlePostClick = (post: BlogPost) => {
+  const handlePostClick = useCallback((post: BlogPost) => {
     // Track post click (analytics disabled)
     console.log('Blog post clicked:', post.title, post.slug.current);
-  };
+  }, []);
+
+  const handleCategorySelect = useCallback((category: string) => {
+    setSelectedCategory(category);
+  }, []);
+
+  const handleTagSelect = useCallback((tag: string) => {
+    setSelectedTag(selectedTag === tag ? '' : tag);
+  }, [selectedTag]);
+
+  const handleClearFilters = useCallback(() => {
+    setSearchTerm('');
+    setSelectedCategory('all');
+    setSelectedTag('');
+  }, []);
 
   return (
     <div style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
@@ -265,13 +282,9 @@ export default function JournalPage() {
               
               {/* Category Filter Badges */}
               <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', alignItems: 'center' }}>
-                <motion.button
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.1, type: 'spring', bounce: 0.3 }}
-                  onClick={() => setSelectedCategory('all')}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                <button
+                  onClick={() => handleCategorySelect('all')}
+                  className="category-button"
                   style={{
                     padding: '0.5rem 1rem',
                     backgroundColor: selectedCategory === 'all' ? '#9B8B7E' : 'rgba(155, 139, 126, 0.1)',
@@ -285,21 +298,17 @@ export default function JournalPage() {
                   }}
                 >
                   All Posts {loading ? '' : `(${posts.length})`}
-                </motion.button>
+                </button>
                 
                 {categories.map((category, index) => {
                   const cleanSlug = (category.slug.current.split(/[A-Z]/)[0] || category.slug.current);
                   const isSelected = selectedCategory === cleanSlug;
                   
                   return (
-                    <motion.button
+                    <button
                       key={category._id}
-                      initial={{ opacity: 0, scale: 0.9 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      transition={{ delay: 0.1 + (index * 0.05), type: 'spring', bounce: 0.3 }}
-                      onClick={() => setSelectedCategory(cleanSlug)}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
+                      onClick={() => handleCategorySelect(cleanSlug)}
+                      className="category-button"
                       style={{
                         padding: '0.5rem 1rem',
                         backgroundColor: isSelected ? (category.color || '#9B8B7E') : `${category.color || '#9B8B7E'}15`,
@@ -313,7 +322,7 @@ export default function JournalPage() {
                       }}
                     >
                       {category.title} {loading ? '' : `(${category.postCount || 0})`}
-                    </motion.button>
+                    </button>
                   );
                 })}
               </div>
@@ -343,14 +352,10 @@ export default function JournalPage() {
                     flexWrap: 'wrap' 
                   }}>
                     {allTags.map((tag, index) => (
-                      <motion.button
+                      <button
                         key={tag}
-                        initial={{ opacity: 0, y: 5 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.5 + (index * 0.03) }}
-                        onClick={() => setSelectedTag(selectedTag === tag ? '' : tag)}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        onClick={() => handleTagSelect(tag)}
+                        className="tag-button"
                         style={{
                           padding: '0.25rem 0.75rem',
                           backgroundColor: selectedTag === tag ? '#9B8B7E' : '#f0f0f0',
@@ -363,7 +368,7 @@ export default function JournalPage() {
                         }}
                       >
                         #{tag}
-                      </motion.button>
+                      </button>
                     ))}
                   </div>
                 </div>
@@ -464,21 +469,12 @@ export default function JournalPage() {
                 >
                   No articles found matching your criteria.
                 </motion.p>
-                <motion.button
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3 }}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    setSearchTerm('');
-                    setSelectedCategory('all');
-                    setSelectedTag('');
-                  }}
-                  className="px-6 py-2 border border-[#9B8B7E] rounded-lg bg-transparent text-[#9B8B7E] hover:bg-[#9B8B7E] hover:text-white transition-all duration-200"
+                <button
+                  onClick={handleClearFilters}
+                  className="clear-filters-button px-6 py-2 border border-[#9B8B7E] rounded-lg bg-transparent text-[#9B8B7E] hover:bg-[#9B8B7E] hover:text-white transition-all duration-200"
                 >
                   Clear Filters
-                </motion.button>
+                </button>
               </motion.div>
             ) : (
               <motion.div
@@ -532,25 +528,15 @@ export default function JournalPage() {
                         <Link 
                           key={post._id} 
                           href={`/journal/${post.slug.current}`}
-                          onClick={() => handlePostClick(post)}
                           style={{ textDecoration: 'none', color: 'inherit' }}
                         >
-                          <article style={{
+                          <article className="featured-post-card" style={{
                             background: 'white',
                             borderRadius: '12px',
                             overflow: 'hidden',
                             boxShadow: '0 4px 20px rgba(0,0,0,0.1)',
-                            transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                             cursor: 'pointer',
                             border: '2px solid #9B8B7E'
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'translateY(-8px)';
-                            e.currentTarget.style.boxShadow = '0 12px 30px rgba(0,0,0,0.15)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'translateY(0)';
-                            e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
                           }}
                           >
                             {post.mainImage && (
@@ -672,24 +658,14 @@ export default function JournalPage() {
                       <Link 
                         key={post._id} 
                         href={`/journal/${post.slug.current}`}
-                        onClick={() => handlePostClick(post)}
                         style={{ textDecoration: 'none', color: 'inherit' }}
                       >
-                        <article style={{
+                        <article className="regular-post-card" style={{
                           background: 'white',
                           borderRadius: '8px',
                           overflow: 'hidden',
                           boxShadow: '0 2px 10px rgba(0,0,0,0.08)',
-                          transition: 'transform 0.3s ease, box-shadow 0.3s ease',
                           cursor: 'pointer'
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-4px)';
-                          e.currentTarget.style.boxShadow = '0 8px 20px rgba(0,0,0,0.12)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = '0 2px 10px rgba(0,0,0,0.08)';
                         }}
                         >
                           {post.mainImage && (

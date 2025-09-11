@@ -35,7 +35,8 @@
       "Bash(npm run vercel-build:*)",
       "Bash(start http://localhost:4448/journal/welcome-to-ilio-sauna-blog)",
       "Bash(rimraf:*)",
-      "Bash(npm uninstall:*)"
+      "Bash(npm uninstall:*)",
+      "Bash(npm run clean:*)"
     ],
     "deny": [],
     "ask": []
