@@ -67,6 +67,7 @@ export default function JournalPage() {
   const [loading, setLoading] = useState(true);
   const [pageLoaded, setPageLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
 
   // Page load animation and mobile detection
   useEffect(() => {
@@ -76,9 +77,15 @@ export default function JournalPage() {
     // Trigger animations
     const timer = setTimeout(() => setPageLoaded(true), 50);
     
-    // Detect mobile screen size
+    // Detect mobile screen size and iOS
+    const detectIOS = () => {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    };
+    
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
+      setIsIOS(detectIOS());
     };
     
     checkMobile();
@@ -217,7 +224,7 @@ export default function JournalPage() {
         backgroundImage: `url('https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48eefde667db736f79.jpeg')`,
         backgroundSize: 'cover',
         backgroundPosition: isMobile ? '80% center' : 'center',
-        backgroundAttachment: 'fixed',
+        backgroundAttachment: isIOS ? 'scroll' : 'fixed',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center'

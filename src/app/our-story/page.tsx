@@ -55,6 +55,7 @@ export default function OurStoryPage() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [pageLoaded, setPageLoaded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
   const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
 
   // Code-First Content Architecture
@@ -214,11 +215,17 @@ export default function OurStoryPage() {
     }
   }, [loading, ourStoryData?.builtInCanadaSection?.slideshowImages?.length]);
 
-  // Detect mobile viewport and window width
+  // Detect mobile viewport, iOS, and window width
   useEffect(() => {
+    const detectIOS = () => {
+      return /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+             (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    };
+    
     const handleResize = () => {
       setIsMobile(window.innerWidth <= 768);
       setWindowWidth(window.innerWidth);
+      setIsIOS(detectIOS());
     };
     handleResize();
     window.addEventListener('resize', handleResize);
@@ -289,7 +296,9 @@ export default function OurStoryPage() {
       <Navbar animated={true} />
 
       {/* Hero Section */}
-      <section style={{
+      <section 
+        className={isIOS ? 'hero-section ios-hero-section' : 'hero-section'}
+        style={{
         minHeight: '100vh',
         width: '100vw',
         position: 'relative',
@@ -304,7 +313,7 @@ export default function OurStoryPage() {
         backgroundSize: 'cover',
         backgroundPosition: isMobile ? '70% 30%' : 'center center',
         backgroundRepeat: 'no-repeat',
-        backgroundAttachment: 'fixed',
+        backgroundAttachment: isIOS ? 'scroll' : 'fixed',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -730,6 +739,30 @@ export default function OurStoryPage() {
             text-align: left !important;
             margin-bottom: 1.5rem !important;
             color: white !important;
+          }
+        }
+        
+        /* iOS SPECIFIC FIXES - Ensure proper image rendering and positioning */
+        .ios-hero-section {
+          /* Override background attachment for iOS */
+          background-attachment: scroll !important;
+          /* Ensure image stays sharp and properly positioned */
+          background-size: cover !important;
+          background-position: 70% 30% !important;
+          /* Prevent iOS zoom issues */
+          -webkit-background-size: cover !important;
+          transform: translateZ(0) !important;
+          -webkit-transform: translateZ(0) !important;
+          /* Force hardware acceleration */
+          will-change: transform !important;
+        }
+        
+        /* Apply iOS class conditionally via JavaScript */
+        @media screen and (-webkit-min-device-pixel-ratio: 2) {
+          .hero-section {
+            /* Ensure crisp rendering on retina displays */
+            -webkit-backface-visibility: hidden !important;
+            backface-visibility: hidden !important;
           }
         }
       `}</style>
