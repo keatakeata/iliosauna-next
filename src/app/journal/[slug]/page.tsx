@@ -1638,7 +1638,7 @@ export default function BlogPostPage() {
               onClick={() => setShowMobileTOC(!showMobileTOC)}
               style={{
                 position: 'fixed',
-                bottom: '15%', // 15% from bottom - stacked above share button
+                bottom: 'calc(10% + 70px)', // Fixed 70px above share button
                 right: '20px',
                 padding: '12px 16px',
                 borderRadius: '4px',
@@ -1678,7 +1678,7 @@ export default function BlogPostPage() {
             onClick={() => setShowMobileShare(!showMobileShare)}
             style={{
               position: 'fixed',
-              bottom: '10%', // 10% from bottom - stacked below TOC button
+              bottom: '10%', // Base position - 10% from bottom
               right: '20px',
               padding: '15px 20px',
               borderRadius: '4px',
@@ -1882,7 +1882,7 @@ export default function BlogPostPage() {
                 exit={{ opacity: 0, x: 100 }}
                 style={{
                   position: 'fixed',
-                  bottom: 'calc(15% + 60px)', // Position above the TOC button
+                  bottom: 'calc(10% + 130px)', // Position above the TOC button (10% + 70px button spacing + 60px button height)
                   right: '20px',
                   width: '280px',
                   maxHeight: 'calc(80vh - 160px)', // Adjust max height for bottom positioning
