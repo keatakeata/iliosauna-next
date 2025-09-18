@@ -135,6 +135,14 @@ export default {
           title: 'Text'
         }
       ]
+    },
+    {
+      name: 'table',
+      type: 'table',
+      title: 'Table',
+      options: {
+        sortable: true
+      }
     }
   ]
 }

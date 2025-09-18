@@ -128,6 +128,7 @@ export default function BlogPostPage() {
   const contentRef = useRef<HTMLDivElement>(null);
   const [showToast, setShowToast] = useState(false);
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
+  const [showAuthorModal, setShowAuthorModal] = useState(false);
   
   // Simple visibility state for mobile buttons
   const [showMobileButtons, setShowMobileButtons] = useState(false);
@@ -267,18 +268,36 @@ export default function BlogPostPage() {
   }, [windowWidth]);
 
 
+  // Track used IDs to ensure uniqueness
+  const usedIds = useRef<Set<string>>(new Set());
+
   // Helper function to generate consistent IDs
   const generateId = (text: string) => {
-    return text
+    const baseId = text
       .toLowerCase()
       .replace(/[^a-z0-9\s]/g, '') // Remove special characters
       .replace(/\s+/g, '-') // Replace spaces with hyphens
       .replace(/(^-|-$)/g, ''); // Remove leading/trailing hyphens
+
+    let uniqueId = baseId;
+    let counter = 1;
+
+    // If this ID is already used, add a suffix
+    while (usedIds.current.has(uniqueId)) {
+      uniqueId = `${baseId}-${counter}`;
+      counter++;
+    }
+
+    usedIds.current.add(uniqueId);
+    return uniqueId;
   };
 
   // Generate table of contents from body content (excluding H1 titles)
   useEffect(() => {
     if (post?.body) {
+      // Clear used IDs for new post
+      usedIds.current.clear();
+
       const toc: Array<{id: string, text: string, level: number}> = [];
       post.body.forEach((block: any) => {
         // Only include h2 and h3 in table of contents, not h1 (main titles)
@@ -473,6 +492,52 @@ export default function BlogPostPage() {
                 {value.caption}
               </p>
             )}
+          </div>
+        );
+      },
+      table: ({ value }: any) => {
+        if (!value?.rows) return null;
+        return (
+          <div style={{
+            margin: '2rem 0',
+            overflowX: 'auto',
+            borderRadius: '8px',
+            border: '1px solid #E5E5E5'
+          }}>
+            <table style={{
+              width: '100%',
+              borderCollapse: 'collapse',
+              fontSize: '0.9rem',
+              backgroundColor: '#fff'
+            }}>
+              <tbody>
+              {value.rows.map((row: any, rowIndex: number) => (
+                <tr key={rowIndex} style={{
+                  borderBottom: rowIndex < value.rows.length - 1 ? '1px solid #E5E5E5' : 'none'
+                }}>
+                  {row.cells.map((cell: string, cellIndex: number) => {
+                    const isHeader = rowIndex === 0;
+                    const Tag = isHeader ? 'th' : 'td';
+                    return (
+                      <Tag
+                        key={cellIndex}
+                        style={{
+                          padding: '12px 16px',
+                          textAlign: 'left',
+                          backgroundColor: isHeader ? '#FAF8F5' : 'transparent',
+                          fontWeight: isHeader ? 600 : 400,
+                          color: isHeader ? '#333' : '#555',
+                          borderRight: cellIndex < row.cells.length - 1 ? '1px solid #E5E5E5' : 'none'
+                        }}
+                      >
+                        {cell}
+                      </Tag>
+                    );
+                  })}
+                </tr>
+              ))}
+              </tbody>
+            </table>
           </div>
         );
       }
@@ -903,59 +968,6 @@ export default function BlogPostPage() {
           )}
         </div>
 
-        {/* Tags with improved styling */}
-        {post.tags && post.tags.length > 0 && (
-          <div style={{
-            marginTop: '4rem',
-            paddingTop: '3rem',
-            borderTop: '2px solid #F8F4EB'
-          }}>
-            <p style={{ 
-              color: '#8B7D6B', 
-              marginBottom: '1.5rem',
-              fontSize: '0.9rem',
-              letterSpacing: '0.1em',
-              textTransform: 'uppercase',
-              fontWeight: 500
-            }}>
-              Tagged With
-            </p>
-            <div style={{ display: 'flex', gap: '0.75rem', flexWrap: 'wrap' }}>
-              {post.tags.map(tag => (
-                <Link
-                  key={tag}
-                  href={`/journal?tag=${tag}`}
-                  style={{
-                    padding: '0.5rem 1.25rem',
-                    backgroundColor: '#FAF8F5',
-                    color: '#8B7D6B',
-                    border: '1px solid #F8F4EB',
-                    borderRadius: '4px',
-                    fontSize: '0.85rem',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                    fontWeight: 400,
-                    letterSpacing: '0.02em'
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#BF5813';
-                    e.currentTarget.style.color = '#FAF8F5';
-                    e.currentTarget.style.borderColor = '#BF5813';
-                    e.currentTarget.style.transform = 'translateY(-2px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FAF8F5';
-                    e.currentTarget.style.color = '#8B7D6B';
-                    e.currentTarget.style.borderColor = '#F8F4EB';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  #{tag}
-                </Link>
-              ))}
-            </div>
-          </div>
-        )}
 
         {/* Back to Journal with improved button */}
         <div style={{ 
@@ -1024,7 +1036,7 @@ export default function BlogPostPage() {
               }}>
                 {/* Category Badge */}
                 {post.categories && post.categories.length > 0 && post.categories[0] && (
-                  <div style={{ marginBottom: '0.5rem' }}>
+                  <div style={{ marginBottom: '0.5rem', textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
                     <span style={{
                       display: 'inline-block',
                       padding: '0.35rem 0.75rem',
@@ -1043,11 +1055,24 @@ export default function BlogPostPage() {
                 )}
                 
                 {post.author && (
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
-                    gap: '0.75rem'
-                  }}>
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.75rem',
+                      cursor: 'pointer',
+                      padding: '4px 8px',
+                      borderRadius: '8px',
+                      transition: 'background-color 0.2s ease'
+                    }}
+                    onClick={() => setShowAuthorModal(true)}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.1)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = 'transparent';
+                    }}
+                  >
                     {post.author.image?.asset && (
                       <img
                         src={getImageUrl(post.author.image, 32, 32)}
@@ -1060,7 +1085,7 @@ export default function BlogPostPage() {
                         }}
                       />
                     )}
-                    <span style={{ 
+                    <span style={{
                       fontWeight: 500,
                       color: '#333'
                     }}>
@@ -1092,9 +1117,9 @@ export default function BlogPostPage() {
                 )}
                 
                 {post.readingTime && (
-                  <div style={{ 
-                    display: 'flex', 
-                    alignItems: 'center', 
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
                     gap: '0.5rem'
                   }}>
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#999" strokeWidth="2">
@@ -1104,9 +1129,55 @@ export default function BlogPostPage() {
                     <span>{post.readingTime} min read</span>
                   </div>
                 )}
+
+                {/* Tags inline after reading time */}
+                {post.tags && post.tags.length > 0 && (
+                  <div style={{
+                    marginTop: '0.75rem'
+                  }}>
+                    <div style={{
+                      fontSize: '0.7rem',
+                      fontWeight: 500,
+                      color: '#999',
+                      marginBottom: '0.25rem',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
+                    }}>
+                      Tags
+                    </div>
+                    <div style={{
+                      fontSize: '0.85rem',
+                      lineHeight: '1.5',
+                      color: '#666'
+                    }}>
+                    {post.tags.map((tag, index) => (
+                      <React.Fragment key={tag}>
+                        <Link
+                          href={`/journal?tag=${tag}`}
+                          style={{
+                            color: '#666',
+                            textDecoration: 'none',
+                            transition: 'color 0.2s ease'
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.color = 'rgb(191, 126, 75)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.color = '#666';
+                          }}
+                        >
+                          {tag}
+                        </Link>
+                        {index < post.tags.length - 1 && <span style={{ margin: '0 0.5rem' }}>•</span>}
+                      </React.Fragment>
+                    ))}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-            
+
+
             {/* Share Section */}
             <div style={{
               padding: '1.5rem'
@@ -1972,8 +2043,374 @@ export default function BlogPostPage() {
           </div>
         )}
       </>
-      
+
+      {/* Author Modal */}
+      {showAuthorModal && post?.author && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            backgroundColor: 'rgba(0, 0, 0, 0.5)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            zIndex: 10001,
+            padding: '20px'
+          }}
+          onClick={() => setShowAuthorModal(false)}
+        >
+          <div
+            style={{
+              position: 'relative',
+              backgroundColor: 'white',
+              borderRadius: '12px',
+              padding: '32px',
+              maxWidth: '500px',
+              width: '100%',
+              maxHeight: '80vh',
+              overflowY: 'auto',
+              boxShadow: '0 20px 40px rgba(0, 0, 0, 0.15)'
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Close Button */}
+            <div
+              style={{
+                position: 'absolute',
+                top: '12px',
+                right: '16px',
+                cursor: 'pointer',
+                width: '32px',
+                height: '32px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '50%',
+                backgroundColor: '#f5f5f5',
+                transition: 'background-color 0.2s ease',
+                fontSize: '18px',
+                fontWeight: 'bold',
+                color: '#666'
+              }}
+              onClick={() => setShowAuthorModal(false)}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#f5f5f5';
+              }}
+            >
+              ×
+            </div>
+
+            {/* Author Header */}
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '16px',
+              marginBottom: '24px'
+            }}>
+              {post.author.image?.asset && (
+                <img
+                  src={getImageUrl(post.author.image, 80, 80)}
+                  alt={post.author.name}
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    objectFit: 'cover'
+                  }}
+                />
+              )}
+              <div>
+                <h3 style={{
+                  margin: 0,
+                  fontSize: '1.5rem',
+                  fontWeight: 600,
+                  color: '#333',
+                  marginBottom: '4px'
+                }}>
+                  {post.author.name}
+                </h3>
+                {post.author.role && (
+                  <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    color: '#666',
+                    fontWeight: 500
+                  }}>
+                    {post.author.role}
+                  </p>
+                )}
+              </div>
+            </div>
+
+            {/* Author Bio */}
+            {post.author.bio && (
+              <div style={{
+                marginBottom: '24px'
+              }}>
+                <p style={{
+                  margin: '0 0 12px 0',
+                  fontSize: '0.9rem',
+                  color: '#666',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  About Author
+                </p>
+                <div style={{
+                  padding: '16px',
+                  backgroundColor: '#FAF8F5',
+                  borderRadius: '8px'
+                }}>
+                  <p style={{
+                    margin: 0,
+                    fontSize: '1rem',
+                    lineHeight: '1.6',
+                    color: '#444'
+                  }}>
+                    {post.author.bio}
+                  </p>
+                </div>
+              </div>
+            )}
+
+            {/* Contact Email */}
+            {post.author.email && (
+              <div style={{
+                marginBottom: '24px'
+              }}>
+                <p style={{
+                  margin: '0 0 8px 0',
+                  fontSize: '0.9rem',
+                  color: '#666',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  Contact
+                </p>
+                <a
+                  href={`mailto:${post.author.email}`}
+                  style={{
+                    color: 'rgb(191, 126, 75)',
+                    textDecoration: 'none',
+                    fontSize: '1rem',
+                    fontWeight: 500
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.textDecoration = 'underline';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.textDecoration = 'none';
+                  }}
+                >
+                  {post.author.email}
+                </a>
+              </div>
+            )}
+
+            {/* Social Links */}
+            {post.author.socialLinks && Object.keys(post.author.socialLinks).length > 0 && (
+              <div>
+                <p style={{
+                  margin: '0 0 12px 0',
+                  fontSize: '0.9rem',
+                  color: '#666',
+                  fontWeight: 600,
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px'
+                }}>
+                  Follow
+                </p>
+                <div style={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: '12px'
+                }}>
+                  {post.author.socialLinks.twitter && (
+                    <a
+                      href={post.author.socialLinks.twitter}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '44px',
+                        height: '44px',
+                        backgroundColor: 'rgba(191, 126, 75, 0.8)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(191, 126, 75, 0.2)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.9)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.boxShadow = '0 4px 8px rgba(191, 126, 75, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.8)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 2px 4px rgba(191, 126, 75, 0.2)';
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                      </svg>
+                    </a>
+                  )}
+                  {post.author.socialLinks.linkedin && (
+                    <a
+                      href={post.author.socialLinks.linkedin}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '44px',
+                        height: '44px',
+                        backgroundColor: 'rgba(191, 126, 75, 0.75)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(191, 126, 75, 0.2)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.9)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.boxShadow = '0 4px 8px rgba(191, 126, 75, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.75)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 2px 4px rgba(191, 126, 75, 0.2)';
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                      </svg>
+                    </a>
+                  )}
+                  {post.author.socialLinks.instagram && (
+                    <a
+                      href={post.author.socialLinks.instagram}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '44px',
+                        height: '44px',
+                        backgroundColor: 'rgba(191, 126, 75, 0.7)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(191, 126, 75, 0.2)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.9)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.boxShadow = '0 4px 8px rgba(191, 126, 75, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.7)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 2px 4px rgba(191, 126, 75, 0.2)';
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                      </svg>
+                    </a>
+                  )}
+                  {post.author.socialLinks.facebook && (
+                    <a
+                      href={post.author.socialLinks.facebook}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '44px',
+                        height: '44px',
+                        backgroundColor: 'rgba(191, 126, 75, 0.65)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(191, 126, 75, 0.2)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.9)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.boxShadow = '0 4px 8px rgba(191, 126, 75, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.65)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 2px 4px rgba(191, 126, 75, 0.2)';
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                      </svg>
+                    </a>
+                  )}
+                  {post.author.socialLinks.website && (
+                    <a
+                      href={post.author.socialLinks.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '44px',
+                        height: '44px',
+                        backgroundColor: 'rgba(191, 126, 75, 0.6)',
+                        color: 'white',
+                        textDecoration: 'none',
+                        borderRadius: '8px',
+                        transition: 'all 0.2s ease',
+                        boxShadow: '0 2px 4px rgba(191, 126, 75, 0.2)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.9)';
+                        e.currentTarget.style.transform = 'translateY(-1px)';
+                        e.currentTarget.style.boxShadow = '0 4px 8px rgba(191, 126, 75, 0.3)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'rgba(191, 126, 75, 0.6)';
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = '0 2px 4px rgba(191, 126, 75, 0.2)';
+                      }}
+                    >
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.94-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/>
+                      </svg>
+                    </a>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       <Footer />
     </div>
   );
-}// Force rebuild
+} // Force rebuild

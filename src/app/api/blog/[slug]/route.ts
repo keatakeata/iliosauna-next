@@ -29,7 +29,10 @@ export async function GET(
         name,
         slug,
         image,
-        bio
+        role,
+        bio,
+        email,
+        socialLinks
       },
       "relatedPosts": *[_type == "blogPost" && slug.current != $slug][0...3] {
         _id,

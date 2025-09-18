@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local iOS Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .simulator-container {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .device {
+            position: relative;
+            background: #000;
+            border-radius: 35px;
+            padding: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .iphone-14 {
+            width: 393px;
+            height: 852px;
+        }
+
+        .iphone-se {
+            width: 375px;
+            height: 667px;
+        }
+
+        .device-screen {
+            width: 100%;
+            height: 100%;
+            background: #fff;
+            border-radius: 25px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .device-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            border-radius: 25px;
+            border: 1px solid #333;
+        }
+
+        .device-notch {
+            position: absolute;
+            top: 8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 25px;
+            background: #000;
+            border-radius: 15px;
+            z-index: 1000;
+        }
+
+        .device-iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+            border-radius: 25px;
+        }
+
+        .controls {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+        }
+
+        .control-group {
+            margin-bottom: 15px;
+        }
+
+        .control-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .control-group input, .control-group select {
+            width: 200px;
+            padding: 8px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255,255,255,0.1);
+            color: white;
+        }
+
+        .control-group input::placeholder {
+            color: rgba(255,255,255,0.6);
+        }
+
+        .button {
+            background: #007AFF;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+
+        .button:hover {
+            background: #0056CC;
+        }
+
+        .button.active {
+            background: #FF3B30;
+        }
+
+        .toggle-controls {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1002;
+        }
+
+        .device-label {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .screenshot-mode {
+            background: #f8f9fa !important;
+        }
+    </style>
+</head>
+<body>
+    <div class="toggle-controls" onclick="toggleControls()">
+        🎛️ Toggle Controls
+    </div>
+
+    <div class="controls" id="controls">
+        <div class="control-group">
+            <label>🌐 Website URL</label>
+            <input type="text" id="urlInput" value="http://localhost:4448/our-story" placeholder="Enter your local URL">
+            <button class="button" onclick="loadURL()">Load</button>
+        </div>
+
+        <div class="control-group">
+            <label>📱 Device Type</label>
+            <select id="deviceSelect" onchange="changeDevice()">
+                <option value="both">Both Devices</option>
+                <option value="iphone-14">iPhone 14 Pro Only</option>
+                <option value="iphone-se">iPhone SE Only</option>
+            </select>
+        </div>
+
+        <div class="control-group">
+            <label>🎨 Simulation Mode</label>
+            <button class="button" id="iosMode" onclick="toggleIOSMode()">Enable iOS Mode</button>
+            <button class="button" onclick="refreshDevices()">🔄 Refresh</button>
+            <button class="button" onclick="screenshotMode()">📸 Screenshot</button>
+        </div>
+
+        <div class="control-group">
+            <label>⚡ Quick Tests</label>
+            <button class="button" onclick="loadPage('/our-story')">Our Story</button>
+            <button class="button" onclick="loadPage('/saunas')">Saunas</button>
+            <button class="button" onclick="loadPage('/contact')">Contact</button>
+            <button class="button" onclick="loadPage('/')">Home</button>
+        </div>
+    </div>
+
+    <div class="simulator-container" id="simulatorContainer">
+        <div class="device iphone-14" id="device1">
+            <div class="device-notch"></div>
+            <div class="device-screen">
+                <iframe class="device-iframe" id="iframe1" src="http://localhost:4448/our-story"></iframe>
+                <div class="device-frame"></div>
+            </div>
+            <div class="device-label">iPhone 14 Pro (393x852)</div>
+        </div>
+
+        <div class="device iphone-se" id="device2">
+            <div class="device-screen">
+                <iframe class="device-iframe" id="iframe2" src="http://localhost:4448/our-story"></iframe>
+                <div class="device-frame"></div>
+            </div>
+            <div class="device-label">iPhone SE (375x667)</div>
+        </div>
+    </div>
+
+    <script>
+        let iosMode = false;
+        let currentURL = 'http://localhost:4448/our-story';
+
+        function loadURL() {
+            const url = document.getElementById('urlInput').value;
+            currentURL = url;
+            document.getElementById('iframe1').src = url;
+            document.getElementById('iframe2').src = url;
+        }
+
+        function loadPage(path) {
+            const baseURL = 'http://localhost:4448';
+            const fullURL = baseURL + path;
+            document.getElementById('urlInput').value = fullURL;
+            loadURL();
+        }
+
+        function changeDevice() {
+            const selection = document.getElementById('deviceSelect').value;
+            const device1 = document.getElementById('device1');
+            const device2 = document.getElementById('device2');
+
+            switch(selection) {
+                case 'iphone-14':
+                    device1.style.display = 'block';
+                    device2.style.display = 'none';
+                    break;
+                case 'iphone-se':
+                    device1.style.display = 'none';
+                    device2.style.display = 'block';
+                    break;
+                default:
+                    device1.style.display = 'block';
+                    device2.style.display = 'block';
+            }
+        }
+
+        function toggleIOSMode() {
+            iosMode = !iosMode;
+            const button = document.getElementById('iosMode');
+            
+            if (iosMode) {
+                button.textContent = '✅ iOS Mode Active';
+                button.classList.add('active');
+                // Inject iOS user agent and styles
+                injectIOSSimulation();
+            } else {
+                button.textContent = 'Enable iOS Mode';
+                button.classList.remove('active');
+            }
+        }
+
+        function injectIOSSimulation() {
+            const iframes = ['iframe1', 'iframe2'];
+            
+            iframes.forEach(iframeId => {
+                const iframe = document.getElementById(iframeId);
+                
+                iframe.onload = function() {
+                    try {
+                        // Inject iOS-specific JavaScript
+                        const script = iframe.contentDocument.createElement('script');
+                        script.textContent = `
+                            // Override navigator properties
+                            Object.defineProperty(navigator, 'userAgent', {
+                                get: function() { 
+                                    return 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'; 
+                                }
+                            });
+                            
+                            Object.defineProperty(navigator, 'platform', {
+                                get: function() { return 'iPhone'; }
+                            });
+                            
+                            // Add iOS-specific styles
+                            const style = document.createElement('style');
+                            style.textContent = \`
+                                * {
+                                    -webkit-tap-highlight-color: transparent;
+                                    -webkit-touch-callout: none;
+                                    -webkit-user-select: none;
+                                }
+                                body {
+                                    -webkit-text-size-adjust: none;
+                                }
+                            \`;
+                            document.head.appendChild(style);
+                            
+                            // Trigger window resize to activate mobile detection
+                            window.dispatchEvent(new Event('resize'));
+                        `;
+                        iframe.contentDocument.head.appendChild(script);
+                    } catch (e) {
+                        console.log('Cannot inject into iframe due to CORS');
+                    }
+                };
+                
+                // Reload to apply changes
+                iframe.src = iframe.src;
+            });
+        }
+
+        function refreshDevices() {
+            document.getElementById('iframe1').src = currentURL;
+            document.getElementById('iframe2').src = currentURL;
+        }
+
+        function screenshotMode() {
+            document.body.classList.toggle('screenshot-mode');
+        }
+
+        function toggleControls() {
+            const controls = document.getElementById('controls');
+            controls.classList.toggle('hidden');
+        }
+
+        // Auto-refresh when localhost changes
+        setInterval(() => {
+            if (currentURL.includes('localhost')) {
+                // Check if page is still accessible
+                fetch(currentURL, { mode: 'no-cors' })
+                    .then(() => {
+                        // Page is accessible, could auto-refresh here if needed
+                    })
+                    .catch(() => {
+                        console.log('Server might be down');
+                    });
+            }
+        }, 5000);
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey) {
+                switch(e.key) {
+                    case 'r':
+                        e.preventDefault();
+                        refreshDevices();
+                        break;
+                    case 'i':
+                        e.preventDefault();
+                        toggleIOSMode();
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>
