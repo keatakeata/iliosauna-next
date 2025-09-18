@@ -677,8 +677,9 @@ export default function BlogPostPage() {
       bullet: ({ children }: any) => (
         <ul style={{
           marginBottom: '1.25rem',
-          paddingLeft: '1.5rem',
-          lineHeight: '1.8'
+          paddingLeft: '0',
+          lineHeight: '1.8',
+          listStyle: 'none'
         }}>
           {children}
         </ul>
@@ -686,11 +687,63 @@ export default function BlogPostPage() {
       number: ({ children }: any) => (
         <ol style={{
           marginBottom: '1.25rem',
-          paddingLeft: '1.5rem',
-          lineHeight: '1.8'
+          paddingLeft: '0',
+          lineHeight: '1.8',
+          listStyle: 'none',
+          counterReset: 'custom-counter'
         }}>
           {children}
         </ol>
+      )
+    },
+    listItem: {
+      bullet: ({ children }: any) => (
+        <li style={{
+          position: 'relative',
+          paddingLeft: '1.5rem',
+          marginBottom: '0.5rem',
+          color: '#6B7280'
+        }}>
+          <span style={{
+            position: 'absolute',
+            left: '0',
+            top: '0.1em',
+            width: '8px',
+            height: '8px',
+            backgroundColor: 'rgb(191, 126, 75)',
+            borderRadius: '50%',
+            marginTop: '0.4em'
+          }}></span>
+          {children}
+        </li>
+      ),
+      number: ({ children, index }: any) => (
+        <li style={{
+          position: 'relative',
+          paddingLeft: '2rem',
+          marginBottom: '0.5rem',
+          color: '#6B7280',
+          counterIncrement: 'custom-counter'
+        }}>
+          <span style={{
+            position: 'absolute',
+            left: '0',
+            top: '0',
+            width: '1.5rem',
+            height: '1.5rem',
+            backgroundColor: 'rgb(191, 126, 75)',
+            color: 'white',
+            borderRadius: '50%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: '0.75rem',
+            fontWeight: '600'
+          }}>
+            {(index || 0) + 1}
+          </span>
+          {children}
+        </li>
       )
     }
   };
