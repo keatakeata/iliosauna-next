@@ -6,7 +6,7 @@ export const dynamic = 'force-dynamic';
 import { ClerkProviderWrapper } from "@/components/ClerkProviderWrapper";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/CartDrawer";
-// Analytics removed for build fix
+import { Analytics } from "@vercel/analytics/next";
 import { SupabaseProvider } from "@/components/SupabaseProvider";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import "./globals.css";
@@ -46,6 +46,7 @@ export default function RootLayout({
             </SupabaseProvider>
           </ClerkProviderWrapper>
         </ErrorBoundary>
+        <Analytics />
       </body>
     </html>
   );
