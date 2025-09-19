@@ -76,13 +76,13 @@ export default function ContactPage() {
     contactInfo: {
       title: 'Call us directly',
       description: 'Professional delivery and installation services across British Columbia, with white-glove service from Victoria to Vancouver.',
-      phone: '604-555-0100',
-      email: 'info@ilioluxurysaunas.com',
+      phone: '250-597-1244',
+      email: 'hello@iliosauna.com',
       address: {
-        street: '123 Sauna Lane',
+        street: '404 – 2471 Sideny Ave',
         city: 'Sidney',
-        state: 'Vancouver Island',
-        zip: 'V8L 0A1',
+        state: 'BC',
+        zip: 'V8L3A6',
         country: 'Canada'
       },
       businessHours: [
@@ -98,9 +98,9 @@ export default function ContactPage() {
     ctaSection: {
       title: 'Ready to Experience Luxury?',
       phoneText: 'Call us directly',
-      phoneNumber: '604-555-0100',
+      phoneNumber: '250-597-1244',
       emailText: 'Email Us',
-      emailAddress: 'info@ilioluxurysaunas.com'
+      emailAddress: 'hello@iliosauna.com'
     },
     socialMedia: {
       facebook: 'https://facebook.com',
@@ -407,7 +407,7 @@ export default function ContactPage() {
                 {isMobile ? (
                   // Mobile: Button style
                   <a 
-                    href="tel:604-555-0100"
+                    href="tel:250-597-1244"
                     style={{ 
                       display: 'inline-block',
                       fontSize: '1.2rem', 
@@ -429,12 +429,12 @@ export default function ContactPage() {
                       e.currentTarget.style.color = 'var(--color-primary)';
                     }}
                   >
-                    604.555.0100
+                    250.597.1244
                   </a>
                 ) : (
                   // Desktop: Text style
                   <a 
-                    href="tel:604-555-0100"
+                    href="tel:250-597-1244"
                     style={{ 
                       fontSize: '1.8rem', 
                       fontWeight: 300, 
@@ -449,7 +449,7 @@ export default function ContactPage() {
                       e.currentTarget.style.color = '#333';
                     }}
                   >
-                    604.555.0100
+                    250.597.1244
                   </a>
                 )}
                 <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.8, marginTop: '15px' }}>
@@ -471,8 +471,8 @@ export default function ContactPage() {
                   Ilio Sauna
                 </h3>
                 <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.8 }}>
-                  Sidney, Vancouver Island<br />
-                  British Columbia<br />
+                  404 – 2471 Sideny Ave<br />
+                  Sidney, BC V8L3A6<br />
                   Canada
                 </p>
               </div>
@@ -492,7 +492,7 @@ export default function ContactPage() {
                   General Inquiries
                 </p>
                 <a 
-                  href="mailto:info@ilioluxurysaunas.com" 
+                  href="mailto:hello@iliosauna.com" 
                   style={{ 
                     fontSize: '0.95rem', 
                     color: 'var(--color-primary)',
@@ -501,7 +501,7 @@ export default function ContactPage() {
                   onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
                   onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
                 >
-                  info@ilioluxurysaunas.com
+                  hello@iliosauna.com
                 </a>
                 <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '8px' }}>
                   We respond within 1 business day
@@ -1097,14 +1097,14 @@ export default function ContactPage() {
               <p style={{ fontSize: '0.95rem', color: '#666' }}>
                 Still have questions? <br />
                 <a 
-                  href="tel:604-555-0100"
+                  href="tel:250-597-1244"
                   style={{
                     color: 'var(--color-primary)',
                     textDecoration: 'none',
                     fontWeight: 500
                   }}
                 >
-                  Call us at 604.555.0100
+                  Call us at 250.597.1244
                 </a>
               </p>
             </div>

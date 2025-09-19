@@ -44,11 +44,11 @@ export default function Footer() {
               CONNECT
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-              <a href="mailto:info@iliosauna.com" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                info@iliosauna.com
+              <a href="mailto:hello@iliosauna.com" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: '0.9rem' }}>
+                hello@iliosauna.com
               </a>
-              <a href="tel:+17788991234" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: '0.9rem' }}>
-                (778) 899-1234
+              <a href="tel:+12505971244" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: '0.9rem' }}>
+                (250) 597-1244
               </a>
             </div>
           </div>
@@ -58,8 +58,8 @@ export default function Footer() {
               LOCATION
             </h4>
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
-              Vancouver Island, BC<br />
-              Serving Greater Vancouver Area
+              404 – 2471 Sideny Ave<br />
+              Sidney, BC V8L3A6
             </p>
           </div>
         </div>

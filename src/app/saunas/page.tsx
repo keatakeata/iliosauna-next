@@ -178,7 +178,7 @@ export default function SaunasPage() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % heroSlides.length);
-    }, 6000);
+    }, 4000);
     return () => clearInterval(timer);
   }, [heroSlides.length]);
 
@@ -448,12 +448,12 @@ export default function SaunasPage() {
             
             <div className="reveal-on-scroll reveal-delay-5" style={{ marginBottom: '2rem' }}>
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>WARRANTY</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>5-year comprehensive coverage</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>2-year comprehensive coverage</div>
             </div>
             
             <div className="reveal-on-scroll reveal-delay-6" style={{ marginBottom: '3rem' }}>
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>LEAD TIME</div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>4-6 weeks</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>2-4 weeks</div>
             </div>
             
             {/* Add to Cart and Buy Now buttons */}
@@ -727,6 +727,401 @@ export default function SaunasPage() {
                 </div>
               </motion.div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* After You Order Your Ilio Sauna Process Section - CRO & GEO Optimized */}
+      <section
+        style={{ padding: '100px 0', background: 'white', position: 'relative' }}
+        itemScope
+        itemType="https://schema.org/Service"
+        aria-labelledby="sauna-delivery-process"
+      >
+        {/* Luxury background pattern */}
+        <div style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          background: 'linear-gradient(135deg, rgba(191, 88, 19, 0.02) 0%, rgba(191, 88, 19, 0.01) 50%, transparent 100%)',
+          pointerEvents: 'none'
+        }}></div>
+
+        <div className="ilio-container" style={{ position: 'relative', zIndex: 1 }}>
+          <header style={{ textAlign: 'center', marginBottom: '4rem' }}>
+            <h2
+              id="sauna-delivery-process"
+              className="reveal-on-scroll"
+              style={{
+                color: '#333',
+                fontSize: 'clamp(2rem, 5vw, 3.5rem)',
+                fontWeight: 100,
+                letterSpacing: '0.05em',
+                marginBottom: '1rem'
+              }}
+              itemProp="name"
+            >
+              Your White-Glove Sauna Experience
+            </h2>
+            <div className="section-divider reveal-on-scroll reveal-delay-1" style={{
+              width: '75%',
+              height: '1px',
+              background: '#D1D5DB',
+              margin: '0 auto 2rem'
+            }}></div>
+            <p
+              className="reveal-on-scroll reveal-delay-2"
+              style={{
+                fontSize: '1.2rem',
+                color: '#666',
+                fontWeight: 300,
+                lineHeight: 1.6,
+                maxWidth: '800px',
+                margin: '0 auto 1.5rem'
+              }}
+              itemProp="description"
+            >
+              Your sauna is already precision-built in transportable sections, designed to move easily through tight gates and pathways. Here's our proven 6-step process:
+            </p>
+
+            {/* Trust signals for CRO */}
+            <div className="reveal-on-scroll reveal-delay-3" style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '2rem',
+              marginTop: '1.5rem',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.9rem',
+                color: '#666',
+                fontWeight: 500
+              }}>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#bf5813',
+                  borderRadius: '50%'
+                }}></div>
+                <span>Same-Day First Steam</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.9rem',
+                color: '#666',
+                fontWeight: 500
+              }}>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#bf5813',
+                  borderRadius: '50%'
+                }}></div>
+                <span>2-Year Warranty</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                fontSize: '0.9rem',
+                color: '#666',
+                fontWeight: 500
+              }}>
+                <div style={{
+                  width: '8px',
+                  height: '8px',
+                  backgroundColor: '#bf5813',
+                  borderRadius: '50%'
+                }}></div>
+                <span>Licensed Electrician Network</span>
+              </div>
+            </div>
+          </header>
+
+          {/* Process steps with enhanced CRO and GEO optimization */}
+          <ol style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))',
+            gap: '2rem',
+            maxWidth: '1200px',
+            margin: '0 auto',
+            listStyle: 'none',
+            padding: 0
+          }}
+          itemScope
+          itemType="https://schema.org/HowTo"
+          >
+            {[
+              {
+                number: '1',
+                title: 'Instant Order Confirmation',
+                description: 'You\'ll receive a comprehensive order summary within minutes, including your estimated 2-4 week delivery window and dedicated project manager contact.',
+                timeline: '< 5 minutes'
+              },
+              {
+                number: '2',
+                title: 'White-Glove Delivery Coordination',
+                description: 'Our logistics team personally coordinates your delivery date and confirms access details, ensuring smooth transport through any gate or pathway.',
+                timeline: '1-2 weeks before'
+              },
+              {
+                number: '3',
+                title: 'Licensed Electrical Setup',
+                description: 'Connect with our network of certified electricians or use our detailed wiring guide. Full technical support included at no extra cost.',
+                timeline: 'Before delivery'
+              },
+              {
+                number: '4',
+                title: 'Professional On-Site Assembly',
+                description: 'Our master craftsmen arrive with precision tools, assembling your sauna panels into a weather-sealed sanctuary in hours, not days.',
+                timeline: '4-6 hours'
+              },
+              {
+                number: '5',
+                title: 'Complete Walkthrough & First Steam',
+                description: 'Personal training on all controls, optimal operation, and maintenance. Your first therapeutic session happens the same day.',
+                timeline: 'Installation day'
+              },
+              {
+                number: '6',
+                title: '2-Year Comprehensive Warranty',
+                description: 'Industry-leading coverage with rapid-response support. Local service network across BC ensures peace of mind for years.',
+                timeline: 'Ongoing'
+              }
+            ].map((step, index) => (
+              <motion.li
+                key={index}
+                className="reveal-on-scroll"
+                style={{
+                  background: 'white',
+                  borderRadius: '8px',
+                  padding: '2rem 2rem 2rem 4rem',
+                  border: '1px solid #e5e7eb',
+                  position: 'relative',
+                  marginBottom: '1.5rem',
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
+                  transition: 'all 0.3s ease'
+                }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                  transition: {
+                    type: "spring",
+                    stiffness: 120,
+                    damping: 25,
+                    delay: index * 0.1,
+                    duration: 0.6
+                  }
+                }}
+                viewport={{ once: true, margin: "-50px" }}
+                whileHover={{
+                  boxShadow: '0 4px 16px rgba(191, 88, 19, 0.1)',
+                  transition: { duration: 0.2 }
+                }}
+                itemProp="step"
+                itemScope
+                itemType="https://schema.org/HowToStep"
+              >
+                {/* Step number badge - positioned within card bounds */}
+                <div style={{
+                  position: 'absolute',
+                  top: '2rem',
+                  left: '2rem',
+                  background: '#bf5813',
+                  color: 'white',
+                  width: '32px',
+                  height: '32px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  fontSize: '1rem',
+                  fontWeight: 'bold',
+                  transform: 'translateX(-50%)'
+                }}>{step.number}</div>
+
+
+                <h3 style={{
+                  fontSize: '1.3rem',
+                  fontWeight: 500,
+                  color: '#333',
+                  marginBottom: '1rem',
+                  marginTop: '0.5rem'
+                }}
+                itemProp="name"
+                >{step.title}</h3>
+
+                <p style={{
+                  fontSize: '1rem',
+                  color: '#666',
+                  lineHeight: 1.6,
+                  margin: 0
+                }}
+                itemProp="text"
+                >{step.description}</p>
+              </motion.li>
+            ))}
+          </ol>
+
+          {/* CRO-optimized CTA section */}
+          <div className="reveal-on-scroll" style={{
+            textAlign: 'center',
+            marginTop: '4rem',
+            padding: '3rem',
+            background: 'linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%)',
+            borderRadius: '16px',
+            border: '1px solid #e5e7eb',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.06)',
+            position: 'relative'
+          }}>
+            {/* Luxury accent */}
+            <div style={{
+              position: 'absolute',
+              top: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: '80px',
+              height: '4px',
+              background: 'linear-gradient(90deg, #bf5813, #d4751e)',
+              borderRadius: '0 0 8px 8px'
+            }}></div>
+
+            <h3 style={{
+              fontSize: '1.8rem',
+              fontWeight: 400,
+              color: '#1a1a1a',
+              marginBottom: '1rem',
+              letterSpacing: '-0.01em'
+            }}>
+              Ready to Experience the Ilio Difference?
+            </h3>
+
+            <p style={{
+              fontSize: '1.1rem',
+              color: '#666',
+              marginBottom: '2rem',
+              maxWidth: '600px',
+              margin: '0 auto 2rem'
+            }}>
+              Start your wellness journey with a sauna crafted for BC's unique climate and lifestyle.
+            </p>
+
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '1.5rem',
+              flexWrap: 'wrap',
+              marginBottom: '1.5rem'
+            }}>
+              <motion.a
+                href="/contact"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.875rem 1.75rem',
+                  background: '#bf5813',
+                  color: 'white',
+                  textDecoration: 'none',
+                  borderRadius: '4px',
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  transition: 'all 0.2s ease'
+                }}
+                whileHover={{
+                  background: '#a04d11'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span>Get Started</span>
+              </motion.a>
+
+              <motion.a
+                href="/our-story"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  padding: '0.875rem 1.75rem',
+                  background: 'transparent',
+                  color: '#bf5813',
+                  textDecoration: 'none',
+                  borderRadius: '4px',
+                  fontSize: '1rem',
+                  fontWeight: 500,
+                  border: '1px solid #bf5813',
+                  transition: 'all 0.2s ease'
+                }}
+                whileHover={{
+                  background: '#bf5813',
+                  color: 'white'
+                }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <span>Our Story</span>
+              </motion.a>
+            </div>
+
+            {/* Trust indicators */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              gap: '2rem',
+              fontSize: '0.85rem',
+              color: '#888',
+              flexWrap: 'wrap'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <div style={{
+                  width: '6px',
+                  height: '6px',
+                  backgroundColor: '#bf5813',
+                  borderRadius: '50%'
+                }}></div>
+                <span>5-Star Customer Service</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <div style={{
+                  width: '6px',
+                  height: '6px',
+                  backgroundColor: '#bf5813',
+                  borderRadius: '50%'
+                }}></div>
+                <span>BC-Wide Delivery</span>
+              </div>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem'
+              }}>
+                <div style={{
+                  width: '6px',
+                  height: '6px',
+                  backgroundColor: '#bf5813',
+                  borderRadius: '50%'
+                }}></div>
+                <span>Professional Installation</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

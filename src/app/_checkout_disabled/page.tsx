@@ -574,14 +574,14 @@ export default function CheckoutPage() {
                   Talk to your Ilio Concierge now
                 </p>
                 <a 
-                  href="tel:604-555-0100" 
+                  href="tel:250-597-1244" 
                   style={{ 
                     fontSize: '1.125rem', 
                     color: '#1a1a1a',
                     textDecoration: 'none'
                   }}
                 >
-                  604.555.0100
+                  250.597.1244
                 </a>
               </div>
             </form>

@@ -62,6 +62,16 @@ export const modalContent: ModalContentMap = {
             subtitle: 'Elevated Foundation',
             image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689eb7001ef51bd9be56915e.jpeg',
             text: 'Full ground clearance prevents moisture wicking and allows airflow. No ground contact means no rot, ever. Includes rodent-proof screening around the entire perimeter.'
+          },
+          {
+            subtitle: 'Fluted Cedar & Fascia Detailing',
+            image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68cce933eaa05820b7f4cdb7.jpeg',
+            text: 'Fluted cedar panels with deep vertical grooves add sculptural depth while resisting moisture, insects, and decay. Matte-black fascia and flashing seal edges against rain and salt air, built to withstand Vancouver Island and Greater Vancouver\'s coastal climate.'
+          },
+          {
+            subtitle: 'Black Hardware & Corner Protection',
+            image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68cceaad253906b9200449dc.jpeg',
+            text: 'Matte-black hinges, trims, and corner guards protect high-contact areas and highlight the cedar\'s warm grain. Powder-coated for longevity, they prevent corrosion and wear across coastal and mountain climates from Vancouver Island to Whistler.'
           }
         ]
       }
