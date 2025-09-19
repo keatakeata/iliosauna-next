@@ -548,9 +548,9 @@ export default function SaunasPage() {
 
       {/* Premium Features Section */}
       <section className="ilio-section" style={{ padding: '100px 0', background: '#FFFFFF' }}>
-        <div className="ilio-container">
+        <div className="ilio-container premium-features-header">
           <div className="text-center mb-5">
-            <h2 className="section-header h2-animate reveal-on-scroll" style={{ 
+            <h2 className="section-header h2-animate reveal-on-scroll" style={{
               marginBottom: '2rem',
               fontSize: 'clamp(2rem, 5vw, 3.5rem)',
               fontWeight: 100,
@@ -568,7 +568,10 @@ export default function SaunasPage() {
               marginBottom: '3rem'
             }}>Tap any feature to explore</p>
           </div>
-          
+        </div>
+
+        <div className="premium-features-container">
+
           {/* Desktop Grid View */}
           <div className="desktop-grid" style={{
             display: 'grid',
@@ -671,12 +674,11 @@ export default function SaunasPage() {
                 style={{
                   position: 'relative',
                   height: '400px',
-                  width: '100%',
-                  maxWidth: '100vw',
-                  marginLeft: 'calc(-50vw + 50%)',
-                  marginRight: 'calc(-50vw + 50%)',
+                  width: '100vw',
+                  marginLeft: 0,
+                  marginRight: 0,
                   cursor: 'pointer',
-                  overflowX: 'hidden'
+                  overflow: 'hidden'
                 }}
               >
                 <div style={{
@@ -2753,12 +2755,31 @@ export default function SaunasPage() {
       <Footer />
       
       <style jsx global>{`
+        /* Prevent horizontal scrolling globally */
+        html, body {
+          overflow-x: hidden !important;
+          max-width: 100% !important;
+        }
+
+        /* Premium Features Container Fixes */
+        .premium-features-container {
+          width: 100%;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
+        }
+
         @media (max-width: 1024px) {
           .desktop-grid {
             display: none !important;
           }
           .mobile-tablet-grid {
             display: block !important;
+          }
+          .premium-features-container {
+            padding: 0 !important;
+            max-width: none !important;
+            overflow: hidden;
           }
         }
         @media (max-width: 768px) {

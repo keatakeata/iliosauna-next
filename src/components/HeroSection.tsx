@@ -69,8 +69,8 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % slides.length);
-    }, 6000); // 6 seconds per slide
-    
+    }, 4000); // 4 seconds per slide - matches Sonos page timing
+
     return () => clearInterval(interval);
   }, [slides.length]);
 
