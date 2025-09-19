@@ -221,15 +221,16 @@ export default function SaunasPage() {
   }, [activeModal, fullscreenImage]);
 
   return (
-    <>
+    <div style={{ overflowX: 'hidden', width: '100%' }}>
       <ScrollAnimations />
       <Navbar animated={true} />
       
       {/* Hero Slideshow Section */}
-      <section style={{ 
+      <section style={{
         position: 'relative',
         height: '100vh',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        overflowX: 'hidden'
       }}>
         <div 
           className="hero-zoom-wrapper"
@@ -670,10 +671,12 @@ export default function SaunasPage() {
                 style={{
                   position: 'relative',
                   height: '400px',
-                  width: '100vw',
+                  width: '100%',
+                  maxWidth: '100vw',
                   marginLeft: 'calc(-50vw + 50%)',
                   marginRight: 'calc(-50vw + 50%)',
-                  cursor: 'pointer'
+                  cursor: 'pointer',
+                  overflowX: 'hidden'
                 }}
               >
                 <div style={{
@@ -2778,6 +2781,6 @@ export default function SaunasPage() {
           }
         }
       `}</style>
-    </>
+    </div>
   );
 }
