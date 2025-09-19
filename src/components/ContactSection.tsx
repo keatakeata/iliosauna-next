@@ -30,7 +30,7 @@ export default function ContactSection({ homepageData }: ContactSectionProps) {
         </div>
 
         <div className="text-center reveal-on-scroll reveal-delay-3" style={{ marginTop: '3rem' }}>
-          <Link href={contactData?.buttonLink || '/contact'} className="btn-primary" style={{
+          <Link href={contactData?.buttonLink || '/saunas'} className="btn-primary" style={{
             display: 'inline-block',
             padding: '0.75rem 2rem',
             background: 'var(--color-primary)',
