@@ -46,7 +46,11 @@
       "Bash(start http://localhost:4448/journal/the-proven-health-benefits-of-finnish-saunas-why-vancouverites-are-embracing-the-heat)",
       "Bash(npx rimraf:*)",
       "Bash(npx next lint:*)",
-      "Bash(git restore:*)"
+      "Bash(git restore:*)",
+      "mcp__playwright__playwright_navigate",
+      "mcp__playwright__playwright_screenshot",
+      "mcp__playwright__playwright_console_logs",
+      "mcp__playwright__playwright_evaluate"
     ],
     "deny": [],
     "ask": []

@@ -120,7 +120,7 @@ export default function ContactPage() {
       },
       {
         question: 'How long does delivery take?',
-        answer: 'Delivery typically takes 4-6 weeks from order confirmation. We provide tracking and white-glove delivery service throughout British Columbia.'
+        answer: 'Delivery typically takes 2-4 weeks from order confirmation. We provide tracking and white-glove delivery service throughout British Columbia.'
       }
     ],
     serviceAreas: {
@@ -258,7 +258,7 @@ export default function ContactPage() {
     },
     {
       question: "How long does delivery take?",
-      answer: "Delivery typically takes 4-6 weeks from order confirmation. We provide tracking and white-glove delivery service throughout British Columbia."
+      answer: "Delivery typically takes 2-4 weeks from order confirmation. We provide tracking and white-glove delivery service throughout British Columbia."
     }
   ];
 
