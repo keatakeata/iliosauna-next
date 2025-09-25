@@ -28,15 +28,36 @@ export default function NewsletterSection({ homepageData }: NewsletterSectionPro
     setIsSubmitting(true);
     setStatus('processing');
 
-    // Here you would integrate with your newsletter service
-    // For now, we'll just simulate it
-    setTimeout(() => {
-      setStatus('success');
-      setEmail('');
+    try {
+      const response = await fetch('/api/newsletter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setStatus('success');
+        setEmail('');
+        // Auto-clear success message after 5 seconds
+        setTimeout(() => setStatus(''), 5000);
+      } else {
+        setStatus('error');
+        console.error('Newsletter signup failed:', result.message);
+        // Auto-clear error message after 5 seconds
+        setTimeout(() => setStatus(''), 5000);
+      }
+    } catch (error) {
+      console.error('Newsletter signup error:', error);
+      setStatus('error');
+      // Auto-clear error message after 5 seconds
+      setTimeout(() => setStatus(''), 5000);
+    } finally {
       setIsSubmitting(false);
-      // Auto-clear success message after 3 seconds
-      setTimeout(() => setStatus(''), 3000);
-    }, 1500);
+    }
   };
 
   return (
@@ -128,8 +149,9 @@ export default function NewsletterSection({ homepageData }: NewsletterSectionPro
             <div style={{
               marginTop: '1.5rem',
               padding: '1rem 1.5rem',
-              background: status === 'processing' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.3)',
+              background: status === 'processing' ? 'rgba(255, 255, 255, 0.1)' :
+                         status === 'error' ? 'rgba(255, 107, 107, 0.05)' : 'rgba(255, 255, 255, 0.05)',
+              border: status === 'error' ? '1px solid rgba(255, 107, 107, 0.4)' : '1px solid rgba(255, 255, 255, 0.3)',
               borderRadius: '8px',
               maxWidth: '400px',
               margin: '1.5rem auto 0',
@@ -166,6 +188,15 @@ export default function NewsletterSection({ homepageData }: NewsletterSectionPro
                   textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
                 }}>
                   ✓ Thank you for subscribing!
+                </div>
+              )}
+              {status === 'error' && (
+                <div style={{
+                  color: '#ff6b6b',
+                  fontWeight: '600',
+                  textShadow: '0 1px 2px rgba(0, 0, 0, 0.3)'
+                }}>
+                  ⚠ Something went wrong. Please try again or contact us directly.
                 </div>
               )}
             </div>

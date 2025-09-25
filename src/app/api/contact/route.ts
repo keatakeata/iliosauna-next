@@ -69,22 +69,84 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Add interest-based tags
-    if (contactData.customFields?.primary_interest) {
-      const interestTags: { [key: string]: string } = {
-        'Wellness/Therapy': 'Interest: Wellness/Therapy',
-        'Family Bonding': 'Interest: Family',
-        'Entertaining Guests': 'Interest: Entertainment',
-        'Retreat/Airbnb': 'Interest: Revenue Generation',
-        'Year-Round Outdoor Living': 'Interest: Outdoor Living'
-      };
-      
-      const interestTag = interestTags[contactData.customFields.primary_interest];
-      if (interestTag && !payload.tags.includes(interestTag)) {
-        payload.tags.push(interestTag);
+    // Custom fields are already mapped above - no need for additional interest tags
+
+    // FIRST: Check if contact already exists before trying to create
+    console.log('🔍 Checking for existing contact before creating...');
+    try {
+      const existingContactsResponse = await axios.get(
+        `${GHL_API_BASE}/contacts/?locationId=${GHL_LOCATION_ID}&limit=100`,
+        {
+          headers: {
+            'Authorization': `Bearer ${GHL_ACCESS_TOKEN}`,
+            'Content-Type': 'application/json',
+            'Version': '2021-07-28'
+          },
+          timeout: 10000
+        }
+      );
+
+      const contacts = existingContactsResponse.data.contacts || [];
+      const existingContact = contacts.find((contact: any) =>
+        contact.email?.toLowerCase() === contactData.email.toLowerCase()
+      );
+
+      if (existingContact) {
+        console.log('📧 Found existing contact, updating instead of creating:', existingContact.id);
+
+        // Merge tags: keep existing tags and add new ones
+        const existingTags = existingContact.tags || [];
+        const newTags = payload.tags || [];
+        const mergedTags = [...new Set([...existingTags, ...newTags])]; // Remove duplicates
+
+        // Prepare update payload - only update fields that have values
+        const updatePayload: any = {
+          tags: mergedTags
+        };
+
+        // Add fields only if they have values (don't overwrite with empty values)
+        if (firstName) updatePayload.firstName = firstName;
+        if (lastName) updatePayload.lastName = lastName;
+        if (contactData.phone) updatePayload.phone = contactData.phone;
+        if (payload.source) updatePayload.source = payload.source;
+
+        // Add custom fields if they exist
+        if (payload.customFields && payload.customFields.length > 0) {
+          updatePayload.customFields = payload.customFields;
+        }
+
+        console.log('🔄 Updating existing contact with:', JSON.stringify(updatePayload, null, 2));
+
+        // Update the existing contact
+        const updateResponse = await axios.put(
+          `${GHL_API_BASE}/contacts/${existingContact.id}`,
+          updatePayload,
+          {
+            headers: {
+              'Authorization': `Bearer ${GHL_ACCESS_TOKEN}`,
+              'Content-Type': 'application/json',
+              'Version': '2021-07-28'
+            },
+            timeout: 10000
+          }
+        );
+
+        console.log('✅ Contact updated successfully:', updateResponse.data);
+
+        return NextResponse.json({
+          success: true,
+          contactId: existingContact.id,
+          message: 'Thank you! Your information has been updated and we will be in touch soon.',
+          updated: true,
+          data: updateResponse.data
+        });
       }
+    } catch (searchError: any) {
+      console.error('Error searching for existing contact:', searchError.message);
+      // Continue with creating new contact if search fails
     }
 
+    console.log('🚀 No existing contact found, creating new contact...');
     console.log('🚀 Sending to GHL:', JSON.stringify(payload, null, 2));
     console.log('🌐 API URL:', `${GHL_API_BASE}/contacts/`);
 
@@ -118,15 +180,100 @@ export async function POST(request: NextRequest) {
       status: error.response?.status
     });
     
-    // Handle duplicate contact error gracefully
-    if (error.response?.status === 400 && 
-        (error.response?.data?.message?.includes('duplicate') || 
+    // Handle duplicate contact error by updating existing contact
+    if (error.response?.status === 400 &&
+        (error.response?.data?.message?.includes('duplicate') ||
          error.response?.data?.message?.includes('already exists'))) {
-      return NextResponse.json({
-        success: true,
-        message: 'Thank you! We already have your information and will be in touch soon.',
-        duplicate: true
-      });
+
+      console.log('🔄 Duplicate contact detected, attempting to update existing contact...');
+
+      try {
+        // Get contacts and search for the email - GHL doesn't have a direct email search
+        const searchResponse = await axios.get(
+          `${GHL_API_BASE}/contacts/?locationId=${GHL_LOCATION_ID}&limit=100`,
+          {
+            headers: {
+              'Authorization': `Bearer ${GHL_ACCESS_TOKEN}`,
+              'Content-Type': 'application/json',
+              'Version': '2021-07-28'
+            },
+            timeout: 10000
+          }
+        );
+
+        // Find the existing contact by email
+        const contacts = searchResponse.data.contacts || [];
+        const existingContact = contacts.find((contact: any) =>
+          contact.email?.toLowerCase() === contactData.email.toLowerCase()
+        );
+
+        if (!existingContact?.id) {
+          console.error('Could not find existing contact ID for update', searchResponse.data);
+          return NextResponse.json({
+            success: true,
+            message: 'Thank you! We already have your information and will be in touch soon.',
+            duplicate: true
+          });
+        }
+
+        console.log('📧 Found existing contact:', existingContact.id, 'with current tags:', existingContact.tags);
+
+        // Merge tags: keep existing tags and add new ones
+        const existingTags = existingContact.tags || [];
+        const newTags = payload.tags || [];
+        const mergedTags = [...new Set([...existingTags, ...newTags])]; // Remove duplicates
+
+        // Prepare update payload - only update fields that have values
+        const updatePayload: any = {
+          tags: mergedTags
+        };
+
+        // Add fields only if they have values (don't overwrite with empty values)
+        if (firstName) updatePayload.firstName = firstName;
+        if (lastName) updatePayload.lastName = lastName;
+        if (contactData.phone) updatePayload.phone = contactData.phone;
+        if (payload.source) updatePayload.source = payload.source;
+
+        // Add custom fields if they exist
+        if (payload.customFields && payload.customFields.length > 0) {
+          updatePayload.customFields = payload.customFields;
+        }
+
+        console.log('🔄 Updating existing contact with:', JSON.stringify(updatePayload, null, 2));
+
+        // Update the existing contact
+        const updateResponse = await axios.put(
+          `${GHL_API_BASE}/contacts/${existingContact.id}`,
+          updatePayload,
+          {
+            headers: {
+              'Authorization': `Bearer ${GHL_ACCESS_TOKEN}`,
+              'Content-Type': 'application/json',
+              'Version': '2021-07-28'
+            },
+            timeout: 10000
+          }
+        );
+
+        console.log('✅ Contact updated successfully:', updateResponse.data);
+
+        return NextResponse.json({
+          success: true,
+          contactId: existingContact.id,
+          message: 'Thank you! Your information has been updated and we will be in touch soon.',
+          updated: true,
+          data: updateResponse.data
+        });
+
+      } catch (updateError: any) {
+        console.error('Error updating existing contact:', updateError.message);
+        // Fallback to original duplicate handling
+        return NextResponse.json({
+          success: true,
+          message: 'Thank you! We already have your information and will be in touch soon.',
+          duplicate: true
+        });
+      }
     }
 
     // Handle authorization errors
