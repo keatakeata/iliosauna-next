@@ -234,7 +234,7 @@ export default function SaunasPage() {
     },
     {
       question: "What areas do you serve?",
-      answer: "We serve Vancouver Island and British Columbia, providing delivery and installation of our premium sauna products."
+      answer: "We serve Vancouver Island, Metro Vancouver, Fraser Valley, and Sea to Sky & Beyond regions. Our service areas include Victoria, Vancouver, Surrey, Burnaby, Nanaimo, Whistler, Squamish, and many more cities across British Columbia. Contact us from Sidney for professional delivery and installation."
     },
     {
       question: "What heating options are available?",

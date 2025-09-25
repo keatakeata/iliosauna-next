@@ -33,7 +33,7 @@ export default function StructuredData({
     '@type': 'LocalBusiness',
     '@id': `${baseUrl}/#organization`,
     name: 'Ilio Sauna',
-    description: 'Premium cedar sauna manufacturer specializing in outdoor barrel and cabin saunas. Serving Vancouver Island and BC with luxury wellness solutions.',
+    description: 'Premium cedar sauna manufacturer specializing in outdoor barrel and cabin saunas. Professional delivery and installation across British Columbia.',
     url: baseUrl,
     logo: {
       '@type': 'ImageObject',
@@ -42,32 +42,110 @@ export default function StructuredData({
       height: 100
     },
     image: `${baseUrl}/ilio-logo-light.svg`,
-    telephone: '+1-250-555-0123',
-    email: 'info@iliosauna.com',
+    telephone: '+1-250-597-1244',
+    email: 'hello@iliosauna.com',
     address: {
       '@type': 'PostalAddress',
-      addressLocality: 'Victoria',
+      streetAddress: '404 – 2471 Sidney Ave',
+      addressLocality: 'Sidney',
       addressRegion: 'BC',
+      postalCode: 'V8L3A6',
       addressCountry: 'CA'
     },
     geo: {
       '@type': 'GeoCoordinates',
-      latitude: 48.4284,
-      longitude: -123.3656
+      latitude: 48.6523,
+      longitude: -123.3991
     },
     areaServed: [
+      // Vancouver Island
       {
         '@type': 'Place',
-        name: 'Vancouver Island'
+        name: 'Vancouver Island',
+        containedInPlace: {
+          '@type': 'Place',
+          name: 'British Columbia, Canada'
+        },
+        containsPlace: [
+          { '@type': 'Place', name: 'Victoria, BC' },
+          { '@type': 'Place', name: 'Saanich, BC' },
+          { '@type': 'Place', name: 'Oak Bay, BC' },
+          { '@type': 'Place', name: 'Sidney, BC' },
+          { '@type': 'Place', name: 'Langford, BC' },
+          { '@type': 'Place', name: 'Colwood, BC' },
+          { '@type': 'Place', name: 'Sooke, BC' },
+          { '@type': 'Place', name: 'Nanaimo, BC' },
+          { '@type': 'Place', name: 'Courtenay, BC' },
+          { '@type': 'Place', name: 'Campbell River, BC' },
+          { '@type': 'Place', name: 'Duncan, BC' },
+          { '@type': 'Place', name: 'Parksville, BC' },
+          { '@type': 'Place', name: 'Qualicum Beach, BC' }
+        ]
       },
+      // Metro Vancouver
       {
         '@type': 'Place',
-        name: 'British Columbia'
+        name: 'Metro Vancouver',
+        containedInPlace: {
+          '@type': 'Place',
+          name: 'British Columbia, Canada'
+        },
+        containsPlace: [
+          { '@type': 'Place', name: 'Vancouver, BC' },
+          { '@type': 'Place', name: 'Burnaby, BC' },
+          { '@type': 'Place', name: 'Surrey, BC' },
+          { '@type': 'Place', name: 'Richmond, BC' },
+          { '@type': 'Place', name: 'Coquitlam, BC' },
+          { '@type': 'Place', name: 'Delta, BC' },
+          { '@type': 'Place', name: 'North Vancouver, BC' },
+          { '@type': 'Place', name: 'West Vancouver, BC' },
+          { '@type': 'Place', name: 'New Westminster, BC' },
+          { '@type': 'Place', name: 'Maple Ridge, BC' },
+          { '@type': 'Place', name: 'Port Moody, BC' },
+          { '@type': 'Place', name: 'White Rock, BC' }
+        ]
+      },
+      // Fraser Valley
+      {
+        '@type': 'Place',
+        name: 'Fraser Valley',
+        containedInPlace: {
+          '@type': 'Place',
+          name: 'British Columbia, Canada'
+        },
+        containsPlace: [
+          { '@type': 'Place', name: 'Abbotsford, BC' },
+          { '@type': 'Place', name: 'Chilliwack, BC' },
+          { '@type': 'Place', name: 'Mission, BC' },
+          { '@type': 'Place', name: 'Hope, BC' },
+          { '@type': 'Place', name: 'Langley Township, BC' },
+          { '@type': 'Place', name: 'Harrison Hot Springs, BC' }
+        ]
+      },
+      // Sea to Sky & Beyond
+      {
+        '@type': 'Place',
+        name: 'Sea to Sky & Beyond',
+        containedInPlace: {
+          '@type': 'Place',
+          name: 'British Columbia, Canada'
+        },
+        containsPlace: [
+          { '@type': 'Place', name: 'Squamish, BC' },
+          { '@type': 'Place', name: 'Whistler, BC' },
+          { '@type': 'Place', name: 'Pemberton, BC' },
+          { '@type': 'Place', name: 'Gibsons, BC' },
+          { '@type': 'Place', name: 'Sechelt, BC' },
+          { '@type': 'Place', name: 'Powell River, BC' },
+          { '@type': 'Place', name: 'Salt Spring Island, BC' },
+          { '@type': 'Place', name: 'Galiano Island, BC' },
+          { '@type': 'Place', name: 'Pender Island, BC' }
+        ]
       }
     ],
     priceRange: '$$$',
-    paymentAccepted: ['Cash', 'Credit Card', 'Interac'],
-    openingHours: 'Mo-Fr 09:00-17:00',
+    paymentAccepted: ['Cash', 'Credit Card', 'Interac', 'E-transfer'],
+    openingHours: ['Mo-Fr 09:00-18:00', 'Sa 10:00-16:00', 'Su 12:00-16:00'],
     sameAs: [
       'https://www.facebook.com/iliosauna',
       'https://www.instagram.com/iliosauna'
