@@ -79,7 +79,7 @@ export default function ContactPage() {
       phone: '250-597-1244',
       email: 'hello@iliosauna.com',
       address: {
-        street: '404 – 2471 Sideny Ave',
+        street: '404 – 2471 Sidney Ave',
         city: 'Sidney',
         state: 'BC',
         zip: 'V8L3A6',
@@ -471,7 +471,7 @@ export default function ContactPage() {
                   Ilio Sauna
                 </h3>
                 <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.8 }}>
-                  404 – 2471 Sideny Ave<br />
+                  404 – 2471 Sidney Ave<br />
                   Sidney, BC V8L3A6<br />
                   Canada
                 </p>

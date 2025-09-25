@@ -441,7 +441,15 @@ export default function SaunasPage() {
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>SIZE</div>
               <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>4-6 person capacity</div>
             </div>
-            
+
+            <div className="reveal-on-scroll reveal-delay-3" style={{ marginBottom: '2rem' }}>
+              <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>DIMENSIONS</div>
+              <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>
+                <div>Exterior: 6'-3" w × 9' d × 8'-5" h</div>
+                <div style={{ marginTop: '0.25rem' }}>Interior: 5'-5" × 6'-3"</div>
+              </div>
+            </div>
+
             <div className="reveal-on-scroll reveal-delay-4" style={{ marginBottom: '2rem' }}>
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>HEATER</div>
               <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>9kW HUUM DROP Finnish heater</div>

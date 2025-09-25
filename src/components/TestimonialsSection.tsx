@@ -31,7 +31,7 @@ export default function TestimonialsSection({ homepageData }: TestimonialsSectio
       location: "Greater Vancouver"
     },
     {
-      quote: "Daily sauna sessions have become our family's favorite ritual. Thank you, Ilio!",
+      quote: "Daily sauna sessions have become our family's favourite ritual. Thank you, Ilio!",
       author: "Jennifer L.",
       location: "Victoria, BC"
     },

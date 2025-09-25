@@ -13,8 +13,8 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
   const scrollPositionRef = useRef(0);
   const { totalItems, openCart } = useCart();
   
-  const whiteLogo = 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f5bea48c9fcffec3e.svg';
-  const blackLogo = 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f9042cd3de1f9c712.svg';
+  const whiteLogo = '/ilio-logo-light.svg';
+  const blackLogo = '/ilio-logo-dark.svg';
 
   useEffect(() => {
     const handleScroll = () => {

@@ -22,9 +22,9 @@ export const metadata: Metadata = {
   description: "Experience luxury outdoor saunas crafted with BC cedar. Transform your backyard into a wellness retreat with our premium cedar barrel and cabin saunas.",
   keywords: "cedar sauna, outdoor sauna, barrel sauna, cabin sauna, Vancouver Island, BC, wellness, luxury sauna",
   icons: {
-    icon: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f5bea48c9fcffec3e.svg",
-    shortcut: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f5bea48c9fcffec3e.svg",
-    apple: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/689c087f5bea48c9fcffec3e.svg",
+    icon: "/ilio-logo-light.svg",
+    shortcut: "/ilio-logo-light.svg",
+    apple: "/ilio-logo-light.svg",
   },
 };
 

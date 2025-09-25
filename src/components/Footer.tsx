@@ -58,7 +58,7 @@ export default function Footer() {
               LOCATION
             </h4>
             <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.9rem' }}>
-              404 – 2471 Sideny Ave<br />
+              404 – 2471 Sidney Ave<br />
               Sidney, BC V8L3A6
             </p>
           </div>
