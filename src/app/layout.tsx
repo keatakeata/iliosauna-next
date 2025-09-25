@@ -8,6 +8,7 @@ import { ClerkProviderWrapper } from "@/components/ClerkProviderWrapper";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/CartDrawer";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SupabaseProvider } from "@/components/SupabaseProvider";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import "./globals.css";
@@ -60,6 +61,7 @@ export default function RootLayout({
           </ClerkProviderWrapper>
         </ErrorBoundary>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
