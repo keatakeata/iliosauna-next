@@ -111,8 +111,8 @@ export default function StructuredData({
       '@type': 'ImageObject',
       url: `${baseUrl}/ilio-logo-light.svg`
     },
-    datePublished: new Date().toISOString(),
-    dateModified: new Date().toISOString()
+    datePublished: '2024-01-01T00:00:00.000Z',
+    dateModified: '2024-12-01T00:00:00.000Z'
   };
 
   // Build the @graph array
@@ -194,6 +194,7 @@ export default function StructuredData({
     <script
       type="application/ld+json"
       dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData, null, 2) }}
+      suppressHydrationWarning={true}
     />
   );
 }
