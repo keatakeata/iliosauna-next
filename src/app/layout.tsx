@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import Script from "next/script";
 
 // Force dynamic rendering globally to prevent DataCloneError
 export const dynamic = 'force-dynamic';
@@ -35,6 +36,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <Script
+        src="https://www.googletagmanager.com/gtag/js?id=G-FHGM890ENW"
+        strategy="afterInteractive"
+      />
+      <Script id="google-analytics" strategy="afterInteractive">
+        {`
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FHGM890ENW');
+        `}
+      </Script>
       <body className="font-sans antialiased" suppressHydrationWarning={true}>
         <ErrorBoundary>
           <ClerkProviderWrapper>
