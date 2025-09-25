@@ -290,7 +290,13 @@ export default function SaunasPage() {
             >
               <img
                 src={slide}
-                alt={`Sauna ${index + 1}`}
+                alt={
+                  index === 0 ? "Premium cedar barrel sauna with R-14 insulation and dual barriers" :
+                  index === 1 ? "Luxury cabin sauna featuring tempered glass doors and BC cedar frame" :
+                  index === 2 ? "Professional sauna installation with electric and wood-burning heater options" :
+                  index === 3 ? "Handcrafted outdoor sauna with premium hardware and weather-resistant construction" :
+                  "Contemporary cedar sauna showcasing Scandinavian craftsmanship and design excellence"
+                }
                 style={{
                   width: '100%',
                   height: '100%',
@@ -655,7 +661,7 @@ export default function SaunasPage() {
               >
                 <LazyImage 
                   src={feature.image}
-                  alt={feature.title}
+                  alt={`${feature.title} - Premium sauna construction detail showing quality materials and craftsmanship`}
                 />
                 <div 
                   className="card-overlay"
@@ -732,7 +738,7 @@ export default function SaunasPage() {
                 }} />
                 <img 
                   src={feature.image}
-                  alt={feature.title}
+                  alt={`${feature.title} - Premium sauna construction detail showing quality materials and craftsmanship`}
                   style={{
                     position: 'absolute',
                     top: 0,
@@ -2760,7 +2766,7 @@ export default function SaunasPage() {
         >
           <img
             src={fullscreenImage}
-            alt="Fullscreen view"
+            alt="Detailed view of premium cedar sauna construction and craftsmanship"
             style={{
               maxWidth: '95%',
               maxHeight: '95%',

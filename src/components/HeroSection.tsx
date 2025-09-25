@@ -114,7 +114,14 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={slide}
-              alt={`Luxury sauna ${index + 1}`}
+              alt={
+                index === 0 ? "Premium cedar barrel sauna in outdoor forest setting - Ilio Sauna Vancouver Island" :
+                index === 1 ? "Luxury outdoor sauna with panoramic glass doors showcasing BC craftsmanship" :
+                index === 2 ? "Cedar cabin sauna with premium insulation and tempered glass windows" :
+                index === 3 ? "Handcrafted barrel sauna featuring sustainable BC cedar construction" :
+                index === 4 ? "Modern sauna design with professional installation in British Columbia" :
+                "Contemporary cedar sauna with Scandinavian-inspired luxury design"
+              }
               style={{
                 width: '100%',
                 height: '100%',
