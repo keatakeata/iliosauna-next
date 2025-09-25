@@ -12,6 +12,8 @@ import Link from 'next/link';
 import { modalContent } from './modalContent';
 import { useCart } from '@/context/CartContext';
 import { FEATURE_FLAGS } from '@/lib/feature-flags';
+import StructuredData from '@/components/StructuredData';
+import Head from 'next/head';
 
 // Lazy Loading Image Component for Performance
 function LazyImage({ src, alt, style }: { src: string; alt: string; style?: React.CSSProperties }) {
@@ -220,8 +222,39 @@ export default function SaunasPage() {
     }
   }, [activeModal, fullscreenImage]);
 
+  const breadcrumbs = [
+    { name: 'Home', url: '/' },
+    { name: 'Saunas', url: '/saunas' }
+  ];
+
+  const faqItems = [
+    {
+      question: "What types of saunas do you offer?",
+      answer: "We offer premium cedar barrel saunas and cabin saunas, all crafted with BC cedar and featuring high-quality construction including 2×4 frames, Rockwool R-14 insulation, and dual barriers."
+    },
+    {
+      question: "What areas do you serve?",
+      answer: "We serve Vancouver Island and British Columbia, providing delivery and installation of our premium sauna products."
+    },
+    {
+      question: "What heating options are available?",
+      answer: "Our saunas come with premium electric and wood-burning heater options to suit your preferences and setup requirements."
+    },
+    {
+      question: "What's included with the sauna?",
+      answer: "Each sauna includes tempered glass doors and windows, cedar frame construction, premium hardware, and professional installation services."
+    }
+  ];
+
   return (
     <div style={{ overflowX: 'hidden', width: '100%' }}>
+      <StructuredData
+        pageType="product"
+        pageTitle="Premium Cedar Saunas - Barrel & Cabin Saunas | Ilio Sauna"
+        pageDescription="Discover our collection of premium cedar saunas including barrel and cabin styles. Crafted with BC cedar, featuring R-14 insulation and premium components."
+        breadcrumbs={breadcrumbs}
+        faqItems={faqItems}
+      />
       <ScrollAnimations />
       <Navbar animated={true} />
       

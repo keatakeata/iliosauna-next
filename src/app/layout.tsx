@@ -11,6 +11,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SupabaseProvider } from "@/components/SupabaseProvider";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import StructuredData from "@/components/StructuredData";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -28,6 +29,43 @@ export const metadata: Metadata = {
     shortcut: "/ilio-logo-light.svg",
     apple: "/ilio-logo-light.svg",
   },
+  metadataBase: new URL('https://iliosauna.com'),
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    title: "Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
+    description: "Experience luxury outdoor saunas crafted with BC cedar. Transform your backyard into a wellness retreat.",
+    url: 'https://iliosauna.com',
+    siteName: 'Ilio Sauna',
+    images: [
+      {
+        url: '/ilio-logo-light.svg',
+        width: 1200,
+        height: 630,
+        alt: 'Ilio Sauna Logo',
+      },
+    ],
+    locale: 'en_US',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: "Ilio Sauna - Premium Cedar Saunas",
+    description: "Experience luxury outdoor saunas crafted with BC cedar.",
+    images: ['/ilio-logo-light.svg'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
 };
 
 export default function RootLayout({
@@ -37,6 +75,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
+      <head>
+        <StructuredData />
+      </head>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-FHGM890ENW"
         strategy="afterInteractive"
