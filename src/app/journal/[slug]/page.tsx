@@ -474,7 +474,7 @@ export default function BlogPostPage() {
           <div style={{ margin: '2rem 0' }}>
             <img
               src={getImageUrl(value, 800, 600)}
-              alt={value.alt || ''}
+              alt={value.alt || 'Sauna wellness and lifestyle content image from Ilio Sauna journal'}
               style={{
                 width: '100%',
                 height: 'auto',
@@ -810,7 +810,7 @@ export default function BlogPostPage() {
         {post.mainImage?.asset ? (
           <img
             src={getImageUrl(post.mainImage, 1920, 1080)}
-            alt={post.title}
+            alt={`${post.title} - Sauna wellness article hero image`}
             style={{
               width: '100%',
               height: '100%',
@@ -1704,7 +1704,7 @@ export default function BlogPostPage() {
                     {relatedPost.mainImage?.asset && (
                       <img
                         src={getImageUrl(relatedPost.mainImage, 400, 250)}
-                        alt={relatedPost.title}
+                        alt={`${relatedPost.title} - Related sauna wellness article`}
                         style={{
                           width: '100%',
                           height: '200px',

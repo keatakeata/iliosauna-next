@@ -84,7 +84,7 @@ export default function SaunaShowcase({ homepageData }: SaunaShowcaseProps) {
               }}>
                 <img
                   src={sauna.imageUrl || (sauna.imageFile ? sanityImageUrl(sauna.imageFile.asset._ref, 600) : (sauna.image?.asset ? sanityImageUrl(sauna.image.asset._ref, 600) : sauna.image))}
-                  alt={sauna.name}
+                  alt={`${sauna.name} - Premium cedar sauna showcase featuring BC craftsmanship`}
                   style={{
                     position: 'absolute',
                     top: 0,

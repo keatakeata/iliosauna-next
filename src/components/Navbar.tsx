@@ -162,7 +162,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img 
               src={isScrolled ? blackLogo : whiteLogo} 
-              alt="Ilio" 
+              alt="Ilio Sauna - Premium Cedar Saunas Vancouver Island BC" 
               style={{ 
                 height: '38.5px',
                 width: 'auto',

@@ -437,7 +437,7 @@ export default function OurStoryPage() {
                   slide.imageUrl ||
                   'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48e9d671d8e63bf298.jpeg'
                 }
-                alt={slide.alt || `Slide ${index + 1}`}
+                alt={slide.alt || `Ilio Sauna story and craftsmanship showcase image ${index + 1} - Premium BC cedar sauna manufacturing`}
                 style={{
                   width: '100%',
                   height: '100%',
