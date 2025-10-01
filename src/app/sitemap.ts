@@ -37,9 +37,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ]
 
-  // TODO: Add dynamic blog/journal pages when you have content
-  // You can fetch these from your CMS/database
-  const dynamicPages: MetadataRoute.Sitemap = []
+  // Blog/journal articles
+  const blogArticles: MetadataRoute.Sitemap = [
+    {
+      url: `${baseUrl}/journal/the-proven-health-benefits-of-finnish-saunas-why-vancouverites-are-embracing-the-heat`,
+      lastModified: new Date('2024-12-01'),
+      changeFrequency: 'monthly' as const,
+      priority: 0.6,
+    },
+  ]
 
-  return [...staticPages, ...dynamicPages]
+  return [...staticPages, ...blogArticles]
 }
