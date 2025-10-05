@@ -415,8 +415,8 @@ export default function Footer() {
         <style jsx>{`
           @media (max-width: 900px) {
             .footer-grid {
-              grid-template-columns: 1fr 2fr 1fr !important;
-              gap: 2rem 0.75rem !important;
+              grid-template-columns: 0.8fr 1.4fr 0.8fr !important;
+              gap: 2rem 0.5rem !important;
               grid-template-areas:
                 "logo logo newsletter"
                 "quicklinks location connect" !important;
@@ -427,44 +427,31 @@ export default function Footer() {
             }
             .footer-grid > div:nth-child(2) {
               grid-area: quicklinks;
-              padding-right: 0.5rem;
+            }
+            .footer-grid > div:nth-child(2) h4,
+            .footer-grid > div:nth-child(2) a {
+              font-size: 0.75rem !important;
             }
             .footer-grid > div:nth-child(3) {
               grid-area: connect;
-              padding-left: 0.5rem;
             }
-            .footer-grid > div:nth-child(3) :global(div) {
-              align-items: flex-end !important;
+            .footer-grid > div:nth-child(3) h4 {
+              font-size: 0.75rem !important;
+            }
+            .footer-grid > div:nth-child(3) a {
+              font-size: 0.75rem !important;
             }
             .footer-grid > div:nth-child(4) {
               grid-area: location;
-              padding: 0 0.5rem;
+            }
+            .footer-grid > div:nth-child(4) h4 {
+              font-size: 0.75rem !important;
+            }
+            .footer-grid > div:nth-child(4) span {
+              font-size: 0.75rem !important;
             }
             .footer-grid > div:nth-child(5) {
               grid-area: newsletter;
-            }
-
-            .footer-bottom {
-              display: grid !important;
-              grid-template-columns: 1fr 1fr !important;
-              grid-template-rows: auto auto !important;
-              gap: 1rem !important;
-              text-align: center !important;
-            }
-            .footer-bottom :global(.footer-link:first-child) {
-              grid-column: 1 / 2;
-              grid-row: 1 / 2;
-              text-align: left !important;
-            }
-            .footer-bottom :global(.footer-link:last-child) {
-              grid-column: 2 / 3;
-              grid-row: 1 / 2;
-              text-align: right !important;
-            }
-            .footer-bottom :global(.footer-copyright) {
-              grid-column: 1 / -1;
-              grid-row: 2 / 3;
-              text-align: center !important;
             }
           }
         `}</style>
