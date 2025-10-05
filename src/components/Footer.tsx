@@ -364,7 +364,7 @@ export default function Footer() {
         </div>
 
         {/* Bottom Section */}
-        <div style={{
+        <div className="footer-bottom" style={{
           borderTop: '1px solid rgba(255,255,255,0.1)',
           paddingTop: '1.5rem',
           display: 'flex',
@@ -376,51 +376,47 @@ export default function Footer() {
           fontSize: '0.75rem',
           color: 'rgba(255,255,255,0.4)'
         }}>
-          <div style={{
-            display: 'flex',
-            gap: '1.5rem',
-            flexWrap: 'wrap'
-          }}>
-            <Link
-              href="/terms"
-              style={{
-                color: 'rgba(255,255,255,0.4)',
-                textDecoration: 'none',
-                transition: 'color 0.3s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#BF5813'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
-            >
-              Terms & Conditions
-            </Link>
-            <Link
-              href="/privacy"
-              style={{
-                color: 'rgba(255,255,255,0.4)',
-                textDecoration: 'none',
-                transition: 'color 0.3s ease'
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.color = '#BF5813'}
-              onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
-            >
-              Privacy Policy
-            </Link>
-          </div>
-          <p style={{
+          <Link
+            href="/terms"
+            className="footer-link"
+            style={{
+              color: 'rgba(255,255,255,0.4)',
+              textDecoration: 'none',
+              transition: 'color 0.3s ease'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#BF5813'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
+          >
+            Terms & Conditions
+          </Link>
+          <p className="footer-copyright" style={{
             margin: 0,
             color: 'rgba(255,255,255,0.4)',
             fontSize: '0.75rem'
           }}>
             © {new Date().getFullYear()} Ilio Sauna. All rights reserved.
           </p>
+          <Link
+            href="/privacy"
+            className="footer-link"
+            style={{
+              color: 'rgba(255,255,255,0.4)',
+              textDecoration: 'none',
+              transition: 'color 0.3s ease'
+            }}
+            onMouseEnter={(e) => e.currentTarget.style.color = '#BF5813'}
+            onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.4)'}
+          >
+            Privacy Policy
+          </Link>
         </div>
 
         {/* Mobile Responsive Styles */}
         <style jsx>{`
           @media (max-width: 900px) {
             .footer-grid {
-              grid-template-columns: 1fr 1fr 1fr !important;
-              gap: 2rem 1rem !important;
+              grid-template-columns: 1fr 2fr 1fr !important;
+              gap: 2rem 0.75rem !important;
               grid-template-areas:
                 "logo logo newsletter"
                 "quicklinks location connect" !important;
@@ -429,10 +425,47 @@ export default function Footer() {
               grid-area: logo;
               max-width: 100% !important;
             }
-            .footer-grid > div:nth-child(2) { grid-area: quicklinks; }
-            .footer-grid > div:nth-child(3) { grid-area: connect; }
-            .footer-grid > div:nth-child(4) { grid-area: location; }
-            .footer-grid > div:nth-child(5) { grid-area: newsletter; }
+            .footer-grid > div:nth-child(2) {
+              grid-area: quicklinks;
+              padding-right: 0.5rem;
+            }
+            .footer-grid > div:nth-child(3) {
+              grid-area: connect;
+              padding-left: 0.5rem;
+            }
+            .footer-grid > div:nth-child(3) :global(div) {
+              align-items: flex-end !important;
+            }
+            .footer-grid > div:nth-child(4) {
+              grid-area: location;
+              padding: 0 0.5rem;
+            }
+            .footer-grid > div:nth-child(5) {
+              grid-area: newsletter;
+            }
+
+            .footer-bottom {
+              display: grid !important;
+              grid-template-columns: 1fr 1fr !important;
+              grid-template-rows: auto auto !important;
+              gap: 1rem !important;
+              text-align: center !important;
+            }
+            .footer-bottom :global(.footer-link:first-child) {
+              grid-column: 1 / 2;
+              grid-row: 1 / 2;
+              text-align: left !important;
+            }
+            .footer-bottom :global(.footer-link:last-child) {
+              grid-column: 2 / 3;
+              grid-row: 1 / 2;
+              text-align: right !important;
+            }
+            .footer-bottom :global(.footer-copyright) {
+              grid-column: 1 / -1;
+              grid-row: 2 / 3;
+              text-align: center !important;
+            }
           }
         `}</style>
       </div>
