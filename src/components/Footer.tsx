@@ -426,37 +426,39 @@ export default function Footer() {
               max-width: 100% !important;
             }
 
-            /* Quick Links - Left aligned */
+            /* Quick Links - Center aligned */
             .footer-grid > div:nth-child(2) {
               grid-area: quicklinks;
-              text-align: left !important;
+              text-align: center !important;
             }
             .footer-grid > div:nth-child(2) h4 {
               font-size: 0.75rem !important;
-              text-align: left !important;
+              text-align: center !important;
             }
             .footer-grid > div:nth-child(2) nav {
-              align-items: flex-start !important;
+              align-items: center !important;
             }
             .footer-grid > div:nth-child(2) a {
               font-size: 0.75rem !important;
             }
 
-            /* Connect - Right aligned */
+            /* Connect - Center aligned */
             .footer-grid > div:nth-child(3) {
               grid-area: connect;
-              text-align: right !important;
+              text-align: center !important;
             }
             .footer-grid > div:nth-child(3) h4 {
               font-size: 0.75rem !important;
-              text-align: right !important;
+              text-align: center !important;
             }
             .footer-grid > div:nth-child(3) > div {
-              align-items: flex-end !important;
+              align-items: center !important;
             }
             .footer-grid > div:nth-child(3) a {
               font-size: 0.75rem !important;
-              flex-direction: row-reverse !important;
+            }
+            .footer-grid > div:nth-child(3) svg {
+              display: none !important;
             }
 
             /* Location - Center aligned */
