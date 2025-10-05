@@ -87,6 +87,7 @@ export default function SaunasPage() {
   const [activeModal, setActiveModal] = useState<string | null>(null);
   const [fullscreenImage, setFullscreenImage] = useState<string | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [isAppleDevice, setIsAppleDevice] = useState(false);
   const scrollPositionRef = useRef(0);
   const { addItem } = useCart();
 
@@ -157,19 +158,31 @@ export default function SaunasPage() {
     }
   ];
 
-  // Trigger page load animations and detect mobile
+  // Trigger page load animations and detect mobile and Apple devices
   useEffect(() => {
     const timer = setTimeout(() => {
       setPageLoaded(true);
     }, 50);
-    
+
     const checkMobile = () => {
       setIsMobile(window.innerWidth <= 768);
     };
-    
+
+    // Detect Apple devices (iOS, iPadOS, macOS)
+    const detectAppleDevice = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      const isIOS = /iphone|ipad|ipod/.test(userAgent);
+      const isMacOS = /macintosh|mac os x/.test(userAgent);
+      const isSafari = /safari/.test(userAgent) && !/chrome/.test(userAgent);
+
+      // Consider it an Apple device if it's iOS, macOS, or Safari browser
+      setIsAppleDevice(isIOS || isMacOS || isSafari);
+    };
+
     checkMobile();
+    detectAppleDevice();
     window.addEventListener('resize', checkMobile);
-    
+
     return () => {
       clearTimeout(timer);
       window.removeEventListener('resize', checkMobile);
@@ -951,7 +964,7 @@ export default function SaunasPage() {
             ].map((step, index) => (
               <motion.li
                 key={index}
-                className="reveal-on-scroll"
+                className={isAppleDevice ? "" : "reveal-on-scroll"}
                 style={{
                   background: 'white',
                   borderRadius: '8px',
