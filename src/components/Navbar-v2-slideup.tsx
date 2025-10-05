@@ -35,26 +35,33 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
     if (isMobileMenuOpen) {
       // Save current scroll position to ref
       scrollPositionRef.current = window.scrollY;
-
-      // Lock scroll but keep scrollbar visible to prevent layout shift
+      
+      // Get scrollbar width to prevent layout shift
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      
+      // Apply scroll lock with position fixed to prevent any scrolling
       document.body.style.position = 'fixed';
       document.body.style.top = `-${scrollPositionRef.current}px`;
       document.body.style.left = '0';
       document.body.style.right = '0';
-      document.body.style.width = '100%';
-      document.body.style.overflowY = 'scroll'; // Keep scrollbar visible
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+      document.body.style.overflow = 'hidden';
+      
+      // Prevent iOS bounce
+      document.documentElement.style.overflow = 'hidden';
     } else if (scrollPositionRef.current >= 0) {
       // Get the saved position before removing styles
       const savedPosition = scrollPositionRef.current;
-
+      
       // Remove all scroll lock styles
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
-      document.body.style.width = '';
-      document.body.style.overflowY = '';
-
+      document.body.style.paddingRight = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
+      
       // Restore scroll position instantly without animation
       window.scrollTo({
         top: savedPosition,
@@ -62,15 +69,16 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
         behavior: 'instant' as ScrollBehavior
       });
     }
-
+    
     return () => {
-      // Cleanup on unmount
+      // Cleanup all styles on unmount
       document.body.style.position = '';
       document.body.style.top = '';
       document.body.style.left = '';
       document.body.style.right = '';
-      document.body.style.width = '';
-      document.body.style.overflowY = '';
+      document.body.style.paddingRight = '';
+      document.body.style.overflow = '';
+      document.documentElement.style.overflow = '';
     };
   }, [isMobileMenuOpen]);
 
@@ -420,7 +428,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             alignItems: 'center',
             gap: '2.5rem',
             zIndex: 9999,
-            animation: 'fadeIn 0.5s ease-in-out',
+            animation: 'slideUp 0.5s cubic-bezier(0.77, 0, 0.175, 1)',
             paddingTop: '70px',
           }}
           onClick={(e) => {
@@ -481,7 +489,6 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
               position: 'absolute',
               left: '50%',
               transform: 'translateX(-50%)',
-              marginLeft: '-4px',
             }}>
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -659,12 +666,12 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
       )}
 
       <style jsx>{`
-        @keyframes fadeIn {
+        @keyframes slideUp {
           from {
-            opacity: 0;
+            transform: translateY(100%);
           }
           to {
-            opacity: 1;
+            transform: translateY(0);
           }
         }
         

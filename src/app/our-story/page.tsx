@@ -62,11 +62,11 @@ export default function OurStoryPage() {
   const codeContent: OurStoryData = {
     heroSection: {
       title: 'Our Story',
-      subtitle: 'Expertly crafted in Vancouver Island, BC',
+      subtitle: 'Expertly crafted on Vancouver island British Columbia, Canada.',
       backgroundImageUrl: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68c2b2c1dee47c7da0f15a48.jpeg'
     },
     passionSection: {
-      title: 'A Passion for Wellness, Made Accessible',
+      title: 'A Passion for Wellness',
       paragraph1: 'Ilio is born out of a desire to bring affordable and beautifully designed thermal wellness experiences home to you.',
       paragraph2: 'Based on Vancouver Island in Cobble Hill, the Ilio team is a group of builders, designers and wellness enthusiasts inspired by the natural beauty of the Pacific West Coast.',
       quote: 'Marrying elements of traditional sauna building with renowned West Coast Cedar, the team at Ilio is reimagining the sauna experience for your backyard.'

@@ -103,8 +103,8 @@ export default function ContactPage() {
       emailAddress: 'hello@iliosauna.com'
     },
     socialMedia: {
-      facebook: 'https://facebook.com',
-      instagram: 'https://instagram.com',
+      facebook: 'https://www.facebook.com/people/Ilio-sauna/61581939952450/',
+      instagram: 'https://www.instagram.com/iliosauna/',
       twitter: 'https://twitter.com',
       linkedin: 'https://linkedin.com',
       youtube: 'https://youtube.com'
@@ -510,8 +510,8 @@ export default function ContactPage() {
 
               {/* Social Media Icons */}
               <div style={{ display: 'flex', gap: '15px', marginTop: '40px' }}>
-                <a 
-                  href="https://instagram.com" 
+                <a
+                  href="https://www.instagram.com/iliosauna/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{
@@ -544,8 +544,8 @@ export default function ContactPage() {
                   </svg>
                 </a>
                 
-                <a 
-                  href="https://facebook.com" 
+                <a
+                  href="https://www.facebook.com/people/Ilio-sauna/61581939952450/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{

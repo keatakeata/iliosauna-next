@@ -472,7 +472,7 @@ export default function SaunasPage() {
           
           <div style={{ textAlign: 'left' }}>
             <div className="reveal-on-scroll reveal-delay-2" style={{ marginBottom: '2rem' }}>
-              <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>BASE PRICE</div>
+              <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>ALL-INCLUSIVE PRICE</div>
               <div style={{ fontSize: '2rem', fontWeight: 200 }}>$20,000 CAD</div>
             </div>
             
@@ -960,7 +960,13 @@ export default function SaunasPage() {
                   position: 'relative',
                   marginBottom: '1.5rem',
                   boxShadow: '0 2px 8px rgba(0, 0, 0, 0.06)',
-                  transition: 'all 0.3s ease'
+                  transition: 'all 0.3s ease',
+                  WebkitBackfaceVisibility: 'hidden',
+                  backfaceVisibility: 'hidden',
+                  WebkitPerspective: 1000,
+                  perspective: 1000,
+                  transform: 'translate3d(0, 0, 0)',
+                  WebkitTransform: 'translate3d(0, 0, 0)'
                 }}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{

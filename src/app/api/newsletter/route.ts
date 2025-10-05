@@ -8,8 +8,9 @@ const GHL_API_BASE = process.env.GHL_API_BASE || 'https://services.leadconnector
 
 export async function POST(request: NextRequest) {
   try {
-    const { email } = await request.json();
+    const { email, source } = await request.json();
     console.log('📧 Newsletter signup for:', email);
+    console.log('📍 Source:', source || 'homepage');
     console.log('🔑 Environment check:', {
       hasToken: !!GHL_ACCESS_TOKEN,
       tokenLength: GHL_ACCESS_TOKEN?.length || 0,
@@ -43,11 +44,13 @@ export async function POST(request: NextRequest) {
     }
 
     // Prepare the contact payload for newsletter subscription
+    // Add source-specific tag based on where the signup came from
+    const sourceTags = source === 'footer' ? ['f-newsletter'] : ['h-newsletter'];
     const payload = {
       locationId: GHL_LOCATION_ID,
       email: email,
-      source: 'Website Newsletter Signup',
-      tags: ['Website Lead', 'Newsletter Subscription'] // Clean, simple tags
+      source: source === 'footer' ? 'Website Footer Newsletter Signup' : 'Website Newsletter Signup',
+      tags: ['Website Lead', ...sourceTags] // Clean, simple tags + source tag
     };
 
     // FIRST: Check if contact already exists before trying to create
