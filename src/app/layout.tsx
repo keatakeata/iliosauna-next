@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   },
   openGraph: {
     title: "Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
-    description: "Experience luxury outdoor saunas crafted with BC cedar. Transform your backyard into a wellness retreat.",
+    description: "Expertly crafted on Vancouver Island British Columbia Canada. Transform your backyard into a wellness retreat.",
     url: 'https://iliosauna.com',
     siteName: 'Ilio Sauna',
     images: [
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: "Ilio Sauna - Premium Cedar Saunas",
-    description: "Experience luxury outdoor saunas crafted with BC cedar.",
+    description: "Expertly crafted on Vancouver Island British Columbia Canada. Transform your backyard into a wellness retreat.",
     images: ['/ilio-logo-light.svg'],
   },
   robots: {
