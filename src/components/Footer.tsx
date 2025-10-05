@@ -425,31 +425,62 @@ export default function Footer() {
               grid-area: logo;
               max-width: 100% !important;
             }
+
+            /* Quick Links - Left aligned */
             .footer-grid > div:nth-child(2) {
               grid-area: quicklinks;
+              text-align: left !important;
             }
-            .footer-grid > div:nth-child(2) h4,
+            .footer-grid > div:nth-child(2) h4 {
+              font-size: 0.75rem !important;
+              text-align: left !important;
+            }
+            .footer-grid > div:nth-child(2) nav {
+              align-items: flex-start !important;
+            }
             .footer-grid > div:nth-child(2) a {
               font-size: 0.75rem !important;
             }
+
+            /* Connect - Right aligned */
             .footer-grid > div:nth-child(3) {
               grid-area: connect;
+              text-align: right !important;
             }
             .footer-grid > div:nth-child(3) h4 {
               font-size: 0.75rem !important;
+              text-align: right !important;
+            }
+            .footer-grid > div:nth-child(3) > div {
+              align-items: flex-end !important;
             }
             .footer-grid > div:nth-child(3) a {
               font-size: 0.75rem !important;
+              flex-direction: row-reverse !important;
             }
+
+            /* Location - Center aligned */
             .footer-grid > div:nth-child(4) {
               grid-area: location;
+              text-align: center !important;
             }
             .footer-grid > div:nth-child(4) h4 {
               font-size: 0.75rem !important;
+              text-align: center !important;
+            }
+            .footer-grid > div:nth-child(4) > div {
+              justify-content: center !important;
+              flex-direction: column !important;
+              align-items: center !important;
             }
             .footer-grid > div:nth-child(4) span {
               font-size: 0.75rem !important;
+              text-align: center !important;
             }
+            .footer-grid > div:nth-child(4) svg {
+              display: none !important;
+            }
+
             .footer-grid > div:nth-child(5) {
               grid-area: newsletter;
             }
