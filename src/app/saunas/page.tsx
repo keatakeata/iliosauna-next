@@ -1,6 +1,7 @@
 'use client';
 
-// BUILD FIX: Removed conflicting force-dynamic export for React 19 compatibility
+// Force dynamic rendering to prevent Vercel from serving stale cached builds
+export const dynamic = 'force-dynamic';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 // React 19 compatible motion import
