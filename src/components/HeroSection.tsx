@@ -2,6 +2,7 @@
 
 import { useEffect, useState, useRef } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { sanityImageUrl } from '@/lib/sanity.config';
 
 interface HeroSectionProps {
@@ -111,8 +112,7 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
               zIndex: currentSlide === index ? 2 : 1,
             }}
           >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
+            <Image
               src={slide}
               alt={
                 index === 0 ? "Premium cedar barrel sauna in outdoor forest setting - Ilio Sauna Vancouver Island" :
@@ -122,9 +122,12 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
                 index === 4 ? "Modern sauna design with professional installation in British Columbia" :
                 "Contemporary cedar sauna with Scandinavian-inspired luxury design"
               }
+              fill
+              priority={index === 0}
+              loading={index === 0 ? undefined : "lazy"}
+              quality={85}
+              sizes="100vw"
               style={{
-                width: '100%',
-                height: '100%',
                 objectFit: 'cover',
                 objectPosition:
                   // Mobile specific positioning for Image 3 (index 2)
@@ -134,10 +137,8 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
                   index === 5 ? '40% center' : // Image 6 - slightly right of left
                   'center center'
               }}
-              loading="eager"
               onError={(e) => {
                 console.error('Hero image failed to load:', slide);
-                e.currentTarget.style.backgroundColor = '#ff0000';
               }}
               onLoad={() => {
                 console.log('Hero image loaded successfully:', slide);

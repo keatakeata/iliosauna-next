@@ -1,0 +1,155 @@
+      {/* Modal - CMS Powered */}
+      {activeModal && (() => {
+        const feature = premiumFeatures.find(f => f.id === activeModal);
+        const modalData = feature?.modalContent;
+
+        if (!modalData) return null;
+
+        return (
+          <div
+            style={{
+              position: 'fixed',
+              inset: 0,
+              background: 'rgba(0,0,0,0.9)',
+              zIndex: 9999,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '2rem'
+            }}
+            onClick={() => setActiveModal(null)}
+          >
+            <div
+              style={{
+                background: 'white',
+                borderRadius: '12px',
+                maxWidth: '900px',
+                width: '100%',
+                maxHeight: '90vh',
+                position: 'relative',
+                display: 'flex',
+                flexDirection: 'column'
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div style={{ overflow: 'auto', flex: 1, position: 'relative' }}>
+                <motion.button
+                  onClick={() => setActiveModal(null)}
+                  whileHover={{ rotate: 90 }}
+                  whileTap={{ scale: 0.9, rotate: 90 }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 400,
+                    damping: 17
+                  }}
+                  style={{
+                    position: 'sticky',
+                    top: '1.5rem',
+                    float: 'right',
+                    marginRight: '1.5rem',
+                    marginTop: '1.5rem',
+                    background: 'white',
+                    border: '1px solid #d1d5db',
+                    borderRadius: '50%',
+                    width: '40px',
+                    height: '40px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+                    zIndex: 10
+                  }}
+                >
+                  <span style={{ fontSize: '18px', color: '#6b7280' }}>✕</span>
+                </motion.button>
+
+                <div style={{ padding: '3rem' }}>
+                  {modalData.award && (
+                    <div style={{
+                      background: 'linear-gradient(135deg, #FFD700 0%, #FFA500 100%)',
+                      color: 'white',
+                      padding: '0.5rem 1rem',
+                      borderRadius: '20px',
+                      display: 'inline-block',
+                      marginBottom: '1rem',
+                      fontSize: '0.875rem',
+                      fontWeight: 500
+                    }}>
+                      {modalData.award}
+                    </div>
+                  )}
+
+                  <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+                    <h2 style={{ fontSize: '2rem', fontWeight: 300, marginBottom: '0.5rem', color: '#111' }}>
+                      {modalData.title}
+                    </h2>
+                    {modalData.subtitle && (
+                      <p style={{ color: '#333', marginBottom: '0', fontSize: '1.1rem' }}>
+                        {modalData.subtitle}
+                      </p>
+                    )}
+                  </div>
+
+                  {modalData.awardText && (
+                    <p style={{
+                      fontStyle: 'italic',
+                      color: '#9B8B7E',
+                      marginBottom: '2rem',
+                      paddingLeft: '1rem',
+                      borderLeft: '3px solid #FFD700'
+                    }}>
+                      {modalData.awardText}
+                    </p>
+                  )}
+
+                  {modalData.mainImageUrl && (
+                    <img
+                      src={modalData.mainImageUrl}
+                      alt={modalData.title}
+                      onClick={() => setFullscreenImage(modalData.mainImageUrl || null)}
+                      style={{
+                        width: '100%',
+                        height: 'auto',
+                        borderRadius: '8px',
+                        marginBottom: '2rem',
+                        cursor: 'zoom-in'
+                      }}
+                    />
+                  )}
+
+                  {modalData.gallery && modalData.gallery.length > 0 && (
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                      gap: '1rem',
+                      marginBottom: '2rem'
+                    }}>
+                      {modalData.gallery.map((img: any) => (
+                        <img
+                          key={img._key}
+                          src={img.imageUrl}
+                          alt={img.alt || modalData.title}
+                          onClick={() => setFullscreenImage(img.imageUrl)}
+                          style={{
+                            width: '100%',
+                            height: '150px',
+                            objectFit: 'cover',
+                            borderRadius: '8px',
+                            cursor: 'zoom-in'
+                          }}
+                        />
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Render all content sections from CMS */}
+                  {modalData.contentSections && modalData.contentSections.length > 0 && (
+                    <ModalContentRenderer sections={modalData.contentSections} />
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}

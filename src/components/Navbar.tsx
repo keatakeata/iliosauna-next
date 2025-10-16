@@ -2,9 +2,16 @@
 
 import { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
-import { SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import dynamic from 'next/dynamic';
 import { useCart } from '@/context/CartContext';
 import { FEATURE_FLAGS } from '@/lib/feature-flags';
+
+// Lazy load Clerk components for better performance
+const SignInButton = dynamic(() => import('@clerk/nextjs').then(mod => ({ default: mod.SignInButton })), { ssr: false });
+const SignUpButton = dynamic(() => import('@clerk/nextjs').then(mod => ({ default: mod.SignUpButton })), { ssr: false });
+const SignedIn = dynamic(() => import('@clerk/nextjs').then(mod => ({ default: mod.SignedIn })), { ssr: false });
+const SignedOut = dynamic(() => import('@clerk/nextjs').then(mod => ({ default: mod.SignedOut })), { ssr: false });
+const UserButton = dynamic(() => import('@clerk/nextjs').then(mod => ({ default: mod.UserButton })), { ssr: false });
 
 export default function Navbar({ animated = false, forceScrolled = false }: { animated?: boolean; forceScrolled?: boolean }) {
   const [isScrolled, setIsScrolled] = useState(forceScrolled);
@@ -668,7 +675,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
           }
         }
         
-        @media (max-width: 924px) {
+        @media (max-width: 800px) {
           .desktop-nav {
             display: none !important;
           }

@@ -1,7 +1,18 @@
 'use client';
 
+import { ClerkProvider } from '@clerk/nextjs';
+
 export function ClerkProviderWrapper({ children }: { children: React.ReactNode }) {
-  // Temporarily bypass Clerk to fix deployment
-  // Re-enable when environment variables are properly configured in Vercel
-  return <>{children}</>;
+  const isEnabled = process.env.NEXT_PUBLIC_CLERK_ENABLED === 'true';
+
+  // Only wrap in ClerkProvider if enabled
+  if (!isEnabled) {
+    return <>{children}</>;
+  }
+
+  return (
+    <ClerkProvider>
+      {children}
+    </ClerkProvider>
+  );
 }

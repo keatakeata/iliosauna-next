@@ -66,18 +66,15 @@ export default function CheckoutPage() {
     postalCode: '',
   });
 
-  // Check authentication and cart
+  // Check cart (allow guest checkout)
   useEffect(() => {
     if (!isLoaded) return;
-    
-    if (!isSignedIn) {
-      // Store the intended destination
-      const returnUrl = '/checkout';
-      router.push(`/sign-in?redirect_url=${encodeURIComponent(returnUrl)}`);
-    } else if (items.length === 0) {
+
+    // Redirect to saunas if cart is empty
+    if (items.length === 0) {
       router.push('/saunas');
     }
-  }, [items, router, isSignedIn, isLoaded]);
+  }, [items, router, isLoaded]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     let { name, value } = e.target;
@@ -207,7 +204,73 @@ export default function CheckoutPage() {
         }
       `}</style>
       <Navbar forceScrolled={true} />
-      
+
+      {/* Sign-In Incentive Banner (only show if not signed in) */}
+      {!isSignedIn && (
+        <div style={{
+          background: 'linear-gradient(135deg, #BF5813 0%, #D87440 100%)',
+          borderBottom: '1px solid rgba(0,0,0,0.1)',
+          padding: '12px 16px',
+        }}>
+          <div style={{
+            maxWidth: '1200px',
+            margin: '0 auto',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '16px',
+            flexWrap: 'wrap',
+          }}>
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '12px',
+              color: 'white',
+            }}>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+              <div>
+                <div style={{ fontWeight: '600', fontSize: '14px' }}>
+                  Sign in for faster checkout & order tracking
+                </div>
+                <div style={{ fontSize: '12px', opacity: 0.9 }}>
+                  Save your info, track orders, and get exclusive member perks
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={() => router.push('/sign-in?redirect_url=/checkout')}
+              style={{
+                padding: '8px 20px',
+                background: 'white',
+                color: '#BF5813',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: '600',
+                fontSize: '14px',
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-2px)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              Sign In
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header Bar */}
       <div className={styles.headerBar}>
         <div className={styles.headerContent}>

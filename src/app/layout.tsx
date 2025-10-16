@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import Script from "next/script";
-
-// Force dynamic rendering globally to prevent DataCloneError
-export const dynamic = 'force-dynamic';
 import { ClerkProviderWrapper } from "@/components/ClerkProviderWrapper";
 import { CartProvider } from "@/context/CartContext";
 import CartDrawer from "@/components/CartDrawer";
@@ -12,6 +9,7 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import { SupabaseProvider } from "@/components/SupabaseProvider";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import StructuredData from "@/components/StructuredData";
+import DevIndicator from "@/components/DevIndicator";
 import "./globals.css";
 
 const montserrat = Montserrat({
@@ -21,7 +19,9 @@ const montserrat = Montserrat({
 });
 
 export const metadata: Metadata = {
-  title: "Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
+  title: process.env.NODE_ENV === 'development'
+    ? "[DEV] Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC"
+    : "Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
   description: "Experience luxury outdoor saunas crafted with BC cedar. Transform your backyard into a wellness retreat with our premium cedar barrel and cabin saunas.",
   keywords: "cedar sauna, outdoor sauna, barrel sauna, cabin sauna, Vancouver Island, BC, wellness, luxury sauna",
   icons: {
@@ -80,9 +80,9 @@ export default function RootLayout({
       </head>
       <Script
         src="https://www.googletagmanager.com/gtag/js?id=G-FHGM890ENW"
-        strategy="afterInteractive"
+        strategy="lazyOnload"
       />
-      <Script id="google-analytics" strategy="afterInteractive">
+      <Script id="google-analytics" strategy="lazyOnload">
         {`
           window.dataLayer = window.dataLayer || [];
           function gtag(){dataLayer.push(arguments);}
@@ -91,16 +91,17 @@ export default function RootLayout({
         `}
       </Script>
       <body className="font-sans antialiased" suppressHydrationWarning={true}>
-        <ErrorBoundary>
-          <ClerkProviderWrapper>
+        <ClerkProviderWrapper>
+          <ErrorBoundary>
             <SupabaseProvider>
               <CartProvider>
+                <DevIndicator />
                 {children}
                 <CartDrawer />
               </CartProvider>
             </SupabaseProvider>
-          </ClerkProviderWrapper>
-        </ErrorBoundary>
+          </ErrorBoundary>
+        </ClerkProviderWrapper>
         <Analytics />
         <SpeedInsights />
       </body>

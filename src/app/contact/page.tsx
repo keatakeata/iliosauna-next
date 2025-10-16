@@ -1,12 +1,13 @@
 'use client';
 
-// BUILD FIX: Removed conflicting force-dynamic export for React 19 compatibility
+// Force dynamic rendering for contact form functionality
+export const dynamic = 'force-dynamic';
 
+import { useState, useEffect } from 'react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import MapComponent from '@/components/MapComponent';
 import GHLContactForm from '@/components/GHLContactForm';
-import { useState, useEffect } from 'react';
 import { client } from '../../../sanity/lib/client';
 import { contactPageQuery } from '../../../sanity/lib/queries';
 

@@ -8,6 +8,7 @@ node_modules/
 # Environment variables
 .env.local
 .env.production.local
+.env.development.local
 
 # IDE
 .vscode/
@@ -23,8 +24,32 @@ Thumbs.db
 nul
 NDH6SA~M
 
+# Development/testing scripts and backups
+*.backup
+*.bak
+*-DONOTUSE.*
+build-saunas-*.js
+check-*.js
+cleanup-*.js
+create-saunas-*.js
+delete-*.js
+fix-*.js
+get-*.js
+import-*.js
+populate-*.js
+update-*.js
+verify-*.js
+undo-*.js
+sanity-saunas-*.json
+saunas-page-import.json
+COPY-PASTE-GUIDE.txt
+DATASET-FIX-INSTRUCTIONS.md
+MANUAL-STUDIO-GUIDE.md
+SANITY-CMS-MAPPING-COMPLETE.md
+
 # Clerk secrets
 /.clerk/
 
 # Vercel
 .vercel/
+.vercel
