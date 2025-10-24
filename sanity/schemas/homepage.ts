@@ -19,8 +19,8 @@ export default {
           name: 'subtitle',
           title: 'Subheading',
           type: 'string',
-          description: 'Currently shows: "Scandinavian craftsmanship"',
-defaultValue: 'Scandinavian craftsmanship'
+          description: 'Currently shows: "Built in Canada. Inspired by Scandinavian craftsmanship"',
+defaultValue: 'Built in Canada. Inspired by Scandinavian craftsmanship'
         },
         {
           name: 'buttonText',
@@ -96,8 +96,8 @@ defaultValue: 'Make it stand out'
           title: 'First Paragraph',
           type: 'text',
           rows: 4,
-          description: 'Currently: "At Ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles."',
-defaultValue: 'At Ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.'
+          description: 'Currently: "At ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles."',
+defaultValue: 'At ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.'
         },
         {
           name: 'paragraph2',
@@ -124,16 +124,16 @@ defaultValue: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media
     },
     {
       name: 'saunaShowcaseSection',
-      title: '"Ilio Sauna" Section (3 Product Cards)',
+      title: '"ilio Sauna" Section (3 Product Cards)',
       type: 'object',
-      description: 'This is the section with "Ilio Sauna" heading and 3 cards: Contemporary Design, Premium Materials, Wellness Focused',
+      description: 'This is the section with "ilio Sauna" heading and 3 cards: Contemporary Design, Premium Materials, Wellness Focused',
       fields: [
         {
           name: 'title',
           title: 'Section Heading',
           type: 'string',
-          description: 'Currently shows: "Ilio Sauna"',
-          defaultValue: 'Ilio Sauna'
+          description: 'Currently shows: "ilio Sauna"',
+          defaultValue: 'ilio Sauna'
         },
         {
           name: 'subtitle',
@@ -239,8 +239,8 @@ defaultValue: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media
           name: 'subtitle',
           title: 'Section Description',
           type: 'text',
-          description: 'Currently shows: "Discover what our early adopters are saying about their Ilio Sauna journey"',
-          defaultValue: 'Discover what our early adopters are saying about their Ilio Sauna journey'
+          description: 'Currently shows: "Discover what our early adopters are saying about their ilio Sauna journey"',
+          defaultValue: 'Discover what our early adopters are saying about their ilio Sauna journey'
         }
       ]
     },
@@ -261,8 +261,8 @@ defaultValue: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media
           name: 'subtitle',
           title: 'Section Description',
           type: 'text',
-          description: 'Currently shows: "Don\'t miss a thing. Sign up to receive updates about new products, wellness insights, and exclusive offers from Ilio."',
-          defaultValue: 'Don\'t miss a thing. Sign up to receive updates about new products, wellness insights, and exclusive offers from Ilio.'
+          description: 'Currently shows: "Don\'t miss a thing. Sign up to receive updates about new products, wellness insights, and exclusive offers from ilio."',
+          defaultValue: 'Don\'t miss a thing. Sign up to receive updates about new products, wellness insights, and exclusive offers from ilio.'
         },
         {
           name: 'buttonText',

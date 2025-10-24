@@ -105,7 +105,7 @@ export default {
     // SECTION 2: LIVE WELL WITH ILIO
     {
       name: 'section2',
-      title: 'Section 2 - Live Well with Ilio',
+      title: 'Section 2 - Live Well with ilio',
       type: 'object',
       description: 'Video section with descriptive content',
       options: {
@@ -196,7 +196,7 @@ export default {
           name: 'mainTitle',
           title: 'Main Title',
           type: 'string',
-          initialValue: 'Ilio Sauna'
+          initialValue: 'ilio Sauna'
         },
         {
           name: 'priceLabel',
@@ -606,7 +606,7 @@ export default {
           name: 'ctaHeading',
           title: 'CTA Heading',
           type: 'string',
-          initialValue: 'Ready to Experience the Ilio Difference?'
+          initialValue: 'Ready to Experience the ilio Difference?'
         },
         {
           name: 'ctaText',

@@ -74,7 +74,7 @@ export default {
           name: 'paragraph1',
           title: 'First Paragraph',
           type: 'text',
-          initialValue: 'At Ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.'
+          initialValue: 'At ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.'
         },
         {
           name: 'paragraph2',
@@ -98,14 +98,14 @@ export default {
     },
     {
       name: 'section3',
-      title: 'Section 3 - Ilio Sauna Pricing',
+      title: 'Section 3 - ilio Sauna Pricing',
       type: 'object',
       fields: [
         {
           name: 'title',
           title: 'Section Title',
           type: 'string',
-          initialValue: 'Ilio Sauna'
+          initialValue: 'ilio Sauna'
         },
         {
           name: 'backgroundImage',
@@ -390,7 +390,7 @@ export default {
           name: 'guaranteeDescription',
           title: 'Guarantee Description',
           type: 'text',
-          initialValue: 'We\'re so confident you\'ll love your Ilio sauna that we offer a full 30-day trial. If you\'re not experiencing deeper sleep, less stress, and that post-sauna glow—we\'ll arrange pickup and issue a complete refund. No questions, no hassle.'
+          initialValue: 'We\'re so confident you\'ll love your ilio sauna that we offer a full 30-day trial. If you\'re not experiencing deeper sleep, less stress, and that post-sauna glow—we\'ll arrange pickup and issue a complete refund. No questions, no hassle.'
         },
         {
           name: 'guaranteeFeatures',

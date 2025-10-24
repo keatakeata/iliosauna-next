@@ -7,7 +7,7 @@ export default {
       name: 'siteName',
       title: 'Site Name',
       type: 'string',
-      description: 'Name of the website (e.g., "Ilio Sauna")'
+      description: 'Name of the website (e.g., "ilio Sauna")'
     },
     {
       name: 'siteDescription',

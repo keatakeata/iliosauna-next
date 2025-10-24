@@ -100,7 +100,7 @@ export default {
           title: 'Paragraph 1',
           type: 'text',
           rows: 3,
-          placeholder: 'Every Ilio sauna is proudly crafted...'
+          placeholder: 'Every ilio sauna is proudly crafted...'
         },
         {
           name: 'paragraph2',
@@ -176,7 +176,7 @@ export default {
           title: 'Description',
           type: 'text',
           rows: 4,
-          placeholder: 'Every Ilio sauna is meticulously crafted...'
+          placeholder: 'Every ilio sauna is meticulously crafted...'
         },
         {
           name: 'features',
@@ -236,7 +236,7 @@ export default {
           title: 'Paragraph 1',
           type: 'text',
           rows: 4,
-          placeholder: 'At Ilio, we believe that wellness...'
+          placeholder: 'At ilio, we believe that wellness...'
         },
         {
           name: 'paragraph2',
@@ -250,7 +250,7 @@ export default {
           title: 'Paragraph 3',
           type: 'text',
           rows: 4,
-          placeholder: 'When you choose Ilio...'
+          placeholder: 'When you choose ilio...'
         }
       ]
     },
@@ -273,7 +273,7 @@ export default {
           title: 'Description',
           type: 'text',
           rows: 2,
-          placeholder: 'Discover how an Ilio sauna can elevate your daily wellness routine'
+          placeholder: 'Discover how an ilio sauna can elevate your daily wellness routine'
         },
         {
           name: 'primaryButtonText',

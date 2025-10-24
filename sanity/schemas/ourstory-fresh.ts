@@ -94,7 +94,7 @@ export default {
           type: 'text',
           rows: 3,
           description: 'First paragraph',
-          defaultValue: 'Every Ilio sauna is proudly crafted in British Columbia using locally sourced Western Red Cedar and time-tested construction techniques.'
+          defaultValue: 'Every ilio sauna is proudly crafted in British Columbia using locally sourced Western Red Cedar and time-tested construction techniques.'
         },
         {
           name: 'paragraph2',
@@ -152,7 +152,7 @@ export default {
           type: 'text',
           rows: 3,
           description: 'Intro paragraph',
-          defaultValue: 'Every Ilio sauna is meticulously crafted in British Columbia using locally sourced materials whenever possible. We combine West Coast craftsmanship with time-honored Scandinavian sauna traditions to create something truly special.'
+          defaultValue: 'Every ilio sauna is meticulously crafted in British Columbia using locally sourced materials whenever possible. We combine West Coast craftsmanship with time-honored Scandinavian sauna traditions to create something truly special.'
         },
         {
           name: 'features',
@@ -203,7 +203,7 @@ export default {
           type: 'text',
           rows: 4,
           description: 'First values paragraph',
-          defaultValue: 'At Ilio, we believe that wellness should be a daily ritual, not a luxury reserved for the few. We stand for quality without compromise, craftsmanship that honors tradition while embracing innovation, and transparency in everything we do.'
+          defaultValue: 'At ilio, we believe that wellness should be a daily ritual, not a luxury reserved for the few. We stand for quality without compromise, craftsmanship that honors tradition while embracing innovation, and transparency in everything we do.'
         },
         {
           name: 'paragraph2',
@@ -219,7 +219,7 @@ export default {
           type: 'text',
           rows: 4,
           description: 'Third values paragraph',
-          defaultValue: 'When you choose Ilio, you\'re not just investing in a sauna – you\'re joining a movement that believes wellness should be accessible, sustainable, and transformative for all Canadians.'
+          defaultValue: 'When you choose ilio, you\'re not just investing in a sauna – you\'re joining a movement that believes wellness should be accessible, sustainable, and transformative for all Canadians.'
         }
       ]
     },
@@ -242,7 +242,7 @@ export default {
           type: 'text',
           rows: 2,
           description: 'CTA subtitle text',
-          defaultValue: 'Discover how an Ilio sauna can elevate your daily wellness routine'
+          defaultValue: 'Discover how an ilio sauna can elevate your daily wellness routine'
         },
         {
           name: 'primaryButtonText',
