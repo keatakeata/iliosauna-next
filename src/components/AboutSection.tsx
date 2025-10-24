@@ -19,7 +19,7 @@ export default function AboutSection({ homepageData }: AboutSectionProps) {
       <div className="ilio-container">
         <div className="text-center mb-5">
           <h2 className="section-header h2-animate reveal-on-scroll" style={{ marginBottom: '2rem' }}>
-            {aboutData?.title || 'Bring beauty and wellness home with Ilio'}
+            {aboutData?.title || 'Bring beauty and wellness home with ilio'}
           </h2>
           <div className="section-divider reveal-on-scroll reveal-delay-1" style={{
             width: '75%',
@@ -35,7 +35,7 @@ export default function AboutSection({ homepageData }: AboutSectionProps) {
               lineHeight: '1.8',
               color: '#5a5a5a'
             }}>
-              {aboutData?.paragraph1 || 'At Ilio, we believe wellness should be accessible, beautiful, and transformative. Ilio delivers an affordable, high-quality sauna experience unlike any other. Our saunas unite Scandinavian craftsmanship with modern design, blending contemporary aesthetics with premium British Columbia–sourced materials. Precision-engineered and fitted with advanced heating systems, each sauna provides enduring quality and an experience that lasts.'}
+              {aboutData?.paragraph1 || 'At ilio, we believe wellness should be accessible, beautiful, and transformative. ilio delivers an affordable, high-quality sauna experience unlike any other. Our saunas unite Scandinavian craftsmanship with modern design, blending contemporary aesthetics with premium British Columbia–sourced materials. Precision-engineered and fitted with advanced heating systems, each sauna provides enduring quality and an experience that lasts.'}
             </p>
             
             {/* Video Section */}

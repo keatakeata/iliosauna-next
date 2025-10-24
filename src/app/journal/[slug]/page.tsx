@@ -474,7 +474,7 @@ export default function BlogPostPage() {
           <div style={{ margin: '2rem 0' }}>
             <img
               src={getImageUrl(value, 800, 600)}
-              alt={value.alt || 'Sauna wellness and lifestyle content image from Ilio Sauna journal'}
+              alt={value.alt || 'Sauna wellness and lifestyle content image from ilio Sauna journal'}
               style={{
                 width: '100%',
                 height: 'auto',

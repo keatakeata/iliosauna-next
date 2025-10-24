@@ -112,7 +112,7 @@ export default function ContactPage() {
     },
     faqItems: [
       {
-        question: 'What makes Ilio Saunas different?',
+        question: 'What makes ilio Saunas different?',
         answer: 'Our saunas combine premium Canadian craftsmanship with Scandinavian design principles. Each unit is built with sustainably sourced materials and features advanced heating technology for optimal wellness benefits.'
       },
       {
@@ -250,7 +250,7 @@ export default function ContactPage() {
 
   const faqItems = [
     {
-      question: "What makes Ilio Saunas different?",
+      question: "What makes ilio Saunas different?",
       answer: "Our saunas combine premium Canadian craftsmanship with Scandinavian design principles. Each unit is built with sustainably sourced materials and features advanced heating technology for optimal wellness benefits."
     },
     {
@@ -469,7 +469,7 @@ export default function ContactPage() {
                   letterSpacing: '0.1em',
                   color: '#333'
                 }}>
-                  Ilio Sauna
+                  ilio Sauna
                 </h3>
                 <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.8 }}>
                   404 – 2471 Sidney Ave<br />

@@ -46,7 +46,7 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
 
   // Get text content from Sanity or use defaults
   const heroTitle = homepageData?.heroSection?.title || 'Contemporary Luxury Saunas';
-  const heroSubtitle = homepageData?.heroSection?.subtitle || 'Scandinavian craftsmanship';
+  const heroSubtitle = homepageData?.heroSection?.subtitle || 'Built in Canada. Inspired by Scandinavian craftsmanship';
   const heroButtonText = homepageData?.heroSection?.buttonText || 'View Models';
 
   useEffect(() => {
@@ -115,7 +115,7 @@ export default function HeroSection({ homepageData }: HeroSectionProps) {
             <Image
               src={slide}
               alt={
-                index === 0 ? "Premium cedar barrel sauna in outdoor forest setting - Ilio Sauna Vancouver Island" :
+                index === 0 ? "Premium cedar barrel sauna in outdoor forest setting - ilio Sauna Vancouver Island" :
                 index === 1 ? "Luxury outdoor sauna with panoramic glass doors showcasing BC craftsmanship" :
                 index === 2 ? "Cedar cabin sauna with premium insulation and tempered glass windows" :
                 index === 3 ? "Handcrafted barrel sauna featuring sustainable BC cedar construction" :

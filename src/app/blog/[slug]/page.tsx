@@ -56,25 +56,25 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 
     if (!post) {
       return {
-        title: 'Post Not Found - Ilio Sauna',
+        title: 'Post Not Found - ilio Sauna',
         description: 'The requested blog post could not be found.',
       };
     }
 
     return {
-      title: post.seo?.metaTitle || post.title || 'Ilio Sauna Blog',
-      description: post.seo?.metaDescription || post.excerpt || 'Ilio Sauna - Luxury wellness and sauna insights',
+      title: post.seo?.metaTitle || post.title || 'ilio Sauna Blog',
+      description: post.seo?.metaDescription || post.excerpt || 'ilio Sauna - Luxury wellness and sauna insights',
       keywords: post.seo?.keywords?.join(', ') || post.tags?.join(', ') || 'sauna, wellness, luxury',
       openGraph: {
-        title: post.seo?.metaTitle || post.title || 'Ilio Sauna Blog',
-        description: post.seo?.metaDescription || post.excerpt || 'Ilio Sauna wellness insights',
+        title: post.seo?.metaTitle || post.title || 'ilio Sauna Blog',
+        description: post.seo?.metaDescription || post.excerpt || 'ilio Sauna wellness insights',
         images: post.mainImage ? [urlFor(post.mainImage).width(1200).height(630).url()] : [],
       },
     };
   } catch (error) {
     console.error('Error generating metadata for blog post:', error);
     return {
-      title: 'Ilio Sauna Blog',
+      title: 'ilio Sauna Blog',
       description: 'Luxury sauna and wellness insights',
     };
   }

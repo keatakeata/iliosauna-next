@@ -417,7 +417,7 @@ export default function SaunasPage() {
                 onClick={() => {
                   addItem({
                     id: 'ilio-sauna-premium',
-                    name: 'Ilio Premium Cedar Sauna',
+                    name: 'ilio Premium Cedar Sauna',
                     price: 20000,
                     image: section1.slides?.[0]?.url || '',
                     description: '4-6 person capacity, HUUM DROP heater'
@@ -454,7 +454,7 @@ export default function SaunasPage() {
                 onClick={() => {
                   addItem({
                     id: 'ilio-sauna-premium',
-                    name: 'Ilio Premium Cedar Sauna',
+                    name: 'ilio Premium Cedar Sauna',
                     price: 20000,
                     image: section1.slides?.[0]?.url || '',
                     description: '4-6 person capacity, HUUM DROP heater'
@@ -690,7 +690,7 @@ export default function SaunasPage() {
                 lineHeight: '1.6',
                 marginBottom: '1.5rem'
               }}>
-                We&apos;re so confident you&apos;ll love your Ilio sauna that we offer a full 30-day trial. 
+                We&apos;re so confident you&apos;ll love your ilio sauna that we offer a full 30-day trial. 
                 If you&apos;re not experiencing deeper sleep, less stress, and that post-sauna glow—we&apos;ll 
                 arrange pickup and issue a complete refund. No questions, no hassle.
               </p>

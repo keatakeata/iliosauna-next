@@ -86,7 +86,7 @@ export default function NewsletterSection({ homepageData }: NewsletterSectionPro
             margin: '0 auto 2rem'
           }}></div>
           <p className="section-text reveal-on-scroll reveal-delay-2" style={{ color: 'rgba(255,255,255,0.8)', marginBottom: '3rem' }}>
-            {newsletterData?.subtitle || "Don't miss a thing. Sign up to receive updates about new products, wellness insights, and exclusive offers from Ilio."}
+            {newsletterData?.subtitle || "Don't miss a thing. Sign up to receive updates about new products, wellness insights, and exclusive offers from ilio."}
           </p>
           
           <form 

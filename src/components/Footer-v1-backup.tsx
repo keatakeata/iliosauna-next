@@ -70,7 +70,7 @@ export default function Footer() {
           textAlign: 'center'
         }}>
           <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.875rem' }}>
-            © {new Date().getFullYear()} Ilio Sauna. All rights reserved.
+            © {new Date().getFullYear()} ilio Sauna. All rights reserved.
           </p>
         </div>
       </div>

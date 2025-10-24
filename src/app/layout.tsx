@@ -20,8 +20,8 @@ const montserrat = Montserrat({
 
 export const metadata: Metadata = {
   title: process.env.NODE_ENV === 'development'
-    ? "[DEV] Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC"
-    : "Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
+    ? "[DEV] ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC"
+    : "ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
   description: "Experience luxury outdoor saunas crafted with BC cedar. Transform your backyard into a wellness retreat with our premium cedar barrel and cabin saunas.",
   keywords: "cedar sauna, outdoor sauna, barrel sauna, cabin sauna, Vancouver Island, BC, wellness, luxury sauna",
   icons: {
@@ -34,16 +34,16 @@ export const metadata: Metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "Ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
+    title: "ilio Sauna - Premium Cedar Saunas | Vancouver Island & BC",
     description: "Expertly crafted on Vancouver Island British Columbia Canada. Transform your backyard into a wellness retreat.",
     url: 'https://iliosauna.com',
-    siteName: 'Ilio Sauna',
+    siteName: 'ilio Sauna',
     images: [
       {
         url: '/ilio-logo-light.svg',
         width: 1200,
         height: 630,
-        alt: 'Ilio Sauna Logo',
+        alt: 'ilio Sauna Logo',
       },
     ],
     locale: 'en_US',
@@ -51,7 +51,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: "Ilio Sauna - Premium Cedar Saunas",
+    title: "ilio Sauna - Premium Cedar Saunas",
     description: "Expertly crafted on Vancouver Island British Columbia Canada. Transform your backyard into a wellness retreat.",
     images: ['/ilio-logo-light.svg'],
   },

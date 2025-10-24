@@ -144,8 +144,8 @@ export default function SaunasPage() {
       ]
     },
     section2: {
-      title: 'The Ilio Difference',
-      paragraph1: 'At Ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.',
+      title: 'The ilio Difference',
+      paragraph1: 'At ilio, we believe wellness should be accessible, beautiful, and transformative. Our contemporary saunas combine Scandinavian craftsmanship with modern design principles.',
       paragraph2: 'Each sauna is precision-engineered from sustainably sourced Western Red Cedar and fitted with advanced heating systems for an experience that lasts.',
       videoUrl: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68b240d0b776b0fbe591e36c.mp4',
       videoPoster: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48eefde667db736f79.jpeg'
@@ -548,7 +548,7 @@ export default function SaunasPage() {
                     onClick={() => {
                       addItem({
                         id: 'ilio-sauna-premium',
-                        name: 'Ilio Premium Cedar Sauna',
+                        name: 'ilio Premium Cedar Sauna',
                         price: 20000,
                         image: section1.slides?.[0]?.url || '',
                         description: '4-6 person capacity, HUUM DROP heater'
@@ -585,7 +585,7 @@ export default function SaunasPage() {
                     onClick={() => {
                       addItem({
                         id: 'ilio-sauna-premium',
-                        name: 'Ilio Premium Cedar Sauna',
+                        name: 'ilio Premium Cedar Sauna',
                         price: 20000,
                         image: section1.slides?.[0]?.url || '',
                         description: '4-6 person capacity, HUUM DROP heater'

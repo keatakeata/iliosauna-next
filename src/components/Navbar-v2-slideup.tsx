@@ -156,7 +156,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={isScrolled ? blackLogo : whiteLogo}
-              alt="Ilio Sauna - Premium Cedar Saunas Vancouver Island BC"
+              alt="ilio Sauna - Premium Cedar Saunas Vancouver Island BC"
               style={{
                 height: '38.5px',
                 width: 'auto',
@@ -493,7 +493,7 @@ export default function Navbar({ animated = false, forceScrolled = false }: { an
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src={whiteLogo}
-                alt="Ilio Sauna"
+                alt="ilio Sauna"
                 style={{
                   height: '38.5px',
                   width: 'auto',

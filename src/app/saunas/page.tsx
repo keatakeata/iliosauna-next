@@ -263,7 +263,7 @@ export default function SaunasPage() {
     <div style={{ overflowX: 'hidden', width: '100%' }}>
       <StructuredData
         pageType="product"
-        pageTitle="Premium Cedar Saunas - Barrel & Cabin Saunas | Ilio Sauna"
+        pageTitle="Premium Cedar Saunas - Barrel & Cabin Saunas | ilio Sauna"
         pageDescription="Discover our collection of premium cedar saunas including barrel and cabin styles. Crafted with BC cedar, featuring R-14 insulation and premium components."
         breadcrumbs={breadcrumbs}
         faqItems={faqItems}
@@ -391,7 +391,7 @@ export default function SaunasPage() {
                 lineHeight: '1.8',
                 color: '#5a5a5a'
               }}>
-                Ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows, complete with a covered porch with a cold rinse shower.
+                ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows, complete with a covered porch with a cold rinse shower.
               </p>
             </div>
             
@@ -432,7 +432,7 @@ export default function SaunasPage() {
                 lineHeight: '1.8',
                 color: '#5a5a5a'
               }}>
-                Ilio interiors are created using the finest clear western red cedar interior panelling, known for its anti-inflammatory, astringent and antimicrobial properties, durability, and pleasant aroma. The meticulously designed sauna is built for comfort and relaxation, with two deep-seat stadium benches spanning over six feet, a modern Wi-Fi-enabled heater for remote start, and a full-length glass door that provides a view corridor and a feeling of spaciousness. Bring beauty and wellness to your backyard with Ilio.
+                ilio interiors are created using the finest clear western red cedar interior panelling, known for its anti-inflammatory, astringent and antimicrobial properties, durability, and pleasant aroma. The meticulously designed sauna is built for comfort and relaxation, with two deep-seat stadium benches spanning over six feet, a modern Wi-Fi-enabled heater for remote start, and a full-length glass door that provides a view corridor and a feeling of spaciousness. Bring beauty and wellness to your backyard with ilio.
               </p>
             </div>
           </div>
@@ -474,7 +474,7 @@ export default function SaunasPage() {
             marginBottom: '2rem',
             color: 'white'
           }}>
-            Ilio <span style={{ fontWeight: 300 }}>Sauna</span>
+            ilio <span style={{ fontWeight: 300 }}>Sauna</span>
           </h2>
           <div className="reveal-on-scroll reveal-delay-1" style={{
             width: '115px',
@@ -529,7 +529,7 @@ export default function SaunasPage() {
                     onClick={() => {
                       addItem({
                         id: 'ilio-sauna-premium',
-                        name: 'Ilio Premium Cedar Sauna',
+                        name: 'ilio Premium Cedar Sauna',
                         price: 20000,
                         image: heroSlides[0],
                         description: '4-6 person capacity, HUUM DROP heater'
@@ -566,7 +566,7 @@ export default function SaunasPage() {
                     onClick={() => {
                       addItem({
                         id: 'ilio-sauna-premium',
-                        name: 'Ilio Premium Cedar Sauna',
+                        name: 'ilio Premium Cedar Sauna',
                         price: 20000,
                         image: heroSlides[0],
                         description: '4-6 person capacity, HUUM DROP heater'
@@ -796,7 +796,7 @@ export default function SaunasPage() {
         </div>
       </section>
 
-      {/* After You Order Your Ilio Sauna Process Section - CRO & GEO Optimized */}
+      {/* After You Order Your ilio Sauna Process Section - CRO & GEO Optimized */}
       <section
         style={{ padding: '100px 0', background: 'white', position: 'relative' }}
         itemScope
@@ -1073,7 +1073,7 @@ export default function SaunasPage() {
               marginBottom: '1rem',
               letterSpacing: '-0.01em'
             }}>
-              Ready to Experience the Ilio Difference?
+              Ready to Experience the ilio Difference?
             </h3>
 
             <p style={{

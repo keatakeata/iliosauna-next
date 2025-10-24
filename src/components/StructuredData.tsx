@@ -32,7 +32,7 @@ export default function StructuredData({
   const organizationData = {
     '@type': 'LocalBusiness',
     '@id': `${baseUrl}/#organization`,
-    name: 'Ilio Sauna',
+    name: 'ilio Sauna',
     description: 'Premium cedar sauna manufacturer specializing in outdoor barrel and cabin saunas. Professional delivery and installation across British Columbia.',
     url: baseUrl,
     logo: {
@@ -147,7 +147,7 @@ export default function StructuredData({
     paymentAccepted: ['Cash', 'Credit Card', 'Interac', 'E-transfer'],
     openingHours: ['Mo-Fr 09:00-18:00', 'Sa 10:00-16:00', 'Su 12:00-16:00'],
     sameAs: [
-      'https://www.facebook.com/people/Ilio-sauna/61581939952450/',
+      'https://www.facebook.com/people/ilio-sauna/61581939952450/',
       'https://www.instagram.com/iliosauna/'
     ]
   };
@@ -157,7 +157,7 @@ export default function StructuredData({
     '@type': 'WebSite',
     '@id': `${baseUrl}/#website`,
     url: baseUrl,
-    name: 'Ilio Sauna - Premium Cedar Saunas',
+    name: 'ilio Sauna - Premium Cedar Saunas',
     description: 'Experience luxury outdoor saunas crafted with BC cedar. Transform your backyard into a wellness retreat.',
     publisher: {
       '@id': `${baseUrl}/#organization`
@@ -177,7 +177,7 @@ export default function StructuredData({
     '@type': 'WebPage',
     '@id': `${currentUrl}/#webpage`,
     url: currentUrl,
-    name: pageTitle || 'Ilio Sauna - Premium Cedar Saunas',
+    name: pageTitle || 'ilio Sauna - Premium Cedar Saunas',
     description: pageDescription || 'Experience luxury outdoor saunas crafted with BC cedar.',
     isPartOf: {
       '@id': `${baseUrl}/#website`
@@ -240,7 +240,7 @@ export default function StructuredData({
       },
       brand: {
         '@type': 'Brand',
-        name: 'Ilio Sauna'
+        name: 'ilio Sauna'
       },
       ...(productData.image && {
         image: {

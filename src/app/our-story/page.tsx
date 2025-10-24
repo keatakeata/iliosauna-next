@@ -67,13 +67,13 @@ export default function OurStoryPage() {
     },
     passionSection: {
       title: 'A Passion for Wellness',
-      paragraph1: 'Ilio is born out of a desire to bring affordable and beautifully designed thermal wellness experiences home to you.',
-      paragraph2: 'Based on Vancouver Island in Cobble Hill, the Ilio team is a group of builders, designers and wellness enthusiasts inspired by the natural beauty of the Pacific West Coast.',
-      quote: 'Marrying elements of traditional sauna building with renowned West Coast Cedar, the team at Ilio is reimagining the sauna experience for your backyard.'
+      paragraph1: 'ilio is born out of a desire to bring affordable and beautifully designed thermal wellness experiences home to you.',
+      paragraph2: 'Based on Vancouver Island in Cobble Hill, the ilio team is a group of builders, designers and wellness enthusiasts inspired by the natural beauty of the Pacific West Coast.',
+      quote: 'Marrying elements of traditional sauna building with renowned West Coast Cedar, the team at ilio is reimagining the sauna experience for your backyard.'
     },
     builtInCanadaSection: {
       title: 'Built in Canada',
-      paragraph1: 'Each Ilio sauna is meticulously crafted in British Columbia, shaped from locally sourced Western Red Cedar and refined through time-honored techniques.',
+      paragraph1: 'Each ilio sauna is meticulously crafted in British Columbia, shaped from locally sourced Western Red Cedar and refined through time-honored techniques.',
       paragraph2: 'We are dedicated to supporting local communities while preserving uncompromising quality ensuring every detail embodies excellence from forest to finish.',
       slideshowImages: [
         { imageUrl: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48e9d671d8e63bf298.jpeg', alt: 'Built in Canada 1' },
@@ -85,7 +85,7 @@ export default function OurStoryPage() {
     },
     craftsmanshipSection: {
       title: 'BC Craftsmanship Meets Scandinavian Tradition',
-      description: 'Every Ilio sauna is meticulously crafted in British Columbia using locally sourced materials whenever possible. We combine West Coast craftsmanship with time-honored Scandinavian sauna traditions to create something truly special.',
+      description: 'Every ilio sauna is meticulously crafted in British Columbia using locally sourced materials whenever possible. We combine West Coast craftsmanship with time-honored Scandinavian sauna traditions to create something truly special.',
       features: [
         { title: 'Premium Materials', description: 'Canadian red cedar and industry-leading heaters ensure durability and an authentic sauna experience.' },
         { title: 'Handcrafted Quality', description: 'Each unit is carefully built by skilled BC artisans – not mass-produced – ensuring exceptional attention to detail.' },
@@ -94,13 +94,13 @@ export default function OurStoryPage() {
     },
     valuesSection: {
       title: 'What We Stand For',
-      paragraph1: 'At Ilio, we believe that wellness should be a daily ritual, not a luxury reserved for the few. We stand for quality without compromise, craftsmanship that honors tradition while embracing innovation, and transparency in everything we do.',
+      paragraph1: 'At ilio, we believe that wellness should be a daily ritual, not a luxury reserved for the few. We stand for quality without compromise, craftsmanship that honors tradition while embracing innovation, and transparency in everything we do.',
       paragraph2: 'Our commitment extends beyond delivering exceptional saunas. We\'re dedicated to educating our customers about the profound benefits of heat therapy, supporting sustainable forestry practices, and contributing to the wellness of our communities.',
-      paragraph3: 'When you choose Ilio, you\'re not just investing in a sauna – you\'re joining a movement that believes wellness should be accessible, sustainable, and transformative for all Canadians.'
+      paragraph3: 'When you choose ilio, you\'re not just investing in a sauna – you\'re joining a movement that believes wellness should be accessible, sustainable, and transformative for all Canadians.'
     },
     ctaSection: {
       title: 'Ready to Transform Your Wellness Journey?',
-      description: 'Discover how an Ilio sauna can elevate your daily wellness routine',
+      description: 'Discover how an ilio sauna can elevate your daily wellness routine',
       primaryButtonText: 'Explore Our Saunas',
       primaryButtonLink: '/saunas',
       secondaryButtonText: 'Get in Touch',
@@ -437,7 +437,7 @@ export default function OurStoryPage() {
                   slide.imageUrl ||
                   'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48e9d671d8e63bf298.jpeg'
                 }
-                alt={slide.alt || `Ilio Sauna story and craftsmanship showcase image ${index + 1} - Premium BC cedar sauna manufacturing`}
+                alt={slide.alt || `ilio Sauna story and craftsmanship showcase image ${index + 1} - Premium BC cedar sauna manufacturing`}
                 style={{
                   width: '100%',
                   height: '100%',

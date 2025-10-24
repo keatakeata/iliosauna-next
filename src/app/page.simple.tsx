@@ -1,7 +1,7 @@
 export default function HomePage() {
   return (
     <div style={{ padding: '2rem', fontFamily: 'system-ui, sans-serif' }}>
-      <h1>Ilio Sauna - Temporary Test Page</h1>
+      <h1>ilio Sauna - Temporary Test Page</h1>
       <p>The site is loading correctly. External services (Sanity, Supabase, Clerk) are temporarily disabled.</p>
       <p>This confirms the development server is working.</p>
       

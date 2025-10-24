@@ -63,7 +63,7 @@ export default function Footer() {
             <Link href="/" style={{ textDecoration: 'none' }}>
               <img
                 src="https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/68d4d30e2c411b8548d5682c.svg"
-                alt="Ilio Sauna"
+                alt="ilio Sauna"
                 style={{
                   height: '32px',
                   marginBottom: '0.75rem'
@@ -107,7 +107,7 @@ export default function Footer() {
               </a>
 
               <a
-                href="https://www.facebook.com/people/Ilio-sauna/61581939952450/"
+                href="https://www.facebook.com/people/ilio-sauna/61581939952450/"
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
@@ -394,7 +394,7 @@ export default function Footer() {
             color: 'rgba(255,255,255,0.4)',
             fontSize: '0.75rem'
           }}>
-            © {new Date().getFullYear()} Ilio Sauna. All rights reserved.
+            © {new Date().getFullYear()} ilio Sauna. All rights reserved.
           </p>
           <Link
             href="/privacy"

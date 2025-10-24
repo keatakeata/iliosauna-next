@@ -637,7 +637,7 @@ export default function CheckoutPage() {
                   Prefer to finish by phone?
                 </p>
                 <p style={{ fontSize: '1rem', fontWeight: 500, color: '#1a1a1a', marginBottom: '4px' }}>
-                  Talk to your Ilio Concierge now
+                  Talk to your ilio Concierge now
                 </p>
                 <a 
                   href="tel:250-597-1244" 
@@ -923,7 +923,7 @@ export default function CheckoutPage() {
                         fontStyle: 'italic',
                         margin: '0 0 8px'
                       }}>
-                        "The installation team was exceptional. Our Ilio Sauna has become the centerpiece of our wellness routine. Worth every penny."
+                        "The installation team was exceptional. Our ilio Sauna has become the centerpiece of our wellness routine. Worth every penny."
                       </p>
                       <div style={{
                         display: 'flex',

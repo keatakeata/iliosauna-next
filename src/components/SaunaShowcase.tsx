@@ -45,7 +45,7 @@ export default function SaunaShowcase({ homepageData }: SaunaShowcaseProps) {
       <div className="ilio-container">
         <div className="text-center mb-5">
           <h2 className="section-header h2-animate reveal-on-scroll" style={{ marginBottom: '2rem' }}>
-            {showcaseData?.title || 'Ilio Sauna'}
+            {showcaseData?.title || 'ilio Sauna'}
           </h2>
           <div className="section-divider reveal-on-scroll reveal-delay-1" style={{
             width: '75%',

@@ -32,7 +32,7 @@ interface Product {
 const MOCK_PRODUCTS: Product[] = [
   {
     id: '1',
-    name: 'Ilio Sauna',
+    name: 'ilio Sauna',
     slug: 'saunas', // Route to /saunas page
     price: 20000,
     image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg', // First homepage hero image
@@ -149,9 +149,9 @@ export default function ProductsPage() {
           return new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
         case 'featured':
         default:
-          // Ilio Sauna always first when sorting by featured
-          if (a.name === 'Ilio Sauna') return -1;
-          if (b.name === 'Ilio Sauna') return 1;
+          // ilio Sauna always first when sorting by featured
+          if (a.name === 'ilio Sauna') return -1;
+          if (b.name === 'ilio Sauna') return 1;
           return a.badge ? -1 : 1;
       }
     });

@@ -616,7 +616,7 @@ export default function JournalPage() {
                                 fontSize: '0.875rem',
                                 color: '#999'
                               }}>
-                                <span>{post.author?.name || 'Ilio Team'}</span>
+                                <span>{post.author?.name || 'ilio Team'}</span>
                                 <div style={{ display: 'flex', gap: '1rem' }}>
                                   {post.readingTime && (
                                     <span>{post.readingTime} min read</span>
@@ -749,7 +749,7 @@ export default function JournalPage() {
                               fontSize: '0.8rem',
                               color: '#999'
                             }}>
-                              <span>{post.author?.name || 'Ilio Team'}</span>
+                              <span>{post.author?.name || 'ilio Team'}</span>
                               <div style={{ display: 'flex', gap: '0.75rem' }}>
                                 {post.readingTime && (
                                   <span>{post.readingTime} min read</span>

@@ -21,7 +21,7 @@ export default function TestimonialsSection({ homepageData }: TestimonialsSectio
   
   const testimonials = [
     {
-      quote: "The Ilio sauna has transformed our backyard into a wellness retreat. The quality is exceptional.",
+      quote: "The ilio sauna has transformed our backyard into a wellness retreat. The quality is exceptional.",
       author: "Sarah M.",
       location: "Vancouver Island"
     },
@@ -31,7 +31,7 @@ export default function TestimonialsSection({ homepageData }: TestimonialsSectio
       location: "Greater Vancouver"
     },
     {
-      quote: "Daily sauna sessions have become our family's favourite ritual. Thank you, Ilio!",
+      quote: "Daily sauna sessions have become our family's favourite ritual. Thank you, ilio!",
       author: "Jennifer L.",
       location: "Victoria, BC"
     },
@@ -41,7 +41,7 @@ export default function TestimonialsSection({ homepageData }: TestimonialsSectio
       location: "Squamish, BC"
     },
     {
-      quote: "Five stars isn't enough. From consultation to installation, the Ilio team exceeded expectations.",
+      quote: "Five stars isn't enough. From consultation to installation, the ilio team exceeded expectations.",
       author: "Amanda T.",
       location: "Salt Spring Island"
     }
@@ -124,7 +124,7 @@ export default function TestimonialsSection({ homepageData }: TestimonialsSectio
             lineHeight: '1.8',
             color: '#5a5a5a'
           }}>
-            {testimonialData?.subtitle || 'Discover what our early adopters are saying about their Ilio Sauna journey'}
+            {testimonialData?.subtitle || 'Discover what our early adopters are saying about their ilio Sauna journey'}
           </p>
         </div>
 
