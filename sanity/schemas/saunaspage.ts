@@ -25,7 +25,7 @@ export default {
           name: 'subtitle',
           title: 'Subtitle',
           type: 'string',
-          initialValue: 'Scandinavian craftsmanship'
+          initialValue: 'Built in Canada. Inspired by Scandinavian craftsmanship'
         },
         {
           name: 'slides',

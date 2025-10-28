@@ -359,7 +359,7 @@ export default function SaunasPage() {
               fontWeight: 200,
               letterSpacing: '0.06em'
             }}>
-              Scandinavian craftsmanship
+              Built in Canada. Inspired by Scandinavian craftsmanship
             </p>
           </div>
         </div>
