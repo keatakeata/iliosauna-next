@@ -95,7 +95,7 @@ export default function ProductCard({
       }}
     >
       {/* Image Container */}
-      <Link href={`/${slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
+      <Link href={`/products/${slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
         <div style={{
           position: 'relative',
           width: '100%',
@@ -199,7 +199,7 @@ export default function ProductCard({
         )}
 
         {/* Product Name */}
-        <Link href={`/${slug}`} style={{ textDecoration: 'none' }}>
+        <Link href={`/products/${slug}`} style={{ textDecoration: 'none' }}>
           <h3 style={{
             fontSize: '18px',
             fontWeight: '400',
@@ -316,7 +316,7 @@ export default function ProductCard({
           flexDirection: 'column',
           gap: '8px',
         }}>
-          <Link href={`/${slug}`} style={{ textDecoration: 'none' }}>
+          <Link href={`/products/${slug}`} style={{ textDecoration: 'none' }}>
             <button style={{
               width: '100%',
               padding: '12px',
