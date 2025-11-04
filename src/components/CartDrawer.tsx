@@ -179,17 +179,30 @@ export default function CartDrawer() {
                   }}
                 >
                   {/* Product Image */}
-                  <div style={{
-                    width: '100px',
-                    height: '100px',
-                    flexShrink: 0,
-                    overflow: 'hidden',
-                    borderRadius: '8px',
-                    background: item.image ? 'transparent' : '#f0f0f0'
-                  }}>
+                  <Link
+                    href={item.name.toLowerCase().includes('ilio sauna') ? '/saunas' : '/products'}
+                    onClick={closeCart}
+                    style={{
+                      width: '100px',
+                      height: '100px',
+                      flexShrink: 0,
+                      overflow: 'hidden',
+                      borderRadius: '8px',
+                      background: item.image ? 'transparent' : '#f0f0f0',
+                      cursor: 'pointer',
+                      transition: 'opacity 0.2s ease',
+                      display: 'block'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.opacity = '0.8';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.opacity = '1';
+                    }}
+                  >
                     {item.image ? (
-                      <img 
-                        src={item.image} 
+                      <img
+                        src={item.image}
                         alt={item.name}
                         style={{
                           width: '100%',
@@ -210,18 +223,35 @@ export default function CartDrawer() {
                         No Image
                       </div>
                     )}
-                  </div>
+                  </Link>
 
                   {/* Product Details */}
                   <div style={{ flex: 1 }}>
-                    <h3 style={{
-                      fontSize: '16px',
-                      fontWeight: 400,
-                      marginBottom: '8px',
-                      color: '#1a1a1a'
-                    }}>
-                      {item.name}
-                    </h3>
+                    <Link
+                      href={item.name.toLowerCase().includes('ilio sauna') ? '/saunas' : '/products'}
+                      onClick={closeCart}
+                      style={{
+                        textDecoration: 'none',
+                        color: '#1a1a1a',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      <h3 style={{
+                        fontSize: '16px',
+                        fontWeight: 400,
+                        marginBottom: '8px',
+                        color: 'inherit',
+                        transition: 'color 0.2s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = '#BF5813';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#1a1a1a';
+                      }}>
+                        {item.name}
+                      </h3>
+                    </Link>
                     {item.description && (
                       <p style={{
                         fontSize: '14px',

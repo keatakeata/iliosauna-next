@@ -6,9 +6,18 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import ProductCard from '@/components/ProductCard';
 import { ChevronDown, Filter, Award, Truck, Shield, Sparkles } from 'lucide-react';
+import { createClient } from '@sanity/client';
 
 // Force dynamic rendering to prevent DataCloneError
 export const dynamic = 'force-dynamic';
+
+const sanityClient = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID!,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET!,
+  apiVersion: process.env.NEXT_PUBLIC_SANITY_API_VERSION || '2024-01-01',
+  useCdn: false, // Disable CDN for real-time updates
+  token: process.env.NEXT_PUBLIC_SANITY_TOKEN,
+});
 
 type Category = 'all' | 'saunas' | 'infrared' | 'cold-therapy' | 'wellness';
 type SortOption = 'featured' | 'price-low' | 'price-high' | 'newest';
@@ -28,78 +37,20 @@ interface Product {
   releaseDate: string;
 }
 
-// Mock product data - will be replaced with GHL/Sanity integration
-const MOCK_PRODUCTS: Product[] = [
-  {
-    id: '1',
-    name: 'ilio Sauna',
-    slug: 'saunas', // Route to /saunas page
-    price: 20000,
-    image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg', // First homepage hero image
-    category: 'saunas',
-    features: ['2×4 Frame with R-14 Insulation', 'HUUM DROP 9kW Heater', 'Tempered Glass Doors', 'Smart Control & App'],
-    inStock: true,
-    stockCount: 3,
-    releaseDate: '2025-01-15'
-  },
-  {
-    id: '2',
-    name: 'Infrared Therapy Pod',
-    slug: 'infrared-therapy-pod',
-    price: 8999,
-    image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887ec6deefde6fa237370e2.jpeg',
-    category: 'infrared',
-    features: ['Full Spectrum IR', 'Chromotherapy', 'Bluetooth Audio', 'Touch Controls'],
-    inStock: true,
-    releaseDate: '2025-10-01'
-  },
-  {
-    id: '3',
-    name: 'Cold Plunge Tub Pro',
-    slug: 'cold-plunge-tub-pro',
-    price: 6499,
-    image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/688e6fd14f59c85a9f60aa2d.jpeg',
-    category: 'cold-therapy',
-    features: ['Temperature Control', 'Filtration System', 'Insulated Design', 'Easy Drain'],
-    inStock: true,
-    stockCount: 5,
-    releaseDate: '2024-08-20'
-  },
-  {
-    id: '4',
-    name: 'Meditation Float Pod',
-    slug: 'meditation-float-pod',
-    price: 15999,
-    image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb49eefde6142a736f7c.jpeg',
-    category: 'wellness',
-    features: ['Sensory Deprivation', 'Salt Water System', 'Sound Isolation', 'Air Purification'],
-    inStock: true,
-    stockCount: 2,
-    releaseDate: '2025-03-10'
-  },
-  {
-    id: '5',
-    name: 'Infrared Sauna Blanket',
-    slug: 'infrared-sauna-blanket',
-    price: 599,
-    image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6898b31fefa0f04e3e74fc35.jpeg',
-    category: 'infrared',
-    features: ['Portable Design', 'Low EMF Technology', 'Easy Storage', 'Digital Controller'],
-    inStock: true,
-    releaseDate: '2024-11-05'
-  },
-  {
-    id: '6',
-    name: 'Red Light Therapy Panel',
-    slug: 'red-light-therapy-panel',
-    price: 799,
-    image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c126b12dc665.jpeg',
-    category: 'wellness',
-    features: ['660nm & 850nm Wavelengths', 'Wall Mountable', 'Timer Function', 'Full Body Coverage'],
-    inStock: true,
-    releaseDate: '2025-02-28'
-  }
-];
+// Static ilio Sauna product - always shown alongside GHL products
+const ILIO_SAUNA_PRODUCT: Product = {
+  id: 'ilio-sauna-static',
+  name: 'ilio Sauna',
+  slug: 'saunas', // Routes to /saunas page
+  price: 20000,
+  image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg',
+  category: 'saunas',
+  features: ['2×4 Frame with R-14 Insulation', 'HUUM DROP 9kW Heater', 'Tempered Glass Doors', 'Smart Control & App'],
+  badge: 'Featured',
+  inStock: true,
+  stockCount: 3,
+  releaseDate: '2025-01-15'
+};
 
 const CATEGORIES = [
   { id: 'all' as Category, label: 'All Products' },
@@ -122,6 +73,62 @@ export default function ProductsPage() {
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [isCategoryOpen, setIsCategoryOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch products from Sanity
+  useEffect(() => {
+    async function fetchProducts() {
+      try {
+        setLoading(true);
+        const query = `*[_type == "ghlProduct" && isActive == true] | order(publishedAt desc) {
+          _id,
+          ghlProductId,
+          name,
+          "slug": slug.current,
+          description,
+          price,
+          salePrice,
+          "image": images[0].url,
+          category,
+          features,
+          badge,
+          inStock,
+          stockCount,
+          publishedAt
+        }`;
+
+        const fetchedProducts = await sanityClient.fetch(query);
+
+        // Transform Sanity data to Product interface
+        const transformedProducts: Product[] = fetchedProducts.map((product: any) => ({
+          id: product._id,
+          name: product.name,
+          slug: product.slug || product.name.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
+          price: product.price,
+          salePrice: product.salePrice,
+          image: product.image || 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg',
+          category: product.category || 'wellness',
+          features: product.features || [],
+          badge: product.badge,
+          inStock: product.inStock !== undefined ? product.inStock : true,
+          stockCount: product.stockCount,
+          releaseDate: product.publishedAt || new Date().toISOString()
+        }));
+
+        // Always include ilio Sauna product at the beginning
+        setProducts([ILIO_SAUNA_PRODUCT, ...transformedProducts]);
+      } catch (error) {
+        console.error('Error fetching products:', error);
+        // On error, at least show ilio Sauna product
+        setProducts([ILIO_SAUNA_PRODUCT]);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProducts();
+  }, []);
 
   // Mobile detection
   useEffect(() => {
@@ -136,8 +143,8 @@ export default function ProductsPage() {
   // Filter and sort products
   const filteredAndSortedProducts = useMemo(() => {
     let filtered = selectedCategory === 'all'
-      ? MOCK_PRODUCTS
-      : MOCK_PRODUCTS.filter(p => p.category === selectedCategory);
+      ? products
+      : products.filter(p => p.category === selectedCategory);
 
     const sorted = [...filtered].sort((a, b) => {
       switch (sortBy) {
@@ -157,7 +164,7 @@ export default function ProductsPage() {
     });
 
     return sorted;
-  }, [selectedCategory, sortBy]);
+  }, [products, selectedCategory, sortBy]);
 
   return (
     <>
@@ -471,30 +478,57 @@ export default function ProductsPage() {
           margin: '0 auto',
           padding: '60px 20px'
         }}>
-          <div style={{
-            display: 'grid',
-            gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(350px, 1fr))',
-            gap: '32px'
-          }}>
-            {filteredAndSortedProducts.map((product, index) => (
-              <ProductCard
-                key={product.id}
-                {...product}
-                index={index}
-              />
-            ))}
-          </div>
-
-          {filteredAndSortedProducts.length === 0 && (
+          {loading ? (
             <div style={{
-              textAlign: 'center',
-              padding: '80px 20px',
-              color: '#666'
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '120px 20px',
+              color: '#BF5813'
             }}>
-              <Filter size={48} style={{ margin: '0 auto 20px', opacity: 0.5 }} />
-              <h3 style={{ fontSize: '1.5rem', marginBottom: '12px' }}>No products found</h3>
-              <p>Try adjusting your filters or check back soon for new arrivals</p>
+              <div style={{
+                width: '60px',
+                height: '60px',
+                border: '4px solid #f3f4f6',
+                borderTop: '4px solid #BF5813',
+                borderRadius: '50%',
+                animation: 'spin 1s linear infinite'
+              }} />
+              <style jsx>{`
+                @keyframes spin {
+                  0% { transform: rotate(0deg); }
+                  100% { transform: rotate(360deg); }
+                }
+              `}</style>
             </div>
+          ) : (
+            <>
+              <div style={{
+                display: 'grid',
+                gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(350px, 1fr))',
+                gap: '32px'
+              }}>
+                {filteredAndSortedProducts.map((product, index) => (
+                  <ProductCard
+                    key={product.id}
+                    {...product}
+                    index={index}
+                  />
+                ))}
+              </div>
+
+              {filteredAndSortedProducts.length === 0 && !loading && (
+                <div style={{
+                  textAlign: 'center',
+                  padding: '80px 20px',
+                  color: '#666'
+                }}>
+                  <Filter size={48} style={{ margin: '0 auto 20px', opacity: 0.5 }} />
+                  <h3 style={{ fontSize: '1.5rem', marginBottom: '12px' }}>No products found</h3>
+                  <p>Try adjusting your filters or check back soon for new arrivals</p>
+                </div>
+              )}
+            </>
           )}
         </section>
 

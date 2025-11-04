@@ -49,7 +49,8 @@ export default function ProductCard({
       name,
       price: displayPrice,
       quantity: 1,
-      image
+      image,
+      slug
     });
 
     // Log to dev indicator

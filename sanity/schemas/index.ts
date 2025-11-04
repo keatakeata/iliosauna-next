@@ -10,6 +10,7 @@ import saunaspage from './saunaspage'
 import contactpage from './contactpage'
 import journalpage from './journalpage'
 import siteSettings from './siteSettings'
+import ghlProduct from './ghlProduct'
 
 export const schemaTypes = [
   // Content types
@@ -18,6 +19,7 @@ export const schemaTypes = [
   testimonial,
   author,
   category,
+  ghlProduct,  // GHL Products
 
   // Page schemas
   homepage,
