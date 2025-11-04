@@ -4,6 +4,12 @@ export default {
   type: 'document',
   fields: [
     {
+      name: 'stripeProductId',
+      title: 'Stripe Product ID',
+      type: 'string',
+      description: 'Unique product ID from Stripe (source of truth for pricing)'
+    },
+    {
       name: 'ghlProductId',
       title: 'GHL Product ID',
       type: 'string',
@@ -61,6 +67,18 @@ export default {
               name: 'alt',
               title: 'Alt Text',
               type: 'string'
+            },
+            {
+              name: 'priceIds',
+              title: 'Associated Price IDs',
+              type: 'array',
+              of: [{ type: 'string' }],
+              description: 'Price variant IDs this image is associated with'
+            },
+            {
+              name: 'isFeatured',
+              title: 'Is Featured Image',
+              type: 'boolean'
             }
           ]
         }
@@ -105,9 +123,66 @@ export default {
               type: 'number'
             },
             {
+              name: 'priceId',
+              title: 'Price ID',
+              type: 'string',
+              description: 'GHL Price ID for matching to images'
+            },
+            {
+              name: 'stripePriceId',
+              title: 'Stripe Price ID',
+              type: 'string',
+              description: 'Stripe Price ID (source of truth)'
+            },
+            {
               name: 'sku',
               title: 'SKU',
               type: 'string'
+            }
+          ]
+        }
+      ]
+    },
+    {
+      name: 'ghlVariants',
+      title: 'GHL Variant Options',
+      type: 'array',
+      description: 'Variant options from GHL (Wood Finish, Size, Bundle Type, etc.)',
+      of: [
+        {
+          type: 'object',
+          fields: [
+            {
+              name: 'id',
+              title: 'Variant ID',
+              type: 'string'
+            },
+            {
+              name: 'name',
+              title: 'Variant Name',
+              type: 'string'
+            },
+            {
+              name: 'options',
+              title: 'Options',
+              type: 'array',
+              of: [
+                {
+                  type: 'object',
+                  fields: [
+                    {
+                      name: 'id',
+                      title: 'Option ID',
+                      type: 'string'
+                    },
+                    {
+                      name: 'name',
+                      title: 'Option Name',
+                      type: 'string'
+                    }
+                  ]
+                }
+              ]
             }
           ]
         }

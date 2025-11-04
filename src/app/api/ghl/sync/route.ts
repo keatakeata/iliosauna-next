@@ -48,6 +48,28 @@ export async function GET(request: NextRequest) {
         continue;
       }
 
+      // Fetch full product details (includes all images)
+      let fullProduct = ghlProduct;
+      try {
+        const productResponse = await fetch(`${GHL_API_BASE}/products/${ghlProduct._id}?locationId=${GHL_LOCATION_ID}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${GHL_ACCESS_TOKEN}`,
+            'Version': '2021-07-28',
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (productResponse.ok) {
+          const productData = await productResponse.json();
+          fullProduct = productData.product || productData;
+        } else {
+          console.warn(`Could not fetch full product details for ${ghlProduct._id}: ${productResponse.status}`);
+        }
+      } catch (productError) {
+        console.error(`Error fetching full product details for ${ghlProduct._id}:`, productError);
+      }
+
       // Fetch prices for this product
       let productPrice = 0;
       let productSalePrice = null;
@@ -78,6 +100,7 @@ export async function GET(request: NextRequest) {
             productVariants = [{
               name: priceArray[0].name || 'Standard',
               price: parseFloat(priceArray[0].amount || 0),
+              priceId: priceArray[0]._id || priceArray[0].id,
               sku: priceArray[0].sku || null,
               inventoryQuantity: null,
               available: true
@@ -91,6 +114,7 @@ export async function GET(request: NextRequest) {
             productVariants = priceArray.map((p: any) => ({
               name: p.name || 'Variant',
               price: parseFloat(p.amount || 0),
+              priceId: p._id || p.id,
               sku: p.sku || null,
               inventoryQuantity: null,
               available: true
@@ -109,34 +133,65 @@ export async function GET(request: NextRequest) {
         { id: ghlProduct._id }
       );
 
-      // Parse images
+      // Parse images - check multiple possible fields (use fullProduct for complete data)
       let images = [];
-      if (ghlProduct.image) {
-        if (typeof ghlProduct.image === 'string') {
-          images = [{ url: ghlProduct.image, alt: ghlProduct.name }];
-        } else if (Array.isArray(ghlProduct.image)) {
-          images = ghlProduct.image.map((img: any) => ({
-            url: typeof img === 'string' ? img : img.url || img.imageUrl,
-            alt: ghlProduct.name
+
+      // Try medias array first (GHL's full product endpoint)
+      if (fullProduct.medias && Array.isArray(fullProduct.medias)) {
+        images = fullProduct.medias
+          .filter((m: any) => m.type === 'image')
+          .map((img: any) => ({
+            url: img.url,
+            alt: img.title || fullProduct.name,
+            priceIds: img.priceIds || [],
+            isFeatured: img.isFeatured || false
           }));
-        } else if (ghlProduct.image.url) {
-          images = [{ url: ghlProduct.image.url, alt: ghlProduct.name }];
+      }
+      // Try images array
+      else if (fullProduct.images && Array.isArray(fullProduct.images)) {
+        images = fullProduct.images.map((img: any) => ({
+          url: typeof img === 'string' ? img : img.url || img.imageUrl || img.src,
+          alt: fullProduct.name
+        }));
+      }
+      // Try media array
+      else if (fullProduct.media && Array.isArray(fullProduct.media)) {
+        images = fullProduct.media
+          .filter((m: any) => m.type === 'image' || m.mediaType === 'image')
+          .map((img: any) => ({
+            url: img.url || img.imageUrl || img.src,
+            alt: fullProduct.name
+          }));
+      }
+      // Fallback to single image field
+      else if (fullProduct.image) {
+        if (typeof fullProduct.image === 'string') {
+          images = [{ url: fullProduct.image, alt: fullProduct.name }];
+        } else if (Array.isArray(fullProduct.image)) {
+          images = fullProduct.image.map((img: any) => ({
+            url: typeof img === 'string' ? img : img.url || img.imageUrl || img.src,
+            alt: fullProduct.name
+          }));
+        } else if (fullProduct.image.url) {
+          images = [{ url: fullProduct.image.url, alt: fullProduct.name }];
         }
       }
 
-      // Comprehensive field mapping from GHL
+      console.log(`Product ${fullProduct.name}: Found ${images.length} images`);
+
+      // Comprehensive field mapping from GHL (use fullProduct for complete data)
       const productData = {
         _type: 'ghlProduct',
         // Core identifiers
-        ghlProductId: ghlProduct._id || ghlProduct.id,
-        name: ghlProduct.name || ghlProduct.title,
+        ghlProductId: fullProduct._id || fullProduct.id,
+        name: fullProduct.name || fullProduct.title,
         slug: {
           _type: 'slug',
-          current: ghlProduct.handle || ghlProduct.slug || ghlProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
+          current: fullProduct.handle || fullProduct.slug || fullProduct.name.toLowerCase().replace(/[^a-z0-9]+/g, '-')
         },
 
         // Descriptions
-        description: ghlProduct.description || ghlProduct.productDescription || ghlProduct.bodyHtml || '',
+        description: fullProduct.description || fullProduct.productDescription || fullProduct.bodyHtml || '',
 
         // Pricing (from prices API)
         price: productPrice,
@@ -146,39 +201,42 @@ export async function GET(request: NextRequest) {
         images: images,
 
         // Categorization
-        category: ghlProduct.productType || ghlProduct.category || 'wellness',
-        productCollection: ghlProduct.productCollection || ghlProduct.collection || ghlProduct.productType || null,
+        category: fullProduct.productType || fullProduct.category || 'wellness',
+        productCollection: fullProduct.productCollection || fullProduct.collection || fullProduct.productType || null,
 
         // Features (parse from description or tags)
-        features: ghlProduct.features || ghlProduct.tags || [],
+        features: fullProduct.features || fullProduct.tags || [],
 
         // Variants (from prices API)
         variants: productVariants,
 
+        // GHL Variants (for dropdown selectors)
+        ghlVariants: fullProduct.variants || [],
+
         // Inventory
-        inStock: (ghlProduct.available !== false || ghlProduct.availableInStore !== false) && ghlProduct.status !== 'archived',
-        stockCount: ghlProduct.availableQuantity || ghlProduct.inventoryQuantity || null,
-        allowOutOfStockPurchase: ghlProduct.allowOutOfStockPurchase || false,
+        inStock: (fullProduct.available !== false || fullProduct.availableInStore !== false) && fullProduct.status !== 'archived',
+        stockCount: fullProduct.availableQuantity || fullProduct.inventoryQuantity || null,
+        allowOutOfStockPurchase: fullProduct.allowOutOfStockPurchase || false,
 
         // SEO fields
-        seoTitle: ghlProduct.seoTitle || ghlProduct.seo?.title || ghlProduct.metaTitle || ghlProduct.name,
-        seoDescription: ghlProduct.seoDescription || ghlProduct.seo?.description || ghlProduct.metaDescription || ghlProduct.description?.substring(0, 160),
+        seoTitle: fullProduct.seoTitle || fullProduct.seo?.title || fullProduct.metaTitle || fullProduct.name,
+        seoDescription: fullProduct.seoDescription || fullProduct.seo?.description || fullProduct.metaDescription || fullProduct.description?.substring(0, 160),
 
         // Specifications
-        specifications: ghlProduct.specifications || ghlProduct.metafields || [],
+        specifications: fullProduct.specifications || fullProduct.metafields || [],
 
         // Badges
-        badge: ghlProduct.badge || ghlProduct.tags?.[0] || (ghlProduct.featured ? 'Featured' : null),
+        badge: fullProduct.badge || fullProduct.tags?.[0] || (fullProduct.featured ? 'Featured' : null),
 
         // Taxes
-        taxable: ghlProduct.isTaxesEnabled !== false,
+        taxable: fullProduct.isTaxesEnabled !== false,
 
         // Timestamps
-        publishedAt: ghlProduct.publishedAt || ghlProduct.createdAt || new Date().toISOString(),
-        updatedAt: ghlProduct.updatedAt || new Date().toISOString(),
+        publishedAt: fullProduct.publishedAt || fullProduct.createdAt || new Date().toISOString(),
+        updatedAt: fullProduct.updatedAt || new Date().toISOString(),
 
         // Status
-        isActive: (ghlProduct.available !== false || ghlProduct.availableInStore !== false) && ghlProduct.status !== 'archived'
+        isActive: (fullProduct.available !== false || fullProduct.availableInStore !== false) && fullProduct.status !== 'archived'
       };
 
       if (existing) {
