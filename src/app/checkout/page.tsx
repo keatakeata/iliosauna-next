@@ -1,8 +1,5 @@
 'use client';
 
-// Force dynamic rendering for checkout page (uses Clerk auth)
-export const dynamic = 'force-dynamic';
-
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@clerk/nextjs';
