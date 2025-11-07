@@ -1,0 +1,131 @@
+{
+    "_id": "690975a8a93f25750e68b266",
+    "parentId": null,
+    "medias": [
+        {
+            "id": "0x1471p2ye9c",
+            "title": "sebastiaan-post-gvkv0IxeC_A-unsplash.jpg",
+            "url": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/69097554db58b4eebdd8fbfe.jpeg",
+            "type": "image",
+            "isFeatured": true,
+            "priceIds": [
+                "690975a8a93f25151d68b282"
+            ]
+        },
+        {
+            "id": "1fyd4e1wuke",
+            "title": "anne-nygard-FQDaYrXjkKo-unsplash.jpg",
+            "url": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/690975546b7a5736ea9e245e.jpeg",
+            "type": "image",
+            "isFeatured": false
+        },
+        {
+            "id": "my1e6jhdl5",
+            "title": "auroom-wellness-v_GHgqgrFzQ-unsplash.jpg",
+            "url": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6909755437c43a6983c2161a.jpeg",
+            "type": "image",
+            "isFeatured": false,
+            "priceIds": [
+                "690975a8a93f250d3968b27d"
+            ]
+        },
+        {
+            "id": "jbht24tasu",
+            "title": "lukas-kubica-oqDNoKPf4YM-unsplash.jpg",
+            "url": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6909755436fa1d0842684bee.jpeg",
+            "type": "image",
+            "isFeatured": false,
+            "priceIds": [
+                "690975a8a93f25f05468b275"
+            ]
+        }
+    ],
+    "variants": [
+        {
+            "id": "tdbuy05jg2f",
+            "name": "Wood Finish",
+            "options": [
+                {
+                    "id": "b00be6zm71l",
+                    "name": "Natural Cedar"
+                },
+                {
+                    "id": "o2r9unmeyp",
+                    "name": "Dark Walnut"
+                },
+                {
+                    "id": "kh6ppv0x32",
+                    "name": "Charcoal Stain"
+                }
+            ]
+        },
+        {
+            "id": "3q8hn4ww4ob",
+            "name": "Size",
+            "options": [
+                {
+                    "id": "3wwmjqiexjl",
+                    "name": "Standard (5L)"
+                },
+                {
+                    "id": "3tvqvvq0shz",
+                    "name": "Large (7L)"
+                }
+            ]
+        },
+        {
+            "id": "oiqqouwu62",
+            "name": "Bundle Type",
+            "options": [
+                {
+                    "id": "ynhxe9xb7g",
+                    "name": "Bucket Only"
+                },
+                {
+                    "id": "7oqlh6nz8st",
+                    "name": "Bucket + Ladle Set"
+                },
+                {
+                    "id": "5zrb2bewnqn",
+                    "name": "Deluxe Aroma Kit"
+                }
+            ]
+        },
+        {
+            "id": "ielo9d4ztb",
+            "name": "Handle Type",
+            "options": [
+                {
+                    "id": "gw6t2ikh3xk",
+                    "name": "Rope Handle"
+                },
+                {
+                    "id": "slj4okp4q6",
+                    "name": "Wooden Handle"
+                }
+            ]
+        }
+    ],
+    "isTaxesEnabled": false,
+    "taxes": [],
+    "isLabelEnabled": false,
+    "collectionIds": [],
+    "rating": [],
+    "excludedStoreIds": [],
+    "displayPriority": [],
+    "locationId": "GCSgKFx6fTLWG5qmWqeN",
+    "name": "Ilio Cedar Sauna Bucket & Ladle Set",
+    "productType": "DIGITAL",
+    "description": "<h3 style=\"line-height: inherit;\" data-start=\"322\" data-end=\"349\"><strong data-start=\"326\" data-end=\"349\">Product Description</strong></h3><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"350\" data-end=\"638\">Complete your sauna ritual with the Ilio Cedar Sauna Bucket &amp; Ladle Set \u00e2\u20ac\u201d a timeless accessory designed to elevate the heat experience. Handcrafted from durable Western Red Cedar, this set adds a touch of natural elegance while releasing the subtle aroma of cedar with every steam pour.</p><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"640\" data-end=\"802\">Engineered to withstand high heat and humidity, the stainless-steel insert prevents leaks while the smooth ergonomic ladle offers the perfect pour \u00e2\u20ac\u201d every time.</p><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"804\" data-end=\"817\"></p><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"804\" data-end=\"817\"><strong data-start=\"804\" data-end=\"817\">Features:</strong></p><ul data-start=\"818\" data-end=\"1026\"><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"820\" data-end=\"860\">Premium Western Red Cedar construction</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"863\" data-end=\"912\">Stainless steel interior liner (rust-resistant)</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"915\" data-end=\"956\">Ergonomic cedar ladle with hanging cord</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"959\" data-end=\"978\">5L water capacity</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"981\" data-end=\"1026\">Designed to complement any Ilio Sauna model</p></li></ul>",
+    "availableInStore": true,
+    "seo": {
+        "title": "",
+        "description": ""
+    },
+    "image": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/69097554db58b4eebdd8fbfe.jpeg",
+    "userId": "ym78Xrm1ASmFZ3A6DzpM",
+    "createdBy": "ym78Xrm1ASmFZ3A6DzpM",
+    "createdAt": "2025-11-04T03:40:24.772Z",
+    "updatedAt": "2025-11-04T09:24:58.142Z",
+    "traceId": "f252b849-0019-4196-bd52-3bbfb9be560f"
+}

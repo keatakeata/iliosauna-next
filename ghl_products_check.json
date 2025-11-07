@@ -1,0 +1,189 @@
+{
+    "products": [
+        {
+            "_id": "6909c8a123816619134e89bb",
+            "variants": [
+                {
+                    "id": "mj1xlk6eem",
+                    "name": "Size",
+                    "options": [
+                        {
+                            "id": "637zuhx8cki",
+                            "name": "Small (3kg)"
+                        },
+                        {
+                            "id": "46vbkediv6j",
+                            "name": "Medium (5kg)"
+                        },
+                        {
+                            "id": "7dybmpd53k9",
+                            "name": "Large (7kg)"
+                        }
+                    ]
+                },
+                {
+                    "id": "ghqn447i3qq",
+                    "name": "Light Tone",
+                    "options": [
+                        {
+                            "id": "w92qjw2tdyd",
+                            "name": "Warm Amber"
+                        },
+                        {
+                            "id": "1hpxwgpdi5xi",
+                            "name": "Soft White"
+                        },
+                        {
+                            "id": "ws2l0wou6nk",
+                            "name": "Deep Amber"
+                        }
+                    ]
+                },
+                {
+                    "id": "7nmkgbov5nv",
+                    "name": "Base Material",
+                    "options": [
+                        {
+                            "id": "jn7toj8g7m",
+                            "name": "Cedar"
+                        },
+                        {
+                            "id": "inq6wpx6r2",
+                            "name": "Thermo-Aspen"
+                        },
+                        {
+                            "id": "ohf7xrju2ln",
+                            "name": "Walnut"
+                        }
+                    ]
+                }
+            ],
+            "isTaxesEnabled": false,
+            "taxes": [],
+            "excludedStoreIds": [],
+            "displayPriority": [],
+            "locationId": "GCSgKFx6fTLWG5qmWqeN",
+            "name": "Ilio Himalayan Salt Sauna Lamp",
+            "productType": "DIGITAL",
+            "description": "<h3 style=\"line-height: inherit;\" data-start=\"269\" data-end=\"298\"><strong data-start=\"273\" data-end=\"296\">Product Description</strong></h3><p style=\"line-height: inherit\" data-start=\"299\" data-end=\"677\">Illuminate your sauna with the soft, calming glow of the Ilio Himalayan Salt Sauna Lamp. Carved from pure Himalayan rock salt, each lamp releases negative ions that help purify the air while adding a tranquil warmth to your sauna experience. Designed to withstand high-heat environments, the Ilio Salt Lamp doubles as functional d\u00c3\u00a9cor \u00e2\u20ac\u201d grounding your space in natural luxury.</p><p style=\"line-height: inherit\" data-start=\"299\" data-end=\"677\"></p><p style=\"line-height: inherit\" data-start=\"679\" data-end=\"694\"><strong data-start=\"679\" data-end=\"692\">Features:</strong></p><ul data-start=\"695\" data-end=\"909\"><li><p style=\"line-height: inherit\" data-start=\"697\" data-end=\"733\">Hand-carved Himalayan salt crystal</p></li><li><p style=\"line-height: inherit\" data-start=\"736\" data-end=\"777\">Heat-safe LED core with soft amber glow</p></li><li><p style=\"line-height: inherit\" data-start=\"780\" data-end=\"820\">Solid cedar base for sauna integration</p></li><li><p style=\"line-height: inherit\" data-start=\"823\" data-end=\"862\">Air-purifying and ionizing properties</p></li><li><p style=\"line-height: inherit\" data-start=\"865\" data-end=\"909\">Ideal for saunas, spas, and wellness rooms</p></li></ul><p style=\"line-height: inherit\" data-start=\"865\" data-end=\"909\"></p><p style=\"line-height: inherit\" data-start=\"865\" data-end=\"909\"></p><h3 style=\"line-height: inherit;\" data-start=\"1427\" data-end=\"1457\"><strong data-start=\"1431\" data-end=\"1455\">Warranty Information</strong></h3><p style=\"line-height: inherit\" data-start=\"1458\" data-end=\"1625\">Your Ilio Himalayan Salt Sauna Lamp is covered by a <strong data-start=\"1510\" data-end=\"1537\">2-Year Limited Warranty</strong> against manufacturing defects and material failures under normal indoor or sauna use.</p><p style=\"line-height: inherit\" data-start=\"1458\" data-end=\"1625\"></p><p style=\"line-height: inherit\" data-start=\"1627\" data-end=\"1651\"><strong data-start=\"1627\" data-end=\"1649\">Warranty Includes:</strong></p><ul data-start=\"1652\" data-end=\"1823\"><li><p style=\"line-height: inherit\" data-start=\"1654\" data-end=\"1702\">Replacement or repair of the LED lighting unit</p></li><li><p style=\"line-height: inherit\" data-start=\"1705\" data-end=\"1749\">Structural coverage for cedar or wood base</p></li><li><p style=\"line-height: inherit\" data-start=\"1752\" data-end=\"1823\">One-time replacement for cracked salt crystal (if damaged in transit)</p></li></ul><p style=\"line-height: inherit\" data-start=\"1752\" data-end=\"1823\"></p><p style=\"line-height: inherit\" data-start=\"1825\" data-end=\"1855\"><strong data-start=\"1825\" data-end=\"1853\">Warranty Does Not Cover:</strong></p><ul data-start=\"1856\" data-end=\"2023\"><li><p style=\"line-height: inherit\" data-start=\"1858\" data-end=\"1916\">Damage caused by misuse, drops, or improper installation</p></li><li><p style=\"line-height: inherit\" data-start=\"1919\" data-end=\"1975\">Discoloration or natural erosion of the salt over time</p></li><li><p style=\"line-height: inherit\" data-start=\"1978\" data-end=\"2023\">Normal wear from high-humidity environments</p></li></ul><p style=\"line-height: inherit\" data-start=\"2025\" data-end=\"2154\">To submit a warranty claim, customers can contact <strong data-start=\"2075\" data-end=\"2097\">support@ilio.sauna</strong> with their order number and photos of the product issue.</p>",
+            "availableInStore": true,
+            "createdBy": "ym78Xrm1ASmFZ3A6DzpM",
+            "createdAt": "2025-11-04T09:34:25.898Z",
+            "updatedAt": "2025-11-04T09:36:37.811Z",
+            "image": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6909c8b8119a8266389bf81e.jpeg",
+            "variantsLength": 3,
+            "taxInclusive": false
+        },
+        {
+            "_id": "690975a8a93f25750e68b266",
+            "variants": [
+                {
+                    "id": "tdbuy05jg2f",
+                    "name": "Wood Finish",
+                    "options": [
+                        {
+                            "id": "b00be6zm71l",
+                            "name": "Natural Cedar"
+                        },
+                        {
+                            "id": "o2r9unmeyp",
+                            "name": "Dark Walnut"
+                        },
+                        {
+                            "id": "kh6ppv0x32",
+                            "name": "Charcoal Stain"
+                        }
+                    ]
+                },
+                {
+                    "id": "3q8hn4ww4ob",
+                    "name": "Size",
+                    "options": [
+                        {
+                            "id": "3wwmjqiexjl",
+                            "name": "Standard (5L)"
+                        },
+                        {
+                            "id": "3tvqvvq0shz",
+                            "name": "Large (7L)"
+                        }
+                    ]
+                },
+                {
+                    "id": "oiqqouwu62",
+                    "name": "Bundle Type",
+                    "options": [
+                        {
+                            "id": "ynhxe9xb7g",
+                            "name": "Bucket Only"
+                        },
+                        {
+                            "id": "7oqlh6nz8st",
+                            "name": "Bucket + Ladle Set"
+                        },
+                        {
+                            "id": "5zrb2bewnqn",
+                            "name": "Deluxe Aroma Kit"
+                        }
+                    ]
+                },
+                {
+                    "id": "ielo9d4ztb",
+                    "name": "Handle Type",
+                    "options": [
+                        {
+                            "id": "gw6t2ikh3xk",
+                            "name": "Rope Handle"
+                        },
+                        {
+                            "id": "slj4okp4q6",
+                            "name": "Wooden Handle"
+                        }
+                    ]
+                }
+            ],
+            "isTaxesEnabled": false,
+            "taxes": [],
+            "excludedStoreIds": [],
+            "displayPriority": [],
+            "locationId": "GCSgKFx6fTLWG5qmWqeN",
+            "name": "Ilio Cedar Sauna Bucket & Ladle Set",
+            "productType": "DIGITAL",
+            "description": "<h3 style=\"line-height: inherit;\" data-start=\"322\" data-end=\"349\"><strong data-start=\"326\" data-end=\"349\">Product Description</strong></h3><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"350\" data-end=\"638\">Complete your sauna ritual with the Ilio Cedar Sauna Bucket &amp; Ladle Set \u00e2\u20ac\u201d a timeless accessory designed to elevate the heat experience. Handcrafted from durable Western Red Cedar, this set adds a touch of natural elegance while releasing the subtle aroma of cedar with every steam pour.</p><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"640\" data-end=\"802\">Engineered to withstand high heat and humidity, the stainless-steel insert prevents leaks while the smooth ergonomic ladle offers the perfect pour \u00e2\u20ac\u201d every time.</p><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"804\" data-end=\"817\"></p><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"804\" data-end=\"817\"><strong data-start=\"804\" data-end=\"817\">Features:</strong></p><ul data-start=\"818\" data-end=\"1026\"><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"820\" data-end=\"860\">Premium Western Red Cedar construction</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"863\" data-end=\"912\">Stainless steel interior liner (rust-resistant)</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"915\" data-end=\"956\">Ergonomic cedar ladle with hanging cord</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"959\" data-end=\"978\">5L water capacity</p></li><li><p style=\"line-height: inherit; line-height: inherit; line-height: inherit\" data-start=\"981\" data-end=\"1026\">Designed to complement any Ilio Sauna model</p></li></ul>",
+            "availableInStore": true,
+            "image": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/69097554db58b4eebdd8fbfe.jpeg",
+            "createdBy": "ym78Xrm1ASmFZ3A6DzpM",
+            "createdAt": "2025-11-04T03:40:24.772Z",
+            "updatedAt": "2025-11-04T09:24:58.142Z",
+            "variantsLength": 4,
+            "taxInclusive": false
+        },
+        {
+            "_id": "686dc63a1c814ac7b1ffcd59",
+            "variants": [],
+            "isTaxesEnabled": true,
+            "taxes": [
+                "688eec71323a14a880cc5e36",
+                "688eec61323a141e7dcc5b68"
+            ],
+            "excludedStoreIds": [],
+            "displayPriority": [],
+            "locationId": "GCSgKFx6fTLWG5qmWqeN",
+            "name": "Ilio Sauna",
+            "productType": "DIGITAL",
+            "availableInStore": true,
+            "createdAt": "2025-07-09T01:30:34.093Z",
+            "updatedAt": "2025-11-04T09:19:22.843Z",
+            "image": "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg",
+            "slug": "ilio-sauna",
+            "taxInclusive": true,
+            "variantsLength": 0
+        }
+    ],
+    "total": [
+        {
+            "total": 3
+        }
+    ],
+    "traceId": "3f02ecc0-8e44-4fce-8723-eb9815deaa06"
+}

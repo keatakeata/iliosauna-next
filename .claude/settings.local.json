@@ -55,7 +55,17 @@
       "Bash(npm i:*)",
       "Bash(start http://localhost:4448/products)",
       "Bash(npm start:*)",
-      "Bash(npx vercel:*)"
+      "Bash(npx vercel:*)",
+      "Bash(start http://localhost:4448/products/ilio-cedar-sauna-bucket-ladle-set)",
+      "Bash(npx shadcn@latest add:*)",
+      "Read(//c/Users/Admin/**)",
+      "mcp__playwright__playwright_get_visible_html",
+      "mcp__playwright__playwright_close",
+      "mcp__playwright__playwright_click",
+      "Bash(python:*)",
+      "WebFetch(domain:marketplace.gohighlevel.com)",
+      "Bash(git checkout:*)",
+      "Bash(gh api:*)"
     ],
     "deny": [],
     "ask": []
