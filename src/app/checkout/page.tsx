@@ -8,6 +8,10 @@ import Footer from '@/components/Footer';
 import { useCart } from '@/context/CartContext';
 import styles from './checkout.module.css';
 
+// Route segment config - prevent static generation
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 export default function CheckoutPage() {
   const router = useRouter();
   const { isSignedIn, isLoaded } = useUser();
