@@ -1,12 +1,13 @@
 /* Tailwind CSS */
-@import "tailwindcss";
-@import "tw-animate-css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 /* ═══════════════════════════════════════════════════════════════════════════
    ILIO SAUNA - GLOBAL STYLES
    ═══════════════════════════════════════════════════════════════════════════ */
 
-@custom-variant dark (&:is(.dark *));
+/* @custom-variant dark (&:is(.dark *)); */
 
 :root {
   /* Brand Colors */
