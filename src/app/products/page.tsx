@@ -37,20 +37,7 @@ interface Product {
   releaseDate: string;
 }
 
-// Static ilio Sauna product - always shown alongside GHL products
-const ILIO_SAUNA_PRODUCT: Product = {
-  id: 'ilio-sauna-static',
-  name: 'ilio Sauna',
-  slug: 'saunas', // Routes to /saunas page
-  price: 20000,
-  image: 'https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6887eb48d9c1c168812dc664.jpeg',
-  category: 'saunas',
-  features: ['2×4 Frame with R-14 Insulation', 'HUUM DROP 9kW Heater', 'Tempered Glass Doors', 'Smart Control & App'],
-  badge: 'Featured',
-  inStock: true,
-  stockCount: 3,
-  releaseDate: '2025-01-15'
-};
+// Products are fetched from GHL via Sanity
 
 const CATEGORIES = [
   { id: 'all' as Category, label: 'All Products' },
@@ -116,12 +103,12 @@ export default function ProductsPage() {
           releaseDate: product.publishedAt || new Date().toISOString()
         }));
 
-        // Always include ilio Sauna product at the beginning
-        setProducts([ILIO_SAUNA_PRODUCT, ...transformedProducts]);
+        // Set only GHL products from Sanity
+        setProducts(transformedProducts);
       } catch (error) {
         console.error('Error fetching products:', error);
-        // On error, at least show ilio Sauna product
-        setProducts([ILIO_SAUNA_PRODUCT]);
+        // On error, show empty array
+        setProducts([]);
       } finally {
         setLoading(false);
       }
@@ -156,9 +143,7 @@ export default function ProductsPage() {
           return new Date(b.releaseDate).getTime() - new Date(a.releaseDate).getTime();
         case 'featured':
         default:
-          // ilio Sauna always first when sorting by featured
-          if (a.name === 'ilio Sauna') return -1;
-          if (b.name === 'ilio Sauna') return 1;
+          // Sort by badge (featured items first)
           return a.badge ? -1 : 1;
       }
     });
