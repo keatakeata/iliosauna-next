@@ -50,9 +50,13 @@ const nextConfig = {
     return [];
   },
   // Skip building account pages if Clerk is not enabled
-  pageExtensions: String(process.env.NEXT_PUBLIC_CLERK_ENABLED || 'false') === 'true' 
-    ? ['tsx', 'ts', 'jsx', 'js'] 
+  pageExtensions: String(process.env.NEXT_PUBLIC_CLERK_ENABLED || 'false') === 'true'
+    ? ['tsx', 'ts', 'jsx', 'js']
     : ['tsx', 'ts', 'jsx', 'js'].filter(ext => !ext.includes('account')),
+  // Experimental features for Next.js 15
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
 };
 
 module.exports = nextConfig;
