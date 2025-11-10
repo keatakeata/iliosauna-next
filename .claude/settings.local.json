@@ -65,7 +65,9 @@
       "Bash(python:*)",
       "WebFetch(domain:marketplace.gohighlevel.com)",
       "Bash(git checkout:*)",
-      "Bash(gh api:*)"
+      "Bash(gh api:*)",
+      "Bash(git cherry-pick:*)",
+      "Bash(git branch:*)"
     ],
     "deny": [],
     "ask": []
