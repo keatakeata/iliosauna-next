@@ -55,7 +55,8 @@
       "Bash(npm i:*)",
       "Bash(start http://localhost:4448/products)",
       "Bash(npm start:*)",
-      "Bash(npx vercel:*)"
+      "Bash(npx vercel:*)",
+      "Bash(start http://localhost:3000)"
     ],
     "deny": [],
     "ask": []

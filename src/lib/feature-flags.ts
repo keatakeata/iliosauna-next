@@ -20,11 +20,11 @@ const isEcomVisible = () => {
 };
 
 export const FEATURE_FLAGS = {
-  // E-commerce features - now environment-based
-  SHOW_CART: isEcomVisible(),           // Cart button in navbar
-  SHOW_AUTH: isEcomVisible(),           // Sign in/Sign up buttons
-  SHOW_ADD_TO_CART: isEcomVisible(),    // Add to Cart buttons on product pages
-  SHOW_BUY_NOW: isEcomVisible(),        // Buy Now buttons on product pages
+  // E-commerce features - DISABLED FOR PRODUCTION
+  SHOW_CART: false,           // Cart button in navbar
+  SHOW_AUTH: false,           // Sign in/Sign up buttons
+  SHOW_ADD_TO_CART: false,    // Add to Cart buttons on product pages
+  SHOW_BUY_NOW: false,        // Buy Now buttons on product pages
 };
 
 // Helper function to check if e-commerce is enabled
