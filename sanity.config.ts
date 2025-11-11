@@ -32,4 +32,15 @@ export default defineConfig({
   },
 
   basePath: '/studio',
+
+  cors: {
+    allowCredentials: true,
+    allowOrigins: [
+      'http://localhost:3000',
+      'http://localhost:4448',
+      'https://iliosauna.com',
+      'https://www.iliosauna.com',
+      'https://iliosauna-next-7l11il9q4-keithlemay85-3936s-projects.vercel.app',
+    ],
+  },
 })
