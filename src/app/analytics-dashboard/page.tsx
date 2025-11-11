@@ -12,10 +12,11 @@ interface AnalyticsData {
   deviceBreakdown: { device: string; count: number; percentage: number }[];
   browsers: { browser: string; count: number; percentage: number }[];
   operatingSystems: { os: string; visitors: number; percentage: number }[];
-  countries: { country: string; visitors: number; percentage: number }[];
+  countries: { country: string; visitors: number; percentage: number; countryCode?: string }[];
   referrers: { source: string; count: number }[];
   trafficChart: { date: string; visitors: number }[];
-  recentEvents: { event: string; timestamp: string; page: string }[];
+  error?: string;
+  message?: string;
 }
 
 export default function AnalyticsDashboard() {
@@ -23,7 +24,9 @@ export default function AnalyticsDashboard() {
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [timeRange, setTimeRange] = useState('7d'); // 24h, 7d, 30d
+  const [timeRange, setTimeRange] = useState('7d'); // 24h, 7d, 30d, custom
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
 
   useEffect(() => {
     track('Analytics Dashboard View');
@@ -35,11 +38,15 @@ export default function AnalyticsDashboard() {
       const interval = setInterval(fetchAnalytics, 30000);
       return () => clearInterval(interval);
     }
-  }, [isAuthenticated, timeRange]);
+  }, [isAuthenticated, timeRange, startDate, endDate]);
 
   const fetchAnalytics = async () => {
     try {
-      const response = await fetch(`/api/analytics?range=${timeRange}`);
+      let url = `/api/analytics?range=${timeRange}`;
+      if (startDate && endDate) {
+        url += `&startDate=${startDate}&endDate=${endDate}`;
+      }
+      const response = await fetch(url);
       const data = await response.json();
       setAnalyticsData(data);
       setLoading(false);
@@ -107,34 +114,89 @@ export default function AnalyticsDashboard() {
     );
   }
 
+  // Show setup message if GA4 is not configured
+  if (analyticsData.error === 'GA4_NOT_CONFIGURED') {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-8">
+        <div className="bg-gray-800 rounded-lg p-8 max-w-2xl">
+          <h1 className="text-3xl font-bold text-white mb-4">⚙️ Google Analytics 4 Setup Required</h1>
+          <p className="text-gray-300 mb-4">{analyticsData.message}</p>
+          <div className="bg-gray-900 rounded p-4 mb-4">
+            <p className="text-sm text-gray-400 mb-2">To enable real-time analytics:</p>
+            <ol className="list-decimal list-inside space-y-1 text-sm text-gray-300">
+              <li>Follow instructions in <code className="bg-gray-700 px-2 py-1 rounded">GA4_SETUP_INSTRUCTIONS.md</code></li>
+              <li>Create a Google Cloud service account</li>
+              <li>Download the credentials JSON</li>
+              <li>Add credentials to environment variables</li>
+            </ol>
+          </div>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Retry Connection
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
           <div>
             <h1 className="text-4xl font-bold text-white">ilio Sauna Analytics</h1>
             <p className="text-gray-400 mt-2">Real-time website analytics</p>
           </div>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setTimeRange('24h')}
-              className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '24h' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-            >
-              24h
-            </button>
-            <button
-              onClick={() => setTimeRange('7d')}
-              className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '7d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-            >
-              7 Days
-            </button>
-            <button
-              onClick={() => setTimeRange('30d')}
-              className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '30d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
-            >
-              30 Days
-            </button>
+          <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex gap-2">
+              <button
+                onClick={() => setTimeRange('24h')}
+                className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '24h' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                24h
+              </button>
+              <button
+                onClick={() => setTimeRange('7d')}
+                className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '7d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                7 Days
+              </button>
+              <button
+                onClick={() => setTimeRange('30d')}
+                className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '30d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
+              >
+                30 Days
+              </button>
+            </div>
+            <div className="flex gap-2">
+              <input
+                type="date"
+                value={startDate}
+                onChange={(e) => {
+                  setStartDate(e.target.value);
+                  if (e.target.value && endDate) {
+                    setTimeRange('custom');
+                  }
+                }}
+                className="px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500"
+                placeholder="Start Date"
+              />
+              <input
+                type="date"
+                value={endDate}
+                onChange={(e) => {
+                  setEndDate(e.target.value);
+                  if (startDate && e.target.value) {
+                    setTimeRange('custom');
+                  }
+                }}
+                className="px-4 py-2 bg-gray-700 text-white rounded-lg border border-gray-600 focus:ring-2 focus:ring-blue-500"
+                placeholder="End Date"
+              />
+            </div>
           </div>
         </div>
 
@@ -235,20 +297,33 @@ export default function AnalyticsDashboard() {
               <span className="text-gray-400 text-sm">VISITORS</span>
             </div>
             <div className="space-y-3">
-              {analyticsData.countries.map((country, index) => (
-                <div key={index}>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="text-gray-300">{country.country}</span>
-                    <span className="text-white font-semibold">{country.percentage}%</span>
+              {analyticsData.countries.map((country, index) => {
+                const countryCode = country.countryCode || getCountryCodeFromName(country.country);
+                return (
+                  <div key={index}>
+                    <div className="flex justify-between items-center mb-1">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={`https://flagcdn.com/w20/${countryCode.toLowerCase()}.png`}
+                          alt={country.country}
+                          className="w-5 h-4 object-cover rounded"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                        <span className="text-gray-300">{country.country}</span>
+                      </div>
+                      <span className="text-white font-semibold">{country.percentage}%</span>
+                    </div>
+                    <div className="w-full bg-gray-700 rounded-full h-2">
+                      <div
+                        className="bg-blue-600 h-2 rounded-full transition-all"
+                        style={{ width: `${country.percentage}%` }}
+                      ></div>
+                    </div>
                   </div>
-                  <div className="w-full bg-gray-700 rounded-full h-2">
-                    <div
-                      className="bg-blue-600 h-2 rounded-full"
-                      style={{ width: `${country.percentage}%` }}
-                    ></div>
-                  </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
 
@@ -345,4 +420,42 @@ function StatCard({
       </div>
     </div>
   );
+}
+
+// Helper function to get country code from country name
+function getCountryCodeFromName(country: string): string {
+  const countryMap: Record<string, string> = {
+    'Canada': 'CA',
+    'United States': 'US',
+    'United States of America': 'US',
+    'Netherlands': 'NL',
+    'Switzerland': 'CH',
+    'United Kingdom': 'GB',
+    'Germany': 'DE',
+    'France': 'FR',
+    'Spain': 'ES',
+    'Italy': 'IT',
+    'Australia': 'AU',
+    'Japan': 'JP',
+    'China': 'CN',
+    'India': 'IN',
+    'Brazil': 'BR',
+    'Mexico': 'MX',
+    'Belgium': 'BE',
+    'Sweden': 'SE',
+    'Norway': 'NO',
+    'Denmark': 'DK',
+    'Finland': 'FI',
+    'Poland': 'PL',
+    'Austria': 'AT',
+    'Portugal': 'PT',
+    'Ireland': 'IE',
+    'New Zealand': 'NZ',
+    'Singapore': 'SG',
+    'South Korea': 'KR',
+    'Russia': 'RU',
+    'Turkey': 'TR',
+  };
+
+  return countryMap[country] || 'XX';
 }
