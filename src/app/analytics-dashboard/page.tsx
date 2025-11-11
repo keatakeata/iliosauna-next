@@ -6,37 +6,32 @@ import { track } from '@vercel/analytics';
 interface AnalyticsData {
   pageViews: number;
   uniqueVisitors: number;
+  bounceRate: number;
   currentOnline: number;
   topPages: { path: string; views: number }[];
-  deviceBreakdown: { device: string; count: number }[];
+  deviceBreakdown: { device: string; count: number; percentage: number }[];
+  browsers: { browser: string; count: number; percentage: number }[];
+  operatingSystems: { os: string; visitors: number; percentage: number }[];
+  countries: { country: string; visitors: number; percentage: number }[];
   referrers: { source: string; count: number }[];
+  trafficChart: { date: string; visitors: number }[];
   recentEvents: { event: string; timestamp: string; page: string }[];
 }
 
 export default function AnalyticsDashboard() {
-  const [analyticsData, setAnalyticsData] = useState<AnalyticsData>({
-    pageViews: 0,
-    uniqueVisitors: 0,
-    currentOnline: 0,
-    topPages: [],
-    deviceBreakdown: [],
-    referrers: [],
-    recentEvents: []
-  });
+  const [analyticsData, setAnalyticsData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [password, setPassword] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [timeRange, setTimeRange] = useState('7d'); // 24h, 7d, 30d
 
   useEffect(() => {
-    // Track that someone viewed the analytics dashboard
     track('Analytics Dashboard View');
   }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
       fetchAnalytics();
-      // Refresh every 30 seconds
       const interval = setInterval(fetchAnalytics, 30000);
       return () => clearInterval(interval);
     }
@@ -56,7 +51,6 @@ export default function AnalyticsDashboard() {
 
   const handlePasswordSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Simple password check - you can change this password
     if (password === 'ilioanalytics2025') {
       setIsAuthenticated(true);
       localStorage.setItem('analytics_auth', 'true');
@@ -65,7 +59,6 @@ export default function AnalyticsDashboard() {
     }
   };
 
-  // Check if already authenticated on mount
   useEffect(() => {
     const auth = localStorage.getItem('analytics_auth');
     if (auth === 'true') {
@@ -106,7 +99,7 @@ export default function AnalyticsDashboard() {
     );
   }
 
-  if (loading) {
+  if (loading || !analyticsData) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-white text-2xl">Loading analytics...</div>
@@ -119,67 +112,101 @@ export default function AnalyticsDashboard() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold text-white">ilio Sauna Analytics</h1>
+          <div>
+            <h1 className="text-4xl font-bold text-white">ilio Sauna Analytics</h1>
+            <p className="text-gray-400 mt-2">Real-time website analytics</p>
+          </div>
           <div className="flex gap-2">
             <button
               onClick={() => setTimeRange('24h')}
-              className={`px-4 py-2 rounded-lg ${timeRange === '24h' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+              className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '24h' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             >
               24h
             </button>
             <button
               onClick={() => setTimeRange('7d')}
-              className={`px-4 py-2 rounded-lg ${timeRange === '7d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+              className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '7d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             >
               7 Days
             </button>
             <button
               onClick={() => setTimeRange('30d')}
-              className={`px-4 py-2 rounded-lg ${timeRange === '30d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'}`}
+              className={`px-4 py-2 rounded-lg transition-colors ${timeRange === '30d' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300 hover:bg-gray-600'}`}
             >
               30 Days
             </button>
           </div>
         </div>
 
-        {/* Stats Cards */}
+        {/* Top Stats Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <StatCard
-            title="Total Page Views"
-            value={analyticsData.pageViews.toLocaleString()}
-            icon="📊"
-            color="bg-blue-600"
+            title="Visitors"
+            value={analyticsData.uniqueVisitors.toLocaleString()}
+            change="-3%"
+            changeColor="text-red-400"
+            icon="👥"
           />
           <StatCard
-            title="Unique Visitors"
-            value={analyticsData.uniqueVisitors.toLocaleString()}
-            icon="👥"
-            color="bg-green-600"
+            title="Page Views"
+            value={analyticsData.pageViews.toLocaleString()}
+            change="-24%"
+            changeColor="text-red-400"
+            icon="📄"
+          />
+          <StatCard
+            title="Bounce Rate"
+            value={`${analyticsData.bounceRate}%`}
+            change="+8%"
+            changeColor="text-red-400"
+            icon="↗️"
           />
           <StatCard
             title="Currently Online"
             value={analyticsData.currentOnline.toString()}
             icon="🟢"
-            color="bg-purple-600"
-          />
-          <StatCard
-            title="Avg. Time on Site"
-            value="2m 34s"
-            icon="⏱️"
-            color="bg-orange-600"
           />
         </div>
 
-        {/* Charts Grid */}
+        {/* Traffic Chart */}
+        <div className="bg-gray-800 rounded-lg p-6 shadow-xl mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">Traffic Overview</h2>
+          <div className="h-64 flex items-end justify-between gap-1">
+            {analyticsData.trafficChart.map((item, index) => {
+              const maxVisitors = Math.max(...analyticsData.trafficChart.map(d => d.visitors));
+              const height = (item.visitors / maxVisitors) * 100;
+              return (
+                <div key={index} className="flex-1 flex flex-col items-center group">
+                  <div
+                    className="w-full bg-blue-600 rounded-t hover:bg-blue-500 transition-colors relative"
+                    style={{ height: `${height}%`, minHeight: '4px' }}
+                  >
+                    <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-900 px-2 py-1 rounded text-xs text-white opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      {item.visitors} visitors
+                    </div>
+                  </div>
+                  <div className="text-xs text-gray-400 mt-2 transform -rotate-45 origin-top-left">
+                    {item.date}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Two Column Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
           {/* Top Pages */}
           <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
-            <h2 className="text-2xl font-bold text-white mb-4">Top Pages</h2>
-            <div className="space-y-3">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Pages</h2>
+              <span className="text-gray-400 text-sm">VISITORS</span>
+            </div>
+            <div className="space-y-2">
               {analyticsData.topPages.map((page, index) => (
-                <div key={index} className="flex justify-between items-center bg-gray-700 p-3 rounded">
+                <div key={index} className="flex justify-between items-center py-2 border-b border-gray-700">
                   <span className="text-gray-300">{page.path}</span>
-                  <span className="text-white font-semibold">{page.views} views</span>
+                  <span className="text-white font-semibold">{page.views}</span>
                 </div>
               ))}
             </div>
@@ -187,39 +214,95 @@ export default function AnalyticsDashboard() {
 
           {/* Referrers */}
           <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
-            <h2 className="text-2xl font-bold text-white mb-4">Top Referrers</h2>
-            <div className="space-y-3">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Referrers</h2>
+              <span className="text-gray-400 text-sm">VISITORS</span>
+            </div>
+            <div className="space-y-2">
               {analyticsData.referrers.map((referrer, index) => (
-                <div key={index} className="flex justify-between items-center bg-gray-700 p-3 rounded">
+                <div key={index} className="flex justify-between items-center py-2 border-b border-gray-700">
                   <span className="text-gray-300">{referrer.source}</span>
-                  <span className="text-white font-semibold">{referrer.count} visits</span>
+                  <span className="text-white font-semibold">{referrer.count}</span>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Device Breakdown */}
+          {/* Countries */}
           <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
-            <h2 className="text-2xl font-bold text-white mb-4">Device Breakdown</h2>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Countries</h2>
+              <span className="text-gray-400 text-sm">VISITORS</span>
+            </div>
+            <div className="space-y-3">
+              {analyticsData.countries.map((country, index) => (
+                <div key={index}>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-gray-300">{country.country}</span>
+                    <span className="text-white font-semibold">{country.percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div
+                      className="bg-blue-600 h-2 rounded-full"
+                      style={{ width: `${country.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Devices */}
+          <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Devices</h2>
+              <span className="text-gray-400 text-sm">VISITORS</span>
+            </div>
             <div className="space-y-3">
               {analyticsData.deviceBreakdown.map((device, index) => (
-                <div key={index} className="flex justify-between items-center bg-gray-700 p-3 rounded">
-                  <span className="text-gray-300">{device.device}</span>
-                  <span className="text-white font-semibold">{device.count}</span>
+                <div key={index}>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="text-gray-300">{device.device}</span>
+                    <span className="text-white font-semibold">{device.percentage}%</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div
+                      className="bg-green-600 h-2 rounded-full"
+                      style={{ width: `${device.percentage}%` }}
+                    ></div>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
 
-          {/* Recent Events */}
+          {/* Browsers */}
           <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
-            <h2 className="text-2xl font-bold text-white mb-4">Recent Events</h2>
-            <div className="space-y-3 max-h-64 overflow-y-auto">
-              {analyticsData.recentEvents.map((event, index) => (
-                <div key={index} className="bg-gray-700 p-3 rounded">
-                  <div className="text-white font-semibold">{event.event}</div>
-                  <div className="text-gray-400 text-sm">{event.page}</div>
-                  <div className="text-gray-500 text-xs">{event.timestamp}</div>
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Browsers</h2>
+              <span className="text-gray-400 text-sm">VISITORS</span>
+            </div>
+            <div className="space-y-2">
+              {analyticsData.browsers.map((browser, index) => (
+                <div key={index} className="flex justify-between items-center py-2 border-b border-gray-700">
+                  <span className="text-gray-300">{browser.browser}</span>
+                  <span className="text-white font-semibold">{browser.percentage}%</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Operating Systems */}
+          <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
+            <div className="flex justify-between items-center mb-4">
+              <h2 className="text-xl font-bold text-white">Operating Systems</h2>
+              <span className="text-gray-400 text-sm">VISITORS</span>
+            </div>
+            <div className="space-y-2">
+              {analyticsData.operatingSystems.map((os, index) => (
+                <div key={index} className="flex justify-between items-center py-2 border-b border-gray-700">
+                  <span className="text-gray-300">{os.os}</span>
+                  <span className="text-white font-semibold">{os.percentage}%</span>
                 </div>
               ))}
             </div>
@@ -235,14 +318,31 @@ export default function AnalyticsDashboard() {
   );
 }
 
-function StatCard({ title, value, icon, color }: { title: string; value: string; icon: string; color: string }) {
+function StatCard({
+  title,
+  value,
+  icon,
+  change,
+  changeColor
+}: {
+  title: string;
+  value: string;
+  icon: string;
+  change?: string;
+  changeColor?: string;
+}) {
   return (
     <div className="bg-gray-800 rounded-lg p-6 shadow-xl">
       <div className="flex items-center justify-between mb-2">
         <span className="text-gray-400 text-sm font-medium">{title}</span>
         <span className="text-2xl">{icon}</span>
       </div>
-      <div className={`text-3xl font-bold text-white mt-2`}>{value}</div>
+      <div className="flex items-baseline gap-2">
+        <div className="text-3xl font-bold text-white">{value}</div>
+        {change && (
+          <span className={`text-sm font-semibold ${changeColor}`}>{change}</span>
+        )}
+      </div>
     </div>
   );
 }
