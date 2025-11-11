@@ -90,8 +90,9 @@ export default function AnalyticsDashboard() {
                 id="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900"
                 placeholder="Enter dashboard password"
+                autoFocus
               />
             </div>
             <button
@@ -106,7 +107,7 @@ export default function AnalyticsDashboard() {
     );
   }
 
-  if (loading || !analyticsData) {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center">
         <div className="text-white text-2xl">Loading analytics...</div>
@@ -115,12 +116,12 @@ export default function AnalyticsDashboard() {
   }
 
   // Show setup message if GA4 is not configured
-  if (analyticsData.error === 'GA4_NOT_CONFIGURED') {
+  if (!analyticsData || analyticsData.error === 'GA4_NOT_CONFIGURED') {
     return (
       <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-8">
         <div className="bg-gray-800 rounded-lg p-8 max-w-2xl">
           <h1 className="text-3xl font-bold text-white mb-4">⚙️ Google Analytics 4 Setup Required</h1>
-          <p className="text-gray-300 mb-4">{analyticsData.message}</p>
+          <p className="text-gray-300 mb-4">{analyticsData?.message || 'Google Analytics 4 needs to be configured to view analytics data.'}</p>
           <div className="bg-gray-900 rounded p-4 mb-4">
             <p className="text-sm text-gray-400 mb-2">To enable real-time analytics:</p>
             <ol className="list-decimal list-inside space-y-1 text-sm text-gray-300">
@@ -130,12 +131,26 @@ export default function AnalyticsDashboard() {
               <li>Add credentials to environment variables</li>
             </ol>
           </div>
-          <button
-            onClick={() => window.location.reload()}
-            className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
-          >
-            Retry Connection
-          </button>
+          <div className="flex gap-4">
+            <button
+              onClick={() => {
+                setLoading(true);
+                fetchAnalytics();
+              }}
+              className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+            >
+              Retry Connection
+            </button>
+            <button
+              onClick={() => {
+                localStorage.removeItem('analytics_auth');
+                setIsAuthenticated(false);
+              }}
+              className="bg-gray-600 text-white px-6 py-2 rounded-lg hover:bg-gray-700 transition-colors"
+            >
+              Logout
+            </button>
+          </div>
         </div>
       </div>
     );
