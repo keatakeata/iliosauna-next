@@ -94,7 +94,7 @@ export default function ContactPage() {
     },
     formSection: {
       title: 'Send us a message',
-      description: 'We respond within 1 business day. For urgent inquiries, call us directly.'
+      description: 'For urgent inquiries, call us directly.'
     },
     ctaSection: {
       title: 'Ready to Experience Luxury?',
@@ -504,9 +504,6 @@ export default function ContactPage() {
                 >
                   hello@iliosauna.com
                 </a>
-                <p style={{ fontSize: '0.85rem', color: '#888', marginTop: '8px' }}>
-                  We respond within 1 business day
-                </p>
               </div>
 
               {/* Social Media Icons */}
