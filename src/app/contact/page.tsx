@@ -455,8 +455,7 @@ export default function ContactPage() {
                 )}
                 <p style={{ fontSize: '0.95rem', color: '#666', lineHeight: 1.8, marginTop: '15px' }}>
                   Monday - Friday: 9am - 6pm PST<br />
-                  Saturday: 10am - 4pm PST<br />
-                  <span style={{ color: '#888' }}>Text inquiries welcome</span>
+                  Saturday: 10am - 4pm PST
                 </p>
               </div>
 
