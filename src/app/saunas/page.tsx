@@ -512,11 +512,42 @@ export default function SaunasPage() {
               <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>2-year comprehensive coverage</div>
             </div>
             
-            <div className="reveal-on-scroll reveal-delay-6" style={{ marginBottom: '3rem' }}>
+            <div className="reveal-on-scroll reveal-delay-6" style={{ marginBottom: '2rem' }}>
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>LEAD TIME</div>
               <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>2-4 weeks</div>
             </div>
-            
+
+            {/* Contact Us CTA */}
+            <div className="reveal-on-scroll reveal-delay-7" style={{ marginBottom: '3rem' }}>
+              <a
+                href="/contact"
+                style={{
+                  display: 'inline-block',
+                  padding: '16px 48px',
+                  backgroundColor: '#BF5813',
+                  color: '#ffffff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  letterSpacing: '0.1em',
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  transition: 'all 0.3s ease'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#a64a11';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#BF5813';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
+              >
+                INQUIRE NOW
+              </a>
+            </div>
+
             {/* Add to Cart and Buy Now buttons */}
             {(FEATURE_FLAGS.SHOW_ADD_TO_CART || FEATURE_FLAGS.SHOW_BUY_NOW) && (
               <div className="reveal-on-scroll reveal-delay-7" style={{ 
