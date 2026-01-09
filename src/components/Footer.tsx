@@ -202,26 +202,6 @@ export default function Footer() {
             </h4>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <a
-                href="mailto:hello@iliosauna.com"
-                style={{
-                  color: 'rgba(255,255,255,0.6)',
-                  textDecoration: 'none',
-                  fontSize: '0.85rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.4rem',
-                  transition: 'color 0.3s ease'
-                }}
-                onMouseEnter={(e) => e.currentTarget.style.color = '#BF5813'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'rgba(255,255,255,0.6)'}
-              >
-                <svg width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" viewBox="0 0 24 24">
-                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
-                  <polyline points="22,6 12,13 2,6"></polyline>
-                </svg>
-                hello@iliosauna.com
-              </a>
-              <a
                 href="tel:+12505971244"
                 style={{
                   color: 'rgba(255,255,255,0.6)',
