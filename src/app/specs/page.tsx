@@ -66,7 +66,7 @@ const renderedViews: RenderedView[] = [
   {
     title: "Rear Exterior View",
     description: "Back three-quarter view showcasing construction quality and cedar detailing.",
-    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6965d8a702f1be4f8102b82e.png"
+    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/69667e66b9e85c52b1f2a064.png"
   },
   {
     title: "Front Exterior View",
