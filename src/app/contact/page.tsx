@@ -78,7 +78,6 @@ export default function ContactPage() {
       title: 'Call us directly',
       description: 'Professional delivery and installation services across British Columbia, with white-glove service from Victoria to Vancouver.',
       phone: '250-597-1244',
-      email: 'hello@iliosauna.com',
       address: {
         street: '404 – 2471 Sidney Ave',
         city: 'Sidney',
@@ -99,9 +98,7 @@ export default function ContactPage() {
     ctaSection: {
       title: 'Ready to Experience Luxury?',
       phoneText: 'Call us directly',
-      phoneNumber: '250-597-1244',
-      emailText: 'Email Us',
-      emailAddress: 'hello@iliosauna.com'
+      phoneNumber: '250-597-1244'
     },
     socialMedia: {
       facebook: 'https://www.facebook.com/people/Ilio-sauna/61581939952450/',
@@ -475,34 +472,6 @@ export default function ContactPage() {
                   Sidney, BC V8L3A6<br />
                   Canada
                 </p>
-              </div>
-
-              <div style={{ marginBottom: '40px' }}>
-                <h3 style={{ 
-                  fontSize: '1.1rem', 
-                  marginBottom: '15px', 
-                  fontWeight: 400,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
-                  color: '#333'
-                }}>
-                  Email Us
-                </h3>
-                <p style={{ fontSize: '0.95rem', color: '#666', marginBottom: '5px' }}>
-                  General Inquiries
-                </p>
-                <a 
-                  href="mailto:hello@iliosauna.com" 
-                  style={{ 
-                    fontSize: '0.95rem', 
-                    color: 'var(--color-primary)',
-                    textDecoration: 'none'
-                  }}
-                  onMouseEnter={(e) => e.currentTarget.style.textDecoration = 'underline'}
-                  onMouseLeave={(e) => e.currentTarget.style.textDecoration = 'none'}
-                >
-                  hello@iliosauna.com
-                </a>
               </div>
 
               {/* Social Media Icons */}

@@ -391,7 +391,7 @@ export default function SaunasPage() {
                 lineHeight: '1.8',
                 color: '#5a5a5a'
               }}>
-                ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows, complete with a covered porch.
+                ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows—crafted with meticulous attention to detail.
               </p>
             </div>
             
