@@ -246,7 +246,7 @@ export const modalContent: ModalContentMap = {
         type: 'specs',
         title: 'Technical Specifications',
         items: [
-          'Power: 9 kW / 240V / 40A',
+          'Power: 9 kW / 240V / 50A',
           'Room Size: 280-530 cubic feet',
           'Heat Time: 176°F in 45 minutes',
           'Stone Capacity: 122 lbs',

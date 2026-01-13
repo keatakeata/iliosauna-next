@@ -391,7 +391,7 @@ export default function SaunasPage() {
                 lineHeight: '1.8',
                 color: '#5a5a5a'
               }}>
-                ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows, complete with a covered porch with a cold rinse shower.
+                ilio saunas are beautifully designed and built for longevity. Each unit reflects a union between architectural design and robust structural elements, boasting insulated walls, roof panels, and thermally insulated windows, complete with a covered porch.
               </p>
             </div>
             
@@ -486,7 +486,7 @@ export default function SaunasPage() {
           <div style={{ textAlign: 'left' }}>
             <div className="reveal-on-scroll reveal-delay-2" style={{ marginBottom: '2rem' }}>
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>ALL-INCLUSIVE PRICE</div>
-              <div style={{ fontSize: '2rem', fontWeight: 200 }}>$20,000 CAD</div>
+              <div style={{ fontSize: '2rem', fontWeight: 200 }}>$25,000 CAD</div>
             </div>
             
             <div className="reveal-on-scroll reveal-delay-3" style={{ marginBottom: '2rem' }}>
@@ -498,7 +498,7 @@ export default function SaunasPage() {
               <div style={{ fontSize: '0.875rem', letterSpacing: '0.1em', marginBottom: '0.5rem', opacity: 0.7 }}>DIMENSIONS</div>
               <div style={{ fontSize: '1.25rem', fontWeight: 200 }}>
                 <div>Exterior: 6'-3" w × 8' d × 8'-5" h</div>
-                <div style={{ marginTop: '0.25rem' }}>Interior: 5'-5" × 6'-3"</div>
+                <div style={{ marginTop: '0.25rem' }}>Interior: 5'-6" × 6'-3"</div>
               </div>
             </div>
 
@@ -561,7 +561,7 @@ export default function SaunasPage() {
                       addItem({
                         id: 'ilio-sauna-premium',
                         name: 'ilio Premium Cedar Sauna',
-                        price: 20000,
+                        price: 25000,
                         image: heroSlides[0],
                         description: '4-6 person capacity, HUUM DROP heater'
                       });
@@ -598,7 +598,7 @@ export default function SaunasPage() {
                       addItem({
                         id: 'ilio-sauna-premium',
                         name: 'ilio Premium Cedar Sauna',
-                        price: 20000,
+                        price: 25000,
                         image: heroSlides[0],
                         description: '4-6 person capacity, HUUM DROP heater'
                       });
@@ -1267,7 +1267,7 @@ export default function SaunasPage() {
               <div style={{ marginBottom: '1.25rem', paddingBottom: '1.25rem', borderBottom: '1px solid #E5E7EB' }}>
                 <h4 style={{ fontWeight: 500, color: '#111', marginBottom: '0.4rem' }}>Can my electrician handle the wiring?</h4>
                 <p style={{ color: '#6B7280', lineHeight: '1.6', fontSize: '0.95rem' }}>
-                  Yes! Any licensed electrician can install the 40A/240V connection. We include detailed wiring diagrams and offer free phone support.
+                  Yes! Any licensed electrician can install the 50A/240V connection. We include detailed wiring diagrams and offer free phone support.
                 </p>
               </div>
               <div style={{ marginBottom: '1.5rem' }}>
