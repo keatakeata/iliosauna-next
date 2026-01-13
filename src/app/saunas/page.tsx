@@ -1330,7 +1330,7 @@ export default function SaunasPage() {
             }}
             onClick={(e) => e.stopPropagation()}
           >
-            <div style={{ overflow: 'auto', flex: 1, position: 'relative' }}>
+            <div style={{ overflowX: 'hidden', overflowY: 'auto', flex: 1, position: 'relative' }}>
               <motion.button
                 onClick={() => setActiveModal(null)}
                 whileHover={{ rotate: 90 }}

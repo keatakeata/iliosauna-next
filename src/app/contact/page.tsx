@@ -318,7 +318,7 @@ export default function ContactPage() {
   };
 
   return (
-    <>
+    <div style={{ overflowX: 'hidden', width: '100%' }}>
       <Navbar animated={true} forceScrolled={true} />
       
       {/* Hero Section with Header */}
@@ -1129,6 +1129,6 @@ export default function ContactPage() {
       )}
 
       <Footer />
-    </>
+    </div>
   );
 }
