@@ -25,37 +25,37 @@ const specSections: SpecSection[] = [
     title: "Overall Dimensions",
     category: "Technical Drawing",
     description: "Complete dimensional overview of the ilio sauna exterior and interior footprint.",
-    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6965d5ee95f9f98e41fb22d8.png",
+    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6966ca504d18c5c1672142e2.png",
     details: [
       "Exterior: 6'-3\" W × 8' D × 8'-5\" H",
       "Interior: 5'-6\" × 6'-3\"",
       "Door Height: 6'-2\"",
       "Overhang Depth: 18\" front porch",
-      "Capacity: 4-6 persons comfortably"
+      "Capacity: 4-6 persons"
     ]
   },
   {
     title: "Foundation Layout",
     category: "Installation Plan",
     description: "Precise foot positioning for concrete pad placement and leveling system.",
-    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6965d5eef8a93b14e61ca2c9.png",
+    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6966ca5041565260d62867d2.png",
     details: [
-      "Adjustable Steel Legs: 2-4\" range",
-      "6 leveling points for stability",
-      "Concrete pads: 12\" × 12\" minimum",
+      "Adjustable Steel Legs: 1\"-4\" range",
+      "4 leveling points for stability",
+      "Concrete pads: 10\"×10\" minimum",
       "Ground clearance prevents moisture",
-      "Rodent-proof perimeter screening"
+      "Ground to be packed and level"
     ]
   },
   {
     title: "Interior Configuration",
     category: "Bench & Heater Layout",
     description: "Top-down view showing bench seating arrangement and HUUM heater placement.",
-    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6965d5ee02f1be7d74025e53.png",
+    image: "https://storage.googleapis.com/msgsndr/GCSgKFx6fTLWG5qmWqeN/media/6966ca50b9e85c02cb08cc9e.png",
     details: [
-      "L-shaped bench configuration",
+      "Floating bench configuration",
       "Upper bench: 24\" depth, ideal heat zone",
-      "Lower bench: 18\" depth for step access",
+      "Lower bench: 24\" depth, slightly recessed",
       "HUUM DROP 9kW heater placement",
       "122 lbs olivine diabase stones included"
     ]
