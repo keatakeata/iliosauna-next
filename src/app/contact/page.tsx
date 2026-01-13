@@ -454,6 +454,56 @@ export default function ContactPage() {
                   Monday - Friday: 9am - 6pm PST<br />
                   Saturday: 10am - 4pm PST
                 </p>
+
+                {/* Email */}
+                <div style={{ marginTop: '20px' }}>
+                  {isMobile ? (
+                    <a
+                      href="mailto:hello@iliosauna.com"
+                      style={{
+                        display: 'inline-block',
+                        fontSize: '1rem',
+                        fontWeight: 300,
+                        color: 'var(--color-primary)',
+                        background: 'transparent',
+                        border: '1.5px solid var(--color-primary)',
+                        padding: '10px 20px',
+                        borderRadius: '4px',
+                        textDecoration: 'none',
+                        transition: 'all 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'var(--color-primary)';
+                        e.currentTarget.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'transparent';
+                        e.currentTarget.style.color = 'var(--color-primary)';
+                      }}
+                    >
+                      hello@iliosauna.com
+                    </a>
+                  ) : (
+                    <a
+                      href="mailto:hello@iliosauna.com"
+                      style={{
+                        fontSize: '1.2rem',
+                        fontWeight: 300,
+                        color: '#333',
+                        textDecoration: 'none',
+                        transition: 'color 0.3s ease'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = 'var(--color-primary)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = '#333';
+                      }}
+                    >
+                      hello@iliosauna.com
+                    </a>
+                  )}
+                </div>
               </div>
 
               <div style={{ marginBottom: '40px' }}>

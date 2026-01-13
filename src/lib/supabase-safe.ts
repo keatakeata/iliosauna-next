@@ -36,7 +36,11 @@ if (supabaseUrl && supabaseAnonKey && !isDevelopment) {
 export const supabase = new Proxy({} as ReturnType<typeof createClient>, {
   get(target, prop) {
     if (!supabaseClient) {
-      console.warn(`Supabase client not initialized. Skipping ${String(prop)} operation.`)
+      // Only log warning once in production, skip in development to avoid console spam
+      if (!isDevelopment && !((globalThis as any).__supabaseWarningShown)) {
+        console.warn('Supabase client not initialized. Database operations will be skipped.');
+        (globalThis as any).__supabaseWarningShown = true;
+      }
       // Return a mock object that doesn't break the app
       return () => ({
         from: () => ({
